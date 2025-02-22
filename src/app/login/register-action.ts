@@ -3,8 +3,6 @@
 import { createSession } from "./session";
 import { FormState } from "./definitions";
 import { client } from "@/prisma/prisma-client";
-import { redirect } from "next/dist/server/api-utils";
-
 
 export async function register(state: FormState, formData: FormData): Promise<FormState> {
     const email = formData.get('email') as string;
