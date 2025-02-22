@@ -1,5 +1,5 @@
-import { ThemeProvider } from "@/components/theme-provider";
-import Header from "./components/header";
+// import { ThemeProvider } from "@/components/theme-provider";
+import Header from "../components/header";
 import "./globals.css";
 
 export default function RootLayout({
@@ -10,19 +10,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider
+        {/* <ThemeProvider
         attribute={'class'}
         defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-        >
+        enableSystem={true}
+        disableTransitionOnChange={false}
+        > */}
         <div className="container-fluid">
           <div className="w-full center">
           <Header />
           </div>
           {children}
         </div>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import { ModeToggle } from "./dark-mode-toggle";
+import { cookies } from "next/headers";
+import { decrypt } from "@/app/login/session";
 
 const landings = [
   {
@@ -59,7 +61,14 @@ const landings = [
   },
 ];
 
-export default function Header() {
+export default async function Header() {
+
+  const sessionCookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(sessionCookie);
+
+  const isLoggedIn = session?.userId;
+
+
   return (
     <Card className="bg-card py-3 px-4 border-0 flex items-center justify-between gap-6 rounded-2xl mt-5">
       <ul className="hidden md:flex items-center gap-10 text-card-foreground">
@@ -94,11 +103,13 @@ export default function Header() {
 
       <div className="flex items-center gap-4">
         <ModeToggle />
-        <Link href="/login">
-          <Button variant={"default"} className="hidden md:block px-2">
-            Login
-          </Button>
-        </Link>
+        { !isLoggedIn ?
+          <Link href="/login">
+            <Button variant={"default"} className="hidden md:block px-2">
+              Login
+            </Button>
+          </Link> : <></>
+      }
 
         <div className="flex md:hidden mr-2 items-center gap-2">
           <DropdownMenu>
