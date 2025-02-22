@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ModeToggle } from "./dark-mode-toggle";
 import { cookies } from "next/headers";
 import { decrypt } from "@/app/login/session";
+import LoginButtons from "./login-buttons";
 
 const landings = [
   {
@@ -66,7 +67,7 @@ export default async function Header() {
   const sessionCookie = (await cookies()).get('session')?.value;
   const session = await decrypt(sessionCookie);
 
-  const isLoggedIn = session?.userId;
+  const isLoggedIn : boolean = session?.userId ? true : false;
 
 
   return (
@@ -103,14 +104,7 @@ export default async function Header() {
 
       <div className="flex items-center gap-4">
         <ModeToggle />
-        { !isLoggedIn ?
-          <Link href="/login">
-            <Button variant={"default"} className="hidden md:block px-2">
-              Login
-            </Button>
-          </Link> : <></>
-      }
-
+        <LoginButtons isLoggedIn={isLoggedIn} />
         <div className="flex md:hidden mr-2 items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
