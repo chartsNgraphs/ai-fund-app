@@ -1,0 +1,13 @@
+.chat-bubble {
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.assistant {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.user {
+    color: white;
+}
