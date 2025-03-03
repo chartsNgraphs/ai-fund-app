@@ -3,6 +3,7 @@
 import { createSession } from "./session";
 import { FormState } from "./definitions";
 import { client } from "@/prisma/prisma-client";
+import { v4 } from "uuid";
 
 export async function register(state: FormState, formData: FormData): Promise<FormState> {
     const email = formData.get('email') as string;
@@ -35,7 +36,7 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
         data: {
             email,
             password,
-            id: '12345',
+            id: v4(),
             name: 'John Doe'
         },
     });

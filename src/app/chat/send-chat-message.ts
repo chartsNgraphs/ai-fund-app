@@ -1,22 +1,28 @@
 import { revalidatePath } from "next/cache";
-import { existingMessages } from "./get-chat-messages";
+import { client, } from "@/prisma/prisma-client";
+import { verifySession } from "@/app/login/session";
+import { startConversation } from "./start-conversation";
 
 
 export async function sendChatMessage(formData: FormData) {
     "use server";
 
     console.log('sending message', formData.get('message'));
-    existingMessages.push({
-        id: existingMessages.length + 1,
-        message: formData.get('message') as string,
-        sender: 'user',
-    })
+    const user = await verifySession();
+    if (!user) {
+        return;
+    }
 
-    existingMessages.push({
-        id: existingMessages.length + 1,
-        message: 'I am a bot, I do not understand',
-        sender: 'bot',
-    })
-
+    const conversationId: string = await startConversation();
+    await client.message.create({
+        data: {
+            conversationId: parseInt(conversationId),
+            text: formData.get('message') as string,
+            role: 'USER',
+        }
+    }).catch((error) => {
+        console.error('Error sending message', error);
+    });
+    
     revalidatePath('/chat');
 }

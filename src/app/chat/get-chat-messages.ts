@@ -1,18 +1,30 @@
-export const existingMessages = [
-    {
-      id: 1,
-      message: "Hello, how can I help you?",
-      sender: "bot",
-    },
-    {
-      id: 2,
-      message: "I need help with my order",
-      sender: "user",
-    },
-  ];
+"use server";
 
-export async function getChatMessages(conversationId?: string) {
-    
+import { client } from '@/prisma/prisma-client';
+import { verifySession } from '../login/session';
+
+export async function getChatMessages(conversationId?: number) {
+  "use server";
+
+  const user = verifySession();
+  if (!user) {
+    return null;
+  }
+
+  if (!conversationId) {
+    console.log('No existing conversation id found');
+    return [];
+}
     console.log('conversationId', conversationId);
-    return existingMessages;
+    
+
+    const messages = await client.message.findMany({
+        where: {
+        conversationId: conversationId,
+        },
+    });
+
+    console.log('messages', messages)
+
+    return messages || [];
 }

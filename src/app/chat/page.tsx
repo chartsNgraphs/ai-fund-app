@@ -3,23 +3,21 @@ import { Input } from "@/components/ui/input";
 import { getChatMessages } from "./get-chat-messages";
 import { sendChatMessage } from "./send-chat-message";
 import ChatMessageDisplay from "./chat-message-display";
-import { v4 as uuidv4 } from 'uuid';
+
 import { cookies } from "next/headers";
 
 export default async function ChatPage() {
 
-    const existingConversationIdFromCookies = (await cookies()).get('messageId');
-    if (!existingConversationIdFromCookies) {
-        console.log('No existing conversation id found');
-        (await cookies()).set('messageId', uuidv4(), {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: true,
-            maxAge: 60 * 60 * 24 * 7,
-        });
-    }
+    const existingConversationIdFromCookies = (await cookies()).get('conversationId');
     
-    const existingMessages = await getChatMessages(existingConversationIdFromCookies?.value);
+    
+    const existingMessages = (await getChatMessages(Number(existingConversationIdFromCookies?.value)))?.map(
+        (message) => ({
+            id: message.id,
+            sender: message.role,
+            message: message.text,
+        })
+    ) || [];
 
     return (
         <div

@@ -47,7 +47,7 @@ export async function verifySession() {
         redirect('/login');
     }
 
-    return { isAuth: true, userId: Number(session.userId) };
+    return { isAuth: true, userId: String(session.userId) };
 }
 
 export async function updateSession() {
