@@ -2,8 +2,11 @@
 import { cookies } from "next/headers";
 import { client } from "@/prisma/prisma-client";
 import { verifySession } from "../login/session";
+import { revalidatePath } from "next/cache";
 
-export async function startConversation(): Promise<string> {
+export async function startConversation(
+    forceNewConversation: boolean = false
+): Promise<string> {
   const { userId, isAuth } = await verifySession();
 
   if (!userId || !isAuth) {
@@ -12,6 +15,9 @@ export async function startConversation(): Promise<string> {
 
   let conversationId = (await cookies()).get("conversationId")?.value;
 
+  if (forceNewConversation) {
+    conversationId = undefined;
+  }
   // TODO: Check if conversationId is valid and the user is the owner of the conversation.
 
   if (conversationId) {
@@ -36,5 +42,6 @@ export async function startConversation(): Promise<string> {
     sameSite: "lax",
   });
 
+  revalidatePath("/chat");
   return conversationId;
 }

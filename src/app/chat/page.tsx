@@ -5,6 +5,7 @@ import { sendChatMessage } from "./send-chat-message";
 import ChatMessageDisplay from "./chat-message-display";
 
 import { cookies } from "next/headers";
+import RestartButton from "./restart-button";
 
 export default async function ChatPage() {
 
@@ -19,6 +20,8 @@ export default async function ChatPage() {
         })
     ) || [];
 
+
+
     return (
         <div
         className="container mx-auto p-4 flex flex-col justify-between h-full"
@@ -26,7 +29,7 @@ export default async function ChatPage() {
         >
         <div className="w-full flex flex-col h-full">
             <div className="w-full flex justify-right items-right m-4">
-                <Button variant={'secondary'}>New Chat</Button>
+            <RestartButton />
             </div>
             <ChatMessageDisplay messages={existingMessages} />
             <form className="flex justify-center mt-4">
