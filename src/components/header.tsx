@@ -4,11 +4,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "nanoid";
-import Link from "next/link";
 import { ModeToggle } from "./dark-mode-toggle";
 import { cookies } from "next/headers";
 import { decrypt } from "@/app/login/session";
@@ -74,32 +74,12 @@ export default async function Header() {
     <Card className="bg-card py-3 px-4 border-0 flex items-center justify-between gap-6 rounded-2xl mt-5">
       <ul className="hidden md:flex items-center gap-10 text-card-foreground">
         <li className="text-primary font-medium">
-          <a href="#home">Home</a>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <a href="#features">Features</a>
+          <a href="/chat">Research</a>
         </li>
-        <li>
-          <a href="#pricing">Pricing</a>
-        </li>
-        <li>
-          <a href="#faqs">FAQs</a>
-        </li>
-        <li>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <span className="cursor-pointer">Pages</span>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="start">
-              {landings.map((page) => (
-                <DropdownMenuItem key={page.id}>
-                  <Link href={page.route}>{page.title}</Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </li>
+      
       </ul>
 
       <div className="flex items-center gap-4">
@@ -132,13 +112,7 @@ export default async function Header() {
                 <a href="#home">Home</a>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <a href="#features">Features</a>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <a href="#pricing">Pricing</a>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <a href="#faqs">FAQs</a>
+                <a href="/chat">Research</a>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Button variant="secondary" className="w-full text-sm">

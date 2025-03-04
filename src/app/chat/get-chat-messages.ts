@@ -4,6 +4,7 @@ import { verifySession } from '../login/session';
 import { PrismaClient } from '@prisma/client';
 
 export async function getChatMessages(conversationId?: number) {
+  "server only";
   const client = new PrismaClient();
   const user = verifySession();
   if (!user) {

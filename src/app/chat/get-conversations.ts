@@ -10,7 +10,6 @@ export async function getConversationHistory() {
     }
 
     const client = new PrismaClient();
-
     const conversations = await client.conversation.findMany({
         where: {
             userId: userId,
@@ -18,6 +17,10 @@ export async function getConversationHistory() {
         include: {
             messages: true,
         },
+        orderBy: {
+            updatedAt: 'desc',
+        },
+        take: 50,
     });
 
     client.$disconnect();
