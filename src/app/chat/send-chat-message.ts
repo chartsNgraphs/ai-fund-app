@@ -14,14 +14,21 @@ export async function sendChatMessage(formData: FormData) {
     }
 
     const conversationId: string = await startConversation();
-    await client.message.create({
-        data: {
-            conversationId: parseInt(conversationId),
-            text: formData.get('message') as string,
-            role: 'USER',
-        }
+    await client.message.createMany({
+        data: [
+            {
+                conversationId: parseInt(conversationId),
+                text: formData.get('message') as string,
+                role: 'USER',
+            },
+            {
+                conversationId: parseInt(conversationId),
+                text: 'Hello, how can I help you today?',
+                role: 'ASSISTANT',
+            }
+        ]
     }).catch((error) => {
-        console.error('Error sending message', error);
+        console.error('Error sending messages', error);
     });
     
     revalidatePath('/chat');
