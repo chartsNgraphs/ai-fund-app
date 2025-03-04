@@ -1,10 +1,10 @@
 "use server";
 
-import { client } from '@/prisma/prisma-client';
 import { verifySession } from '../login/session';
+import { PrismaClient } from '@prisma/client';
 
 export async function getChatMessages(conversationId?: number) {
-
+  const client = new PrismaClient();
   const user = verifySession();
   if (!user) {
     return null;
@@ -23,6 +23,7 @@ export async function getChatMessages(conversationId?: number) {
         },
     });
 
+    client.$disconnect();
     console.log('messages', messages)
 
     return messages || [];

@@ -1,6 +1,13 @@
+:root {
+    --user-bubble-background: #c2c2c2;
+    --assistant-bubble-background: #f1f1f1;
+}
+
+
+
 .chat-bubble {
-    border-radius: 15px;
-    padding: 1rem;
+    border-radius: 10px;
+    padding: .75rem;
 }
 
 .assistant {
@@ -9,5 +16,5 @@
 }
 
 .user {
-    color: white;
+    background-color: var(--user-bubble-background);
 }

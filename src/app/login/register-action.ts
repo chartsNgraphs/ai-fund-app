@@ -2,13 +2,13 @@
 
 import { createSession } from "./session";
 import { FormState } from "./definitions";
-import { client } from "@/prisma/prisma-client";
+import { PrismaClient } from "@prisma/client";
 import { v4 } from "uuid";
 
 export async function register(state: FormState, formData: FormData): Promise<FormState> {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-
+    const client = new PrismaClient();
     console.log(formData);
 
     if (!email) {
@@ -22,8 +22,6 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
             email,
         },
     });
-
-    console.log('existingUser', existingUser);
 
     if (existingUser) {
         await createSession(existingUser.id);

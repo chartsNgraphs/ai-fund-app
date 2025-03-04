@@ -1,19 +1,19 @@
 import { revalidatePath } from "next/cache";
-import { client, } from "@/prisma/prisma-client";
+import { PrismaClient } from "@prisma/client";
 import { verifySession } from "@/app/login/session";
-import { startConversation } from "./start-conversation";
+import { getOrStartConversation } from "./get-or-start-conversation";
 
 
 export async function sendChatMessage(formData: FormData) {
     "use server";
-
+    const client = new PrismaClient();
     console.log('sending message', formData.get('message'));
     const user = await verifySession();
     if (!user) {
         return;
     }
 
-    const conversationId: string = await startConversation();
+    const conversationId: string = await getOrStartConversation();
     await client.message.createMany({
         data: [
             {
