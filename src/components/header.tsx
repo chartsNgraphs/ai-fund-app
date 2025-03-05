@@ -38,7 +38,7 @@ export default async function Header() {
       </ul>
 
       <div className="flex items-center gap-4">
-        <ModeToggle />
+        {/* <ModeToggle /> */}
         <LoginButtons isLoggedIn={isLoggedIn} />
         <div className="flex md:hidden mr-2 items-center gap-2">
 
