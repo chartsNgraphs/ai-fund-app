@@ -15,12 +15,25 @@ export async function getConversationHistory() {
             userId: userId,
         },
         include: {
-            messages: true,
+            messages: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+                take: 1,
+                select: {
+                    createdAt: true,
+                },
+            },
         },
         orderBy: {
             updatedAt: 'desc',
         },
         take: 50,
+    });
+
+    // Add createdAt of the most recent message to each conversation
+    conversations.forEach(conversation => {
+        conversation.updatedAt = conversation.messages[0]?.createdAt || null;
     });
 
     client.$disconnect();

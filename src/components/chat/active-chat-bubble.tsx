@@ -11,7 +11,7 @@ export default function ActiveChatBubble({ message, sendMessageFunction }: { mes
     }, []);
 
     return (
-        <div className="w-full flex flex-col space-y-2">
+        <div className="w-full flex flex-col space-y-4">
             <div className="flex justify-start">
                 <div className="chat-bubble text-left assistant bg-secondary text-secondary-foreground">
                     <div>
@@ -19,12 +19,13 @@ export default function ActiveChatBubble({ message, sendMessageFunction }: { mes
                     </div>
                 </div>
             </div>
-            <div className="flex justify-start space-x-2">
+            <div className="flex justify-start space-x-2 ">
                 {
                     message.suggestedResponses?.map((response, index) => (
                         <Badge variant={'default'} onClick={
                             () => handleBadgeClick(response)
-                        } className="cursor-pointer" key={index}>{response}</Badge>
+                        } className="cursor-pointer p-1" key={index}>{response}
+                        </Badge>
                     ))
                 }
             </div>
