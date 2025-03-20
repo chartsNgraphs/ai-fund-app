@@ -1,6 +1,7 @@
 // import { ThemeProvider } from "@/components/theme-provider";
 import Header from "../components/header";
 import "./globals.css";
+import AuthProvider from "@/components/auth-provider";
 
 export default function RootLayout({
   children,
@@ -8,6 +9,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <AuthProvider>
     <html lang="en">
       <body>
         {/* <ThemeProvider
@@ -25,5 +27,6 @@ export default function RootLayout({
         {/* </ThemeProvider> */}
       </body>
     </html>
+    </AuthProvider>
   );
 }

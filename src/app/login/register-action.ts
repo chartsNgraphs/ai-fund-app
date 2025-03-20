@@ -1,5 +1,6 @@
 'use server';
-
+// TODO: Remove this file, it's not needed. 
+// use next-auth callback instead
 import { createSession } from "./session";
 import { FormState } from "./definitions";
 import { PrismaClient } from "@prisma/client";

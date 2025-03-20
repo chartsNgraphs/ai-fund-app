@@ -1,3 +1,6 @@
+// TODO: Remove this file, it's not needed.
+// use next-auth callback instead
+
 import 'server-only';
 
 import { cookies } from 'next/headers';
