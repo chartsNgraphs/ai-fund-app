@@ -72,7 +72,7 @@ export default function LoginButtons({
               </Button>
               <Button className="rounded-full" variant={"secondary"}>
                 <Settings className="mr-2" />
-                Settings
+                Preferences
               </Button>
               <Button
                 className="rounded-full"
