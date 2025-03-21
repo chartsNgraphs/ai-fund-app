@@ -1,5 +1,6 @@
 import { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google'
+import { PrismaClient } from '@prisma/client';
 
 const authOptions : AuthOptions = {
     providers: [
@@ -17,9 +18,30 @@ const authOptions : AuthOptions = {
     ],
     callbacks: {
         async signIn({ profile }) {
+            if (!profile || !profile.email || !profile.name) {
+                // if no profile, return false to deny sign in
+                return false;
+            }
+            const client = new PrismaClient();
             // connect to the DB
             // check if user exists
+            const user = await client.user.findUnique({
+                where: {
+                    email: profile.email
+                }
+            });
             // if not, create user
+            if (!user) {
+                await client.user.create({
+                    data: {
+                        email: profile.email,
+                        name: profile.name,
+                        image: profile.image,
+                        password: '',
+                        id: profile.sub // password is not used for Google sign in
+                    }
+                });
+            }
             // return true if user is allowed to sign in
             return true;
         },
