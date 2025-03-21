@@ -16,7 +16,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
+
+import  Image from 'next/image';
+
 import { Card } from "./ui/card";
 
 export default function LoginButtons({
@@ -49,22 +51,38 @@ export default function LoginButtons({
       {session ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
+            <div className="flex items-center gap-2 p-2 m-0 rounded-full hover:bg-secondary">
             <h3 className="text-md bold">{session.user?.name}</h3>
+            <Image
+              src={session.user?.image || ""}
+              alt="Profile Picture"
+              placeholder="empty"
+              width={35}
+              height={35}
+              className="w-10 h-10 rounded-full"
+            />
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="p-1">
             <Card className="p-4 flex flex-col gap-4">
-              <Button onClick={() => signOut()} variant={"default"}>
-                Logout as {session.user?.name}
-              </Button>
-              <Button variant={"secondary"}>
+              <Button className="rounded-full" variant={"default"}>
                 Profile
+              </Button>
+              <Button
+                className="rounded-full"
+                onClick={() => signOut()}
+                variant={"outline"}
+              >
+                Logout as {session.user?.name}
               </Button>
             </Card>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <Link href="/login">
-          <Button variant={"default"}>Login</Button>
+          <Button className="rounded-full" variant={"default"}>
+            Login
+          </Button>
         </Link>
       )}
     </div>

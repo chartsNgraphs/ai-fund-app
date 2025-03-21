@@ -49,7 +49,7 @@ export default async function Header() {
                 <LoginButtons arrange='vertical'/>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Button className="w-full text-sm">Get Started</Button>
+                <Button className="w-full text-sm rounded-full">Get Started</Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

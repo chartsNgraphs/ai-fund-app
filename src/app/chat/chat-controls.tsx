@@ -12,14 +12,14 @@ export default function ChatControls({ historyCards }: { historyCards: React.Rea
     historyCards = historyCards || [];
     return (
         <div className="flex flex-row space-x-4">
-        <Button onClick={restartConversation} variant={'outline'}>
+        <Button className='rounded-full' onClick={restartConversation} variant={'outline'}>
             <Plus />
             New Chat
         </Button>
         <div className="lg:hidden">
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant={'outline'}>
+                <Button className='rounded-full'  variant={'outline'}>
                     <Clock />
                     History
                 </Button>

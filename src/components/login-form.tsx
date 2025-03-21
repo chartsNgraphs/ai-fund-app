@@ -102,7 +102,7 @@ export function LoginForm({
               <Button
                 key={provider.id}
                 onClick={() => signIn(provider.id)}
-                className="w-full"
+                className="w-full rounded-full"
                 variant={"secondary"}
               >
                 Sign in with {provider.name}
