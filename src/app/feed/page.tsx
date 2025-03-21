@@ -1,6 +1,9 @@
+import { FilterChip } from "@/components/filter-chip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+
 export default async function Feed() {
+
 
     return (
         <div className="container mx-auto p-4 flex justify-center">
@@ -11,7 +14,11 @@ export default async function Feed() {
             <TabsTrigger value="actions">Tasks & Actions</TabsTrigger>
           </TabsList>
           <TabsContent value="updates">
-            
+            <div className="flex flex-row gap-1 justify-start">
+                <FilterChip label="Asset Sales" checked={false} />
+                <FilterChip label="Employment Changes" checked={true}  />
+                <FilterChip label="News" checked={false} />
+            </div>
           </TabsContent>
           <TabsContent value="actions">
             
