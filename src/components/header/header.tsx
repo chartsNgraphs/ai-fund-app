@@ -6,26 +6,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
+import HeaderLinks from "./header-links";
 import { Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import LoginButtons from "./login-buttons";
+import { authOptions } from "@/utils/auth-options";
+import { getServerSession } from "next-auth";
 
 export default async function Header() {
+  const session = await getServerSession(authOptions);
+
+
+
   return (
     <Card className="bg-card py-3 px-4 border-0 flex items-center justify-between gap-6 rounded-none">
-      <ul className="hidden md:flex items-center gap-10 text-card-foreground">
-        <li className="text-primary font-medium">
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <a href="/chat">Feed</a>
-        </li>
-        <li>
-          <a href="/chat">Prospects</a>
-        </li>
-      </ul>
+      <HeaderLinks session={!!session} />
 
       <div className="flex items-center gap-6 width-full justify-end md:justify-between">
         {/* <ModeToggle /> */}
@@ -44,12 +40,18 @@ export default async function Header() {
                 <DropdownMenuItem className="p-3">
                   <a href="#home">Home</a>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="p-3">
-                  <a href="/feed">Feed</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="p-3">
-                  <a href="/prospects">Prospects</a>
-                </DropdownMenuItem>
+                {session ? (
+                  <>
+                    <DropdownMenuItem className="p-3">
+                      <a href="/feed">Feed</a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="p-3">
+                      <a href="/prospects">Prospects</a>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <></>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

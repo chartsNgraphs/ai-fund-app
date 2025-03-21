@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   signOut,
   getProviders,
@@ -20,7 +20,7 @@ import { Settings, LogOut, LogIn, User } from "lucide-react";
 
 import Image from "next/image";
 
-import { Card } from "./ui/card";
+import { Card } from "../ui/card";
 
 export default function LoginButtons({
   arrange,

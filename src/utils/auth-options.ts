@@ -23,11 +23,17 @@ const authOptions : AuthOptions = {
             // return true if user is allowed to sign in
             return true;
         },
-        async session({ session }) {
+        async session({ session, token }) {
             // get user from DB
             // assign userID from session
             // return the session
-            return session;
+            return {
+                user: {
+                    ...session.user,
+                    id: token.sub
+                },
+                expires: session.expires
+            };
         }
     }
 }

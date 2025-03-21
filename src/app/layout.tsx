@@ -1,5 +1,5 @@
 // import { ThemeProvider } from "@/components/theme-provider";
-import Header from "../components/header";
+import Header from "../components/header/header";
 import "./globals.css";
 import AuthProvider from "@/components/auth-provider";
 
