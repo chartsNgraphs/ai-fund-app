@@ -1,10 +1,26 @@
+
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+
 export default async function Feed() {
 
     return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-        <h1 className="text-2xl font-bold">Feed</h1>
-        <p className="mt-4 text-lg">This is the feed page.</p>
-        {/* Add your feed content here */}
-        </div>
+        <div className="container mx-auto p-4 flex justify-center">
+      <div className="w-full sm:w-1/2">
+        <Tabs defaultValue="updates">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="updates">Updates</TabsTrigger>
+            <TabsTrigger value="actions">Tasks & Actions</TabsTrigger>
+          </TabsList>
+          <TabsContent value="updates">
+            
+          </TabsContent>
+          <TabsContent value="actions">
+            
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
     );
     }
