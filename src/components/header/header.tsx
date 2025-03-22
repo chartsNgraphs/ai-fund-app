@@ -18,17 +18,13 @@ export default async function Header() {
   const session = await getServerSession(authOptions);
 
 
-
   return (
     <Card className="bg-card py-3 px-4 border-0 flex items-center justify-between gap-6 rounded-none">
       <HeaderLinks session={!!session} />
 
-      <div className="flex items-center gap-6 width-full justify-end md:justify-between">
+      <div className="flex items-center gap-6 justify-end w-full md:justify-between w-full">
         {/* <ModeToggle /> */}
-        <div className="hidden md:block px-2">
-          <LoginButtons arrange="horizontal" />
-        </div>
-        <div className="md:hidden flex items-center gap-4">
+        <div className="md:hidden flex justify-between w-full">
           <div className="flex md:hidden mr-2 items-center gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -55,8 +51,9 @@ export default async function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <LoginButtons arrange="vertical" />
+          
         </div>
+        <LoginButtons/>
       </div>
     </Card>
   );

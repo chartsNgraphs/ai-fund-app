@@ -22,11 +22,7 @@ import Image from "next/image";
 
 import { Card } from "../ui/card";
 
-export default function LoginButtons({
-  arrange,
-}: {
-  arrange: "horizontal" | "vertical";
-}) {
+export default function LoginButtons() {
   const { data: session } = useSession();
   const [, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
@@ -46,13 +42,13 @@ export default function LoginButtons({
   return (
     <div
       className={`flex items-center gap-4 ${
-        arrange === "horizontal" ? "flex-row" : "flex-col"
+        'flex-row justify-end w-full'
       }`}
     >
       {session ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
-            <div className="flex items-center gap-2 p-2 m-0 rounded-full hover:bg-secondary">
+            <div className="flex items-center gap-2 p-2 m-0 rounded-full hover:bg-secondary transition duration-200">
               <h3 className="text-md bold">{session.user?.name}</h3>
               <Image
                 src={session.user?.image || ""}
@@ -76,7 +72,9 @@ export default function LoginButtons({
               </Button>
               <Button
                 className="rounded-full"
-                onClick={() => signOut()}
+                onClick={() => 
+                  signOut({ callbackUrl: `${window.location.origin}/` })
+                }
                 variant={"outline"}
               >
                 <LogOut className="mr-2" />
