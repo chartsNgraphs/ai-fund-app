@@ -1,9 +1,13 @@
+import ProspectSearchBar from "./prospect-search-bar";
+import { DataTableDemo } from "./prospect-table";
+
 export default async function Prospects() {
+
+
     return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-            <h1 className="text-2xl font-bold">Prospects</h1>
-            <p className="mt-4 text-lg">This is the prospects page.</p>
-            {/* Add your prospects content here */}
+        <div className="container mx-auto p-4 flex flex-col gap-5">
+            <ProspectSearchBar />
+            <DataTableDemo />
         </div>
     );
 }
