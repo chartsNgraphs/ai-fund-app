@@ -44,14 +44,14 @@ export default function FeedCard({
         <div className="flex flex-row gap-2 items-center">
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             className="flex items-center gap-1 rounded-full"
           >
             <Trash className="h-4 w-4" />
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button className="rounded-full" variant="ghost" size="icon">
                 <MoreVertical className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>

@@ -85,7 +85,7 @@ export default function LoginButtons() {
         </DropdownMenu>
       ) : (
         <Link href="/login">
-          <Button className="rounded-full" variant={"default"}>
+          <Button size={'default'} className="rounded-full" variant={"default"}>
             <LogIn className="mr-2" />
             Login
           </Button>
