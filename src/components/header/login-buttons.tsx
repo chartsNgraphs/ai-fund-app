@@ -48,15 +48,15 @@ export default function LoginButtons() {
       {session ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
-            <div className="flex items-center gap-2 p-1.5 pl-2 m-0 rounded-full bg-muted hover:bg-secondary transition duration-200">
-              <h3 className="text-md bold">{session.user?.name}</h3>
+            <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-muted hover:bg-secondary transition duration-200">
+              <h3 className="text-md bold hidden md:block">{session.user?.name}</h3>
               <Image
                 src={session.user?.image || ""}
                 alt="Profile Picture"
                 placeholder="empty"
                 width={25}
                 height={25}
-                className="w-8 h-8 rounded-full"
+                className="rounded-full w-10 h-10 md:w-8 md:h-8"
               />
             </div>
           </DropdownMenuTrigger>

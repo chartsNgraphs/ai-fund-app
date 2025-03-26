@@ -17,7 +17,7 @@ import {
 
 export default function CreateProspectPage() {
     const [addresses, setAddresses] = useState<Array<unknown>>([]);
-    const [socials, setSocials] = useState<Array<unknown>>([]);
+    const [socials, setSocials] = useState<Array<string>>([]);
 
     return (
         <div className="container mx-auto p-1 pt-5">
@@ -156,6 +156,10 @@ export default function CreateProspectPage() {
                                         name="social"
                                         type="text"
                                         placeholder="https://platform.com/johndoe"
+                                        onChange={(e) => {
+                                            socials[index] = e.target.value;
+                                            setSocials([...socials]);
+                                        }}
                                     />
                                 </FormItem>
                                 <Button
@@ -174,14 +178,15 @@ export default function CreateProspectPage() {
                         ))}
                         <div className="flex justify-center p-4">
                             <Button
+                                disabled={socials[socials.length - 1] === ""}
                                 onClick={(event) => {
                                     // suppress form submit
                                     event.preventDefault();
-                                    setSocials([...socials, {}]);
+                                    setSocials([...socials, ""]);
                                 }}
                                 variant="outline"
-                                className="rounded-full"
-                            >
+                                className={`rounded-full`}
+                                >
                                 <Plus size={24} />
                                 Add Social
                             </Button>
