@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import { Plus, Search, Upload } from "lucide-react";
 import { useState } from "react";
 
@@ -28,14 +29,20 @@ export default function ProspectSearchBar() {
                     </Button>
                 </div>
                 <div className="flex flex-row items-center lg:justify-end gap-2 md:justify-start">
-                    <Button className="p-2 rounded-full" variant="secondary">
+                    <Button
+                        className="p-2 rounded-full"
+                        variant="secondary"
+                    >
                         <Upload className="w-5 h-5" />
-                        <span className="hidden md:inline">Import</span>
+                        Import
                     </Button>
-                    <Button className="p-2 rounded-full" variant="default">
-                        <Plus className="w-5 h-5" />
-                        <span className="hidden md:inline">Add Prospect</span>
-                    </Button>
+                    <Link href="/prospects/create">
+                        <Button className="p-2 rounded-full" variant="default">
+                            <Plus className="w-5 h-5" />
+                            <span className="hidden md:inline">Add a Prospect</span>
+                            <span className="inline md:hidden">Add</span>
+                        </Button>
+                    </Link>
                 </div>
             </div>
             {    /* Recent searches section */}

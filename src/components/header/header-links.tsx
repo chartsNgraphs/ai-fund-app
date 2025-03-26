@@ -8,21 +8,21 @@ export default function HeaderLinks({ session }: { session: boolean;}) {
     const pathName = usePathname();
 
     const activeStyling = (path: string) => {
-        return pathName === path ? "text-primary text-md font-bold" : "";
+        return pathName === path ? "font-bold" : "";
     }
 
     return (
         <ul className="hidden md:flex items-center gap-10 text-card-foreground">
         <li className={`${activeStyling("/")}`}>
-          <Link href="/">Home</Link>
+          <Link className="text-primary-foreground text-lg" href="/">Home</Link>
         </li>
         {session ? (
           <>
-            <li>
-              <Link href="/feed" className={`${activeStyling("/feed")}`}>Feed</Link>
+            <li className={`${activeStyling("/feed")}`}>
+              <Link className="text-primary-foreground text-lg" href="/feed" >Feed</Link>
             </li>
-            <li>
-              <Link href="/prospects" className={`${activeStyling("/prospects")}`}>Prospects</Link>
+            <li className={`${activeStyling("/prospects")}`}>
+              <Link className="text-primary-foreground text-lg" href="/prospects" >Prospects</Link>
             </li>
           </>
         ) : (

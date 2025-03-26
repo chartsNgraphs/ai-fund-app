@@ -16,3 +16,47 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+model Prospect {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  dateOfBirth DateTime
+  email     String   @unique
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  addresses ProspectAddress[]
+  profiles  ProspectProfile[]
+  socials   ProspectSocialLink[]
+}
+
+model ProspectAddress {
+  id        String   @id @default(cuid())
+  street    String
+  city      String
+  state     String
+  zip       String
+  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProspectProfile {
+  id        String   @id @default(cuid())
+  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospectId String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProspectSocialLink {
+  id        String   @id @default(cuid())
+  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospectId String
+  type      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

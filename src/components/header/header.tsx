@@ -19,7 +19,7 @@ export default async function Header() {
 
 
   return (
-    <Card className="bg-card py-3 px-4 border-0 flex items-center justify-between gap-6 rounded-none">
+    <Card className="bg-card py-3 px-4 border-0 flex bg-primary items-center justify-between gap-6 rounded-none">
       <HeaderLinks session={!!session} />
 
       <div className="flex items-center gap-6 justify-end w-full md:justify-between w-full">

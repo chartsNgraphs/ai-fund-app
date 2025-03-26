@@ -10,7 +10,18 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+	...compat.extends("next/core-web-vitals", "next/typescript"),
+	{
+		rules: {
+			"no-console": "off",
+		"prettier/prettier":[  //or whatever plugin that is causing the clash
+            "error",
+            {
+                "tabWidth":4
+            }
+        ]
+		},
+	},
 ];
 
 export default eslintConfig;
