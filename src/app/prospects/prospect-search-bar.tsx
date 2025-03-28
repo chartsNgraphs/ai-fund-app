@@ -31,13 +31,13 @@ export default function ProspectSearchBar() {
                 <div className="flex flex-row items-center lg:justify-end gap-2 md:justify-start">
                     <Button
                         className="p-2 rounded-full"
-                        variant="secondary"
+                        variant="outline"
                     >
                         <Upload className="w-5 h-5" />
                         Import
                     </Button>
                     <Link href="/prospects/create">
-                        <Button className="p-2 rounded-full" variant="default">
+                        <Button className="p-2 rounded-full" variant="secondary">
                             <Plus className="w-5 h-5" />
                             <span className="hidden md:inline">Add a Prospect</span>
                             <span className="inline md:hidden">Add</span>
