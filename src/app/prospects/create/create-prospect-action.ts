@@ -16,9 +16,9 @@ export default async function createProspectAction(data: FormData) {
     }
 
     console.log("Session: ", session);
-    
+
     // create the prospect object from the form data
-    const prospect : Prospect = {
+    const prospect: Prospect = {
         userId: (session.user as unknown as any).id,
         firstName: data.get("firstName")?.toString()!,
         lastName: data.get("lastName")?.toString()!,
@@ -34,7 +34,6 @@ export default async function createProspectAction(data: FormData) {
     }).catch((error) => {
         console.error("Error creating prospect: ", error);
     }
-    // redirect to the prospects page
     )
 
     redirect("/prospects");
