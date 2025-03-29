@@ -23,7 +23,7 @@ export default class ProspectRepository {
                 include: {
                     addresses: true,
                     socials: true,
-                   } 
+                }
             },);
 
         return results.map(result => ({
@@ -85,7 +85,7 @@ export default class ProspectRepository {
             console.error("Error creating prospect: ", error);
             return false;
         }
-        
+
         return true;
     }
 
