@@ -15,6 +15,7 @@ model User {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  prospects  Prospect[]
 }
 model Prospect {
   id        String   @id @default(cuid())
@@ -24,6 +25,8 @@ model Prospect {
   email     String   @unique
   phone     String
   createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   updatedAt DateTime @updatedAt
   addresses ProspectAddress[]
   profiles  ProspectProfile[]
@@ -33,6 +36,7 @@ model Prospect {
 model ProspectAddress {
   id        String   @id @default(cuid())
   street    String
+  street2   String?
   city      String
   state     String
   zip       String

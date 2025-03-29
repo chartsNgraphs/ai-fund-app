@@ -49,7 +49,22 @@ const authOptions : AuthOptions = {
             // get user from DB
             // assign userID from session
             // return the session
+
+            const client = new PrismaClient();
+            // connect to the DB
+            // check if user exists
+            const user = await client.user.findUnique({
+                where: {
+                    id: token.sub
+                }
+            });
+            // if not user, raise error
+            if (!user) {
+                throw new Error("User not found");
+            }
+
             return {
+                ...session,
                 user: {
                     ...session.user,
                     id: token.sub
