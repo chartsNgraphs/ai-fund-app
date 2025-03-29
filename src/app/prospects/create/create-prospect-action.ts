@@ -3,6 +3,7 @@
 import { Prospect } from "@/model/prospects/prospect";
 import ProspectRepository from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
+import { url } from "inspector";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -30,17 +31,23 @@ export default async function createProspectAction(data: FormData) {
         email: data.get("email")?.toString()!,
         phone: data.get("phone")?.toString()!,
         addresses: data.get("addresses") ? JSON.parse(data.get("addresses") as string) : [],
-        socials: data.get("socials") ? JSON.parse(data.get("socials") as string) : [],
+        socials: (data.get("socials") ? JSON.parse(data.get("socials") as string) : []).map((social: any) => {
+            return {
+                url: social,
+                type: social.type || "linkedin",
+            }}),
     };
 
-    prospectRepository.create(prospect).then((prospect) => {
-        console.log("Prospect created: ", prospect);
+    const createResult = await prospectRepository.create(prospect).then((result) => {
+        return result;
     }).catch((error) => {
         console.error("Error creating prospect: ", error);
     }
     )
 
-    redirect("/prospects");
+    if (createResult) {
+        redirect("/prospects");
+    }
 
 
 }

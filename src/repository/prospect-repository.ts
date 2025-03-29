@@ -90,8 +90,8 @@ export default class ProspectRepository {
                     },
                     socials: {
                         create: prospect.socials.map(social => ({
-                            ...social,
-                            type: social.type || "", // Ensure type is always a string
+                            url: social.url, // Ensure url is a string
+                            type: social.type || "linkedin", // Ensure type is always a string TODO: use the value from form.
                         })),
                     },
                 },
