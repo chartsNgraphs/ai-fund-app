@@ -1,12 +1,12 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FormItem } from "@/components/ui/form";
-import { Plus, Trash, X } from "lucide-react";
+import { Loader2, Plus, Trash, X } from "lucide-react";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -16,12 +16,22 @@ import {
 } from "@/components/ui/breadcrumb";
 import createProspectAction from "./create-prospect-action";
 import { Address } from "@/model/shared/address";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Prospect } from "@/model/prospects/prospect";
+import { redirect } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function CreateProspectPage() {
+    const toast = useToast();
     const [addresses, setAddresses] = useState<Array<Address>>([]);
     const [socials, setSocials] = useState<Array<string>>([]);
 
-    const handleSubmit = (formData: FormData) => {
+    const [prospect, setProspect] = useState<Prospect>({} as unknown as Prospect);
+
+    const [isError, setIsError] = useState(false);
+
+    const handleSubmit = async (prevState: any, formData: FormData) => {
         
         // append array of addresses to formData
         formData.append("addresses", JSON.stringify(addresses));
@@ -29,8 +39,29 @@ export default function CreateProspectPage() {
         // append array of socials to formData
         formData.append("socials", JSON.stringify(socials));
 
-        createProspectAction(formData);
+        const creationResults = await createProspectAction(formData);
+
+        if (!creationResults.success) {
+            setIsError(true);
+            setProspect(creationResults.prospect);
+            return {
+                message: "Error creating prospect",
+            }
+        }
+        else {
+            setIsError(false);
+            toast.toast({
+                title: "Prospect Created",
+                description: "The prospect has been created successfully.",
+                variant: "default",
+            });
+            redirect("/prospects");
+        }
     }
+
+    const [actionState, action, pending] = useActionState(handleSubmit, {
+        message: "",
+    } as unknown as any);
 
     return (
         <div className="container mx-auto p-1 pt-5">
@@ -51,21 +82,29 @@ export default function CreateProspectPage() {
                     Add some basic details here, let our magic fill out the rest!
                 </p>
             </div>
-            <form className="space-y-4" action={handleSubmit}>
+            {
+                actionState?.message && (
+                    <Alert variant="destructive" className="mb-4" >
+                        <AlertTitle>{`Something went wrong`}</AlertTitle>
+                        {isError && <AlertDescription>{actionState.message}</AlertDescription>}
+                    </Alert>
+                )
+            }
+            <form className="space-y-4" action={action}>
                 <Card className="p-4">
                     <h1 className="text-xl text-primary font-semibold">Basic Details</h1>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormItem>
                             <Label htmlFor="firstName">First Name</Label>
-                            <Input name="firstName" type="text" placeholder="First Name" />
+                            <Input name="firstName" type="text" placeholder="First Name" defaultValue={prospect?.firstName} />
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="lastName">Last Name</Label>
-                            <Input name="lastName" type="text" placeholder="Last Name" />
+                            <Input name="lastName" type="text" placeholder="Last Name" defaultValue={prospect?.lastName}/>
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="email">Email</Label>
-                            <Input name="email" type="email" placeholder="Email" />
+                            <Input name="email" type="email" placeholder="Email" defaultValue={prospect?.email}/>
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="phone">Phone</Label>
@@ -80,6 +119,7 @@ export default function CreateProspectPage() {
                                         .slice(0, 14);
                                     e.target.value = formattedValue;
                                 }}
+                                defaultValue={prospect?.phone}
                             />
                         </FormItem>
                         <FormItem>
@@ -88,6 +128,7 @@ export default function CreateProspectPage() {
                                 name="dateOfBirth"
                                 type="date"
                                 placeholder="Date of Birth"
+                                defaultValue={prospect?.dateOfBirth?.toString()}
                             />
                         </FormItem>
                     </div>
@@ -131,6 +172,7 @@ export default function CreateProspectPage() {
                                                 };
                                                 setAddresses(updatedAddresses);
                                             }}
+                                            defaultValue={address.street || ""}
                                         />
                                     </FormItem>
                                     <FormItem>
@@ -147,6 +189,7 @@ export default function CreateProspectPage() {
                                                 };
                                                 setAddresses(updatedAddresses);
                                             }}
+                                            defaultValue={address.street2 || ""}
                                         />
                                     </FormItem>
                                 </div>
@@ -164,6 +207,7 @@ export default function CreateProspectPage() {
                                             };
                                             setAddresses(updatedAddresses);
                                         }}
+                                        defaultValue={address.city || ""}
                                     />
                                 </FormItem>
                                 <FormItem>
@@ -180,6 +224,7 @@ export default function CreateProspectPage() {
                                             };
                                             setAddresses(updatedAddresses);
                                         }}
+                                        defaultValue={address.state || ""}
                                     />
                                 </FormItem>
                                 <FormItem>
@@ -196,6 +241,7 @@ export default function CreateProspectPage() {
                                             };
                                             setAddresses(updatedAddresses);
                                         }}
+                                        defaultValue={address.zip || ""}
                                     />
                                 </FormItem>
                             </div>
@@ -232,6 +278,7 @@ export default function CreateProspectPage() {
                                             socials[index] = e.target.value;
                                             setSocials([...socials]);
                                         }}
+                                        defaultValue={social || ""}
                                     />
                                 </FormItem>
                                 <Button
@@ -273,6 +320,11 @@ export default function CreateProspectPage() {
                         Save for Later 
                     </Button>
                     <Button variant="default" size={"lg"} className="rounded-full">
+                        {
+                            pending && (
+                                <Loader2 className="animate-spin mr-2" size={16} />
+                            )
+                        }
                         Create Prospect Profile
                     </Button>
                 </div>

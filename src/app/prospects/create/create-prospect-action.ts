@@ -3,16 +3,15 @@
 import { Prospect } from "@/model/prospects/prospect";
 import ProspectRepository from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
-import { url } from "inspector";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 /**
  * Server action to create the prospect from the form data
  * @param data FormData
  */
-export default async function createProspectAction(data: FormData) {
+export default async function createProspectAction(data: FormData): Promise<{ prospect: Prospect, success: boolean }> {
     const prospectRepository = new ProspectRepository();
+
 
     // Get the session from the server
     const session = await getServerSession(authOptions);
@@ -42,12 +41,20 @@ export default async function createProspectAction(data: FormData) {
         return result;
     }).catch((error) => {
         console.error("Error creating prospect: ", error);
+        return null;
     }
     )
 
-    if (createResult) {
-        redirect("/prospects");
+    if (!createResult) {
+        return {
+            prospect: prospect,
+            success: false
+        }
     }
 
+    return {
+        prospect: prospect,
+        success: true
+    }
 
 }

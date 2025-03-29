@@ -76,7 +76,7 @@ export default class ProspectRepository {
      * @param prospect The prospect object to create
      * @returns True if the prospect was created successfully, false otherwise
      */
-    async create(prospect: Prospect): Promise<Boolean> {
+    async create(prospect: Prospect): Promise<{prospect: Prospect, success: boolean}> {
         console.log("Creating prospect: ", prospect);
         // console.log(this.prisma.prospect);
         try {
@@ -102,10 +102,16 @@ export default class ProspectRepository {
             });
         } catch (error) {
             console.error("Error creating prospect: ", error);
-            return false;
+            return {
+                prospect: prospect,
+                success: false,
+            };
         }
 
-        return true;
+        return {
+            prospect: prospect,
+            success: true,
+        };
     }
 
 }
