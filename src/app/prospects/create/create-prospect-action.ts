@@ -6,6 +6,10 @@ import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+/**
+ * Server action to create the prospect from the form data
+ * @param data FormData
+ */
 export default async function createProspectAction(data: FormData) {
     const prospectRepository = new ProspectRepository();
 

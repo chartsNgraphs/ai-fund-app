@@ -2,6 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 import { Prospect } from "@/model/prospects/prospect";
 
+/**
+ * ProspectRepository class to handle all the database operations related to prospects.
+ * It uses PrismaClient to interact with the database.
+ */
 export default class ProspectRepository {
     private prisma: PrismaClient;
 
@@ -9,6 +13,11 @@ export default class ProspectRepository {
         this.prisma = new PrismaClient();
     }
 
+    /**
+     * Get all prospects for a user
+     * @param userId The ID of the user
+     * @returns An array of prospects for the user
+     */
     async getAll(
         userId
     ): Promise<Prospect[]> {
@@ -35,6 +44,11 @@ export default class ProspectRepository {
         }));
     }
 
+    /**
+     * Get a prospect by ID
+     * @param id The ID of the prospect
+     * @returns The prospect object or null if not found
+     */
     async getById(id: string): Promise<Prospect | null> {
         const result = await this.prisma.prospect.findUnique({
             where: { id },
@@ -57,6 +71,11 @@ export default class ProspectRepository {
         return null;
     }
 
+    /**
+     * Create a new prospect in the database
+     * @param prospect The prospect object to create
+     * @returns True if the prospect was created successfully, false otherwise
+     */
     async create(prospect: Prospect): Promise<Boolean> {
         console.log("Creating prospect: ", prospect);
         // console.log(this.prisma.prospect);
