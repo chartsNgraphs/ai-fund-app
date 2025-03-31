@@ -44,6 +44,7 @@ const authOptions : AuthOptions = {
             }
             // return true if user is allowed to sign in
             return true;
+            
         },
         async session({ session, token }) {
             // get user from DB
