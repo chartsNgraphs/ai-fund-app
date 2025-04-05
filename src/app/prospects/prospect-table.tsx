@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -109,6 +110,7 @@ export const columns: ColumnDef<Prospect>[] = [
 
 export function DataTableDemo(props: { prospects: Prospect[] }) {
   const { prospects } = props
+  const router = useRouter()
   const editedProspects = prospects.map((prospect) => {
     return {
       ...prospect,
@@ -199,6 +201,8 @@ export function DataTableDemo(props: { prospects: Prospect[] }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => router.push(`/prospects/${row.original.id}`)}
+                  className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
