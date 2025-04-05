@@ -41,16 +41,32 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             }}),
     };
 
-    const profile = await buildProfile(prospect);
-
-    prospect.profiles = [
-        {
-            data: JSON.stringify(profile),
+    if (!prospect.firstName || !prospect.lastName) {
+        return {
+            prospect: prospect,
+            success: false
         }
-    ]
+    }
+    
+    try {
+        const profile = await buildProfile(prospect);
+        prospect.profiles = [
+            {
+                data: JSON.stringify(profile),
+            }
+        ]
+    }
+    catch (error) {
+        console.error("Error building profile: ", error);
+        return {
+            prospect: prospect,
+            success: false
+        }
+    }
+    
 
     const createResult = await prospectRepository.create(prospect);
-    if (!createResult) {
+    if (!createResult.success) {
         return {
             prospect: prospect,
             success: false

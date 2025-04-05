@@ -163,7 +163,6 @@ export default function CreateProspectPage() {
                                         <Input
                                             type="text"
                                             placeholder="Street"
-                                            value={address.street || ""}
                                             onChange={(e) => {
                                                 const updatedAddresses = [...addresses];
                                                 updatedAddresses[index] = {

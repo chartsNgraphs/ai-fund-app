@@ -125,7 +125,6 @@ export default class ProspectRepository {
                 },
             });
         } catch (error) {
-            console.error("Error creating prospect: ", error);
             return {
                 prospect: prospect,
                 success: false,
