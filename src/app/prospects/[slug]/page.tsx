@@ -9,6 +9,7 @@ import ProspectOverview from "./prospect-overview";
 import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
 import ProspectAddressInformation from "./prospect-address-information";
 import ProspectSocialDisplay from "./prospect-social-display";
+import ProfileDetailView from "./profile-detail-view";
 
 export default async function Page({
 	params,
@@ -57,14 +58,15 @@ export default async function Page({
 				<ProspectOverview {...prospect} />
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-4">
 					<WealthSnapshotDisplay data={wealthPlaceholder} />
-					<Card  className="w-full h-full p-4">
+					<Card className="w-full h-full p-4">
 						<h1 className="text-xl font-semibold">Address & Socials</h1>
 						<div className="flex flex-col gap-8 p-0">
-							<ProspectAddressInformation addresses={prospect.addresses}/>
+							<ProspectAddressInformation addresses={prospect.addresses} />
 							<ProspectSocialDisplay socials={prospect.socials} />
 						</div>
 					</Card>
 				</div>
+				<ProfileDetailView profiles={prospect.profiles}/>
 			</div>
 
 			{/* <p>{JSON.stringify(prospect)}</p> */}
