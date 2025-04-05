@@ -4,6 +4,9 @@ import { Prospect } from "@/model/prospects/prospect";
 import ProspectRepository from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
+import { getProfile } from "@/app/services/build-profile-service";
+import ProspectProfileRepository from "@/repository/profile-repository";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Server action to create the prospect from the form data
@@ -11,7 +14,7 @@ import { getServerSession } from "next-auth";
  */
 export default async function createProspectAction(data: FormData): Promise<{ prospect: Prospect, success: boolean }> {
     const prospectRepository = new ProspectRepository();
-
+    const prospectProfileRepository = new ProspectProfileRepository();
 
     // Get the session from the server
     const session = await getServerSession(authOptions);
@@ -23,6 +26,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
 
     // create the prospect object from the form data
     const prospect: Prospect = {
+        id: uuidv4(),
         userId: (session.user as unknown as any).id,
         firstName: data.get("firstName")?.toString()!,
         lastName: data.get("lastName")?.toString()!,
@@ -37,14 +41,15 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             }}),
     };
 
-    const createResult = await prospectRepository.create(prospect).then((result) => {
-        return result;
-    }).catch((error) => {
-        console.error("Error creating prospect: ", error);
-        return null;
-    }
-    )
+    const profile = await buildProfile(prospect);
 
+    prospect.profiles = [
+        {
+            data: JSON.stringify(profile),
+        }
+    ]
+
+    const createResult = await prospectRepository.create(prospect);
     if (!createResult) {
         return {
             prospect: prospect,
@@ -57,4 +62,19 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
         success: true
     }
 
+}
+
+async function buildProfile(prospect: Prospect): Promise<any> {
+    const profile = await getProfile(prospect).then((result) => {
+        return result;
+    }).catch((error) => {
+        console.error("Error building profile: ", error);
+        return null;
+    });
+
+    if (!profile) {
+        throw new Error("Error building profile");
+    }
+
+    return profile;
 }

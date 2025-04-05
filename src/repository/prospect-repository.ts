@@ -32,6 +32,7 @@ export default class ProspectRepository {
                 include: {
                     addresses: true,
                     socials: true,
+                    profiles: true, // Include profiles in the query
                 }
             },);
 
@@ -40,6 +41,14 @@ export default class ProspectRepository {
             addresses: result.addresses.map(address => ({
                 ...address,
                 street2: address.street2 || "", // Ensure street2 is always a string
+            })),
+            socials: result.socials.map(social => ({
+                ...social,
+                type: social.type || "linkedin", // Ensure type is always a string
+            })),
+            profiles: result.profiles.map(profile => ({
+                ...profile,
+                data: (profile.data as unknown as string), // Parse the data field
             })),
         }));
     }
@@ -55,6 +64,7 @@ export default class ProspectRepository {
             include: {
                 addresses: true,
                 socials: true,
+                profiles: true, // Include profiles in the query
             },
         });
 
@@ -64,6 +74,14 @@ export default class ProspectRepository {
                 addresses: result.addresses.map(address => ({
                     ...address,
                     street2: address.street2 || "", // Provide a default value for street2
+                })),
+                socials: result.socials.map(social => ({
+                    ...social,
+                    type: social.type || "linkedin", // Provide a default value for type
+                })),
+                profiles: result.profiles.map(profile => ({
+                    ...profile,
+                    data: (profile.data as unknown as string), // Parse the data field
                 })),
             };
         }
@@ -94,6 +112,12 @@ export default class ProspectRepository {
                             type: social.type || "linkedin", // Ensure type is always a string TODO: use the value from form.
                         })),
                     },
+                    profiles: {
+                        create: prospect.profiles?.map(profile => ({
+                            data: profile.data, // Ensure data is a string
+                        })),
+                    },
+
                 },
                 include: {
                     addresses: true,
