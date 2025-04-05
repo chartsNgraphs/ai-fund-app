@@ -1,7 +1,7 @@
 "use server";
 import axios from 'axios';
 import { Prospect } from '@/model/prospects/prospect';
-import { getServerSession } from 'next-auth';
+import { DefaultSession, getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth-options';
 
 interface ProspectBuildRequest {
@@ -14,7 +14,7 @@ interface ProspectBuildRequest {
  */
 export async function getProfile(prospect: Prospect): Promise<any> {
 
-    const session = await getServerSession(authOptions);
+    const session : DefaultSession | null = await getServerSession(authOptions);
     if (!session || !session.user) {
         throw new Error("Session not found");
     }
