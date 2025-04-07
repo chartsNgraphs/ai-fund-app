@@ -179,7 +179,6 @@ export default function CreateProspectPage() {
                                         <Input
                                             type="text"
                                             placeholder="Street"
-                                            value={address.street2 || ""}
                                             onChange={(e) => {
                                                 const updatedAddresses = [...addresses];
                                                 updatedAddresses[index] = {
@@ -197,7 +196,6 @@ export default function CreateProspectPage() {
                                     <Input
                                         type="text"
                                         placeholder="City"
-                                        value={address.city || ""}
                                         onChange={(e) => {
                                             const updatedAddresses = [...addresses];
                                             updatedAddresses[index] = {
@@ -214,7 +212,6 @@ export default function CreateProspectPage() {
                                     <Input
                                         type="text"
                                         placeholder="State"
-                                        value={address.state || ""}
                                         onChange={(e) => {
                                             const updatedAddresses = [...addresses];
                                             updatedAddresses[index] = {
@@ -231,7 +228,6 @@ export default function CreateProspectPage() {
                                     <Input
                                         type="text"
                                         placeholder="Zip"
-                                        value={address.zip || ""}
                                         onChange={(e) => {
                                             const updatedAddresses = [...addresses];
                                             updatedAddresses[index] = {
