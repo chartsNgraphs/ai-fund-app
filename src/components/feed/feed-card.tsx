@@ -26,14 +26,14 @@ export default function FeedCard({
   date?: string; // Optional date
 }) {
   return (
-    <Card className="flex flex-col gap-2 p-4 border-0">
+    <Card className="flex flex-col gap-2 p-4">
       <div className="flex flex-row justify-between items-center mb-2">
         {badges && (
           <div className="flex flex-row gap-2 h-6">
             {badges.map((badge, index) => (
               <Badge
                 key={`badge-${id}-${index}`} // Unique key for each badge
-                className="badge-sm py-0 text-xs my-0 px-2 cursor-auto hover:bg-secondary hover:text-secondary-foreground"
+                className="badge-sm py-0 text-xs my-0 px-2 bg-muted cursor-auto hover:bg-muted hover:text-secondary-foreground dark:bg-muted dark:text-muted-foreground"
                 variant="secondary" // Use secondary variant for badges
               >
                 {badge}
@@ -73,7 +73,7 @@ export default function FeedCard({
       <p className="text-sm text-muted-foreground">{description}</p>
       <div className="flex flex-row justify-between items-center mt-2">
         <Button
-          variant="default"
+          variant="secondary"
           size="sm"
           className="flex items-center gap-1 rounded-full"
         >

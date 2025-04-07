@@ -8,7 +8,7 @@ export default function HeaderLinks({ session }: { session: boolean;}) {
     const pathName = usePathname();
 
     const activeStyling = (path: string) => {
-      return pathName === path ? "font-bold underline underline-offset-8 decoration-secondary" : "";
+      return pathName === path ? "font-bold underline underline-offset-8 decoration-background" : "";
     }
 
     return (

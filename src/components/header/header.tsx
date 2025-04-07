@@ -23,13 +23,12 @@ export default async function Header() {
       <HeaderLinks session={!!session} />
 
       <div className="flex items-center gap-6 justify-end w-full md:justify-between w-full">
-        {/* <ModeToggle /> */}
         <div className="md:hidden flex justify-between w-full">
           <div className="flex md:hidden mr-2 items-center gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="h-5 w-5 rotate-0 scale-100" />
+                <Button variant="default" size="icon">
+                  <Menu className="h-10 w-10 rotate-0 scale-100" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center">

@@ -13,7 +13,7 @@ export default function ProspectSearchBar() {
     const recents = ["John Doe", "John Doe NY"]
 
     return (
-        <div className={`w-full transition p-4 bg-white border rounded-lg shadow-md ${searchActive ? "z-999" : ""}`}
+        <div className={`w-full transition p-4 bg-card border rounded-lg shadow-md ${searchActive ? "z-999" : ""}`}
             onBlur={() => setSearchActive(false)}>
             <div className="flex items-center justify-between grid lg:grid-cols-2 gap-2 md: grid-cols-1">
                 <div className="flex flex-row">

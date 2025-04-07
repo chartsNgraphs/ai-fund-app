@@ -21,6 +21,7 @@ import { Settings, LogOut, LogIn, User } from "lucide-react";
 import Image from "next/image";
 
 import { Card } from "../ui/card";
+import { ModeToggle } from "../dark-mode-toggle";
 
 export default function LoginButtons() {
   const { data: session } = useSession();
@@ -46,9 +47,11 @@ export default function LoginButtons() {
       }`}
     >
       {session ? (
+        <>
+        <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
-            <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-muted hover:bg-secondary transition duration-200">
+            <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-muted hover:bg-secondary transition duration-200 dark:hover:text-secondary-foreground">
               <h3 className="text-md bold hidden md:block">{session.user?.name}</h3>
               <Image
                 src={session.user?.image || ""}
@@ -83,13 +86,17 @@ export default function LoginButtons() {
             </Card>
           </DropdownMenuContent>
         </DropdownMenu>
+        </>
       ) : (
+        <>
+        <ModeToggle />
         <Link href="/login">
           <Button size={'lg'} className="rounded-full" variant={"secondary"}>
             <LogIn className="mr-2" />
             Login
           </Button>
         </Link>
+        </>
       )}
     </div>
   );
