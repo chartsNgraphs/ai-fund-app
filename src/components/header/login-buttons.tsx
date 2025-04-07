@@ -51,7 +51,7 @@ export default function LoginButtons() {
         <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
-            <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-muted hover:bg-secondary transition duration-200 dark:hover:text-secondary-foreground">
+            <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-white hover:bg-secondary transition duration-200 dark:hover:text-secondary-foreground">
               <h3 className="text-md bold hidden md:block">{session.user?.name}</h3>
               <Image
                 src={session.user?.image || ""}
