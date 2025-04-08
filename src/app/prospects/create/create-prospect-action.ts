@@ -22,8 +22,6 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
         throw new Error("Session not found");
     }
 
-    console.log("Session: ", session);
-
     // create the prospect object from the form data
     const prospect: Prospect = {
         id: uuidv4(),
