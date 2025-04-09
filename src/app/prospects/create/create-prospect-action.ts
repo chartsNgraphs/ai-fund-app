@@ -14,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export default async function createProspectAction(data: FormData): Promise<{ prospect: Prospect, success: boolean }> {
     const prospectRepository = new ProspectRepository();
-    const prospectProfileRepository = new ProspectProfileRepository();
 
     // Get the session from the server
     const session = await getServerSession(authOptions);

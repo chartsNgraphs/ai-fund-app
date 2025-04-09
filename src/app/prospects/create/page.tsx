@@ -15,6 +15,7 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import createProspectAction from "./create-prospect-action";
+import editProspectAction from "../edit/edit-prospect-action";
 import { Address } from "@/model/shared/address";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Prospect } from "@/model/prospects/prospect";
@@ -25,13 +26,13 @@ import { useToast } from "@/hooks/use-toast";
  * 
  * @param props Page to create a prospect, also used to edit a prospect.
  */
-export default function CreateProspectPage(props: {prospect?: Prospect, mode?: string}) {
+export default function CreateProspectPage(props: { prospect?: Prospect, mode?: string }) {
     const { prospect: initialProspect } = props;
     const { mode } = props;
     const isEditMode = mode === "edit";
     const toast = useToast();
-    const [addresses, setAddresses] = useState<Array<Address>>( initialProspect?.addresses || []);
-    const [socials, setSocials] = useState<Array<string>>( initialProspect?.socials.map(
+    const [addresses, setAddresses] = useState<Array<Address>>(initialProspect?.addresses || []);
+    const [socials, setSocials] = useState<Array<string>>(initialProspect?.socials.map(
         (social) => social.url
     ) || []);
 
@@ -40,31 +41,53 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
     const [isError, setIsError] = useState(false);
 
     const handleSubmit = async (prevState: any, formData: FormData) => {
-        
         // append array of addresses to formData
         formData.append("addresses", JSON.stringify(addresses));
 
         // append array of socials to formData
         formData.append("socials", JSON.stringify(socials));
 
-        const creationResults = await createProspectAction(formData);
-
-        if (!creationResults.success) {
-            setIsError(true);
-            setProspect(creationResults.prospect);
-            return {
-                message: "Error creating prospect",
+        if (isEditMode) {
+            const editResults = await editProspectAction(initialProspect?.id!, formData);
+            if (!editResults.success) {
+                setIsError(true);
+                setProspect(editResults.prospect || prospect);
+                return {
+                    message: "Error editing prospect",
+                }
+            }
+            else {
+                setIsError(false);
+                toast.toast({
+                    title: "Prospect Edited",
+                    description: "The prospect has been edited successfully.",
+                    variant: "default",
+                });
+                redirect("/prospects/" + initialProspect?.id);
             }
         }
+
         else {
-            setIsError(false);
-            toast.toast({
-                title: "Prospect Created",
-                description: "The prospect has been created successfully.",
-                variant: "default",
-            });
-            redirect("/prospects");
+            const creationResults = await createProspectAction(formData);
+            if (!creationResults.success) {
+                setIsError(true);
+                setProspect(creationResults.prospect);
+                return {
+                    message: "Error creating prospect",
+                }
+            }
+            else {
+                setIsError(false);
+                toast.toast({
+                    title: "Prospect Created",
+                    description: "The prospect has been created successfully.",
+                    variant: "default",
+                });
+                redirect("/prospects");
+            }
+
         }
+
     }
 
     const [actionState, action, pending] = useActionState(handleSubmit, {
@@ -84,10 +107,10 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
             </Breadcrumb>
             <div>
                 <h1 className="text-2xl font-bold m-1 text-primary">
-                    {isEditMode? `Edit Prospect Details`: `Create a Prospect`}
+                    {isEditMode ? `Edit Prospect Details` : `Create a Prospect`}
                 </h1>
                 <p className=" m-1 text-s mb-1 md:mb-5">
-                    {isEditMode? `Update personal & address details here.`: `Add some basic details here, let our magic fill out the rest!`}
+                    {isEditMode ? `Update personal & address details here.` : `Add some basic details here, let our magic fill out the rest!`}
                 </p>
             </div>
             {
@@ -108,11 +131,11 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="lastName">Last Name</Label>
-                            <Input name="lastName" type="text" placeholder="Last Name" defaultValue={prospect?.lastName}/>
+                            <Input name="lastName" type="text" placeholder="Last Name" defaultValue={prospect?.lastName} />
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="email">Email</Label>
-                            <Input name="email" type="email" placeholder="Email" defaultValue={prospect?.email}/>
+                            <Input name="email" type="email" placeholder="Email" defaultValue={prospect?.email} />
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="phone">Phone</Label>
@@ -308,7 +331,7 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
                                 }}
                                 variant="outline"
                                 className={`rounded-full`}
-                                >
+                            >
                                 <Plus size={24} />
                                 Add Social
                             </Button>
@@ -335,7 +358,7 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
                             event.preventDefault();
                         }}
                     >
-                        Save for Later 
+                        Save for Later
                     </Button>
                     <Button variant="default" size={"lg"} className="rounded-full">
                         {
@@ -343,7 +366,7 @@ export default function CreateProspectPage(props: {prospect?: Prospect, mode?: s
                                 <Loader2 className="animate-spin mr-2" size={16} />
                             )
                         }
-                        Create Prospect Profile
+                        {isEditMode ? 'Save Changes' : 'Create Prospect Profile'}
                     </Button>
                 </div>
             </form>
