@@ -137,4 +137,62 @@ export default class ProspectRepository {
         };
     }
 
+    /**
+     * Update a prospect in the database
+     * @param id The ID of the prospect to update
+     * @param data The data to update the prospect with
+     * @returns The updated prospect object or null if not found
+     */
+    async update(id: string, data: Partial<Prospect>): Promise<Prospect | null> {
+        try {
+            const { profiles, socials, ...updateData } = data; // Exclude profiles from being updated
+
+            // Remove all existing socials and recreate them
+            const updatedProspect = await this.prisma.prospect.update({
+                where: { id },
+                data: {
+                    ...updateData,
+                    socials: {
+                        deleteMany: {}, // Delete all existing socials
+                        create: socials?.map(social => ({
+                            url: social.url,
+                            type: social.type || "linkedin", // Ensure type is always a string
+                        })),
+                    },
+                    addresses: updateData.addresses ? {
+                        upsert: updateData.addresses.map(({prospectId, ...address}) => ({
+                            where: { id: address.id },
+                            update: address,
+                            create: address,
+                        })),
+                    } : undefined,
+                },
+                include: {
+                    addresses: true,
+                    socials: true,
+                    profiles: true,
+                },
+            });
+
+            return {
+                ...updatedProspect,
+                addresses: updatedProspect.addresses.map(address => ({
+                    ...address,
+                    street2: address.street2 || "",
+                })),
+                socials: updatedProspect.socials.map(social => ({
+                    ...social,
+                    type: social.type || "linkedin",
+                })),
+                profiles: updatedProspect.profiles.map(profile => ({
+                    ...profile,
+                    data: (profile.data as unknown as string),
+                })),
+            };
+        } catch (error) {
+            console.error("Error updating prospect:", error);
+            return null;
+        }
+    }
+
 }
