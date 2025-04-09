@@ -19,7 +19,7 @@ import editProspectAction from "../edit/edit-prospect-action";
 import { Address } from "@/model/shared/address";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Prospect } from "@/model/prospects/prospect";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
 /**
@@ -63,7 +63,7 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                     description: "The prospect has been edited successfully.",
                     variant: "default",
                 });
-                redirect("/prospects/" + initialProspect?.id);
+                permanentRedirect("/prospects/" + initialProspect?.id);
             }
         }
 
