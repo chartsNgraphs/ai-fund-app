@@ -16,7 +16,7 @@ export default async function Page({
 }: {
 	params: Promise<{ slug: string }>;
 }) {
-	const { slug } = await await params;
+	const { slug } = await params;
 
 	const session = await getServerSession(authOptions);
 	if (!session || !session.user) {

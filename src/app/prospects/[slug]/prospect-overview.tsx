@@ -3,12 +3,22 @@ import { Prospect } from "@/model/prospects/prospect";
 import { Pencil, Mail } from "lucide-react";
 import { Phone } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import EditButton from "./edit-button";
 
 export default function ProspectOverview(prospect: Prospect) {
+    
+    if (!prospect || !prospect.id) {
+        return <div>No prospect data available</div>;
+    }
+
     return (
         <Card className="w-full h-full p-4">
-            <div>
-                <h2 className="text-xl font-semibold">{`${prospect.firstName.toLocaleUpperCase()} ${prospect.lastName.toLocaleUpperCase()}`}</h2>
+            <div className="flex flex-row justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">
+                    {`${prospect.firstName.toLocaleUpperCase()} ${prospect.lastName.toLocaleUpperCase()}`}
+                </h2>
+                <EditButton prospectId={prospect.id} />
             </div>
             <hr className="m-3"></hr>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
