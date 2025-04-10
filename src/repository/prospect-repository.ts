@@ -195,4 +195,57 @@ export default class ProspectRepository {
         }
     }
 
+    /**
+     * update the viewedAt field of a prospect.
+     * @param prospectId the prospect Id.
+     * @returns boolean
+     */
+    async view(prospectId: string): Promise<boolean> {
+        try {
+            await this.prisma.prospect.update({
+                where: { id: prospectId },
+                data: {
+                    viewedAt: new Date(),
+                },
+            });
+            return true;
+        } catch (error) {
+            console.error("Error updating viewedAt:", error);
+            return false;
+        }
+    }
+
+   /**
+    * get Recently viewed prospects for a user.
+    * @param userId The ID of the user
+    * @returns 
+    */
+    async getRecentlyViewed(userId: string, count: number): Promise<Prospect[]> {
+        const results = await this.prisma.prospect.findMany({
+            where: {
+                userId: userId,
+                viewedAt: {
+                    not: null,
+                },
+            },
+            orderBy: {
+                viewedAt: "desc",
+            },
+            take: count, // Limit the number of results to the specified count
+            include: {
+                addresses: false,
+                socials: false,
+                profiles: false,
+            },
+        });
+
+        return results.map(result => ({
+            ...result,
+            addresses: [],
+            socials: [],
+            profiles: [],
+        }));
+    }
+
+
 }

@@ -28,6 +28,7 @@ model Prospect {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   updatedAt DateTime @updatedAt
+  viewedAt DateTime?
   addresses ProspectAddress[]
   profiles  ProspectProfile[]
   socials   ProspectSocialLink[]

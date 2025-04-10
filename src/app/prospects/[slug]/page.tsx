@@ -10,6 +10,7 @@ import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, Breadcr
 import ProspectAddressInformation from "./prospect-address-information";
 import ProspectSocialDisplay from "./prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
+import updateViewedAtAction from "./update-viewed-at-action";
 
 export default async function Page({
 	params,
@@ -34,6 +35,10 @@ export default async function Page({
 	if (!prospect?.userId || (prospect?.userId !== userId)) {
 		throw new Error("Unauthorized access to this prospect");
 	}
+
+	// Update the viewedAt timestamp for the prospect
+	// This is a server action, so it will run on the server side
+	updateViewedAtAction(slug);
 
 	const wealthPlaceholder: WealthSnapshot = {
 		estimatedNetWorth: 2800000,

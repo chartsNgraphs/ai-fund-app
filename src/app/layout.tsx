@@ -13,7 +13,7 @@ export default function RootLayout({
     <AuthProvider>
       {/* // Suppress hydration warning due to the ThemeProvider. */}
       <html lang="en" suppressHydrationWarning={true}> 
-        <body>
+        <body className="overflow-x-hidden">
           <ThemeProvider
             attribute={'class'}
             defaultTheme="system"
@@ -22,7 +22,7 @@ export default function RootLayout({
           >
             <div className="container-fluid">
               <div className="w-full center">
-                <Header />
+              <Header />
               </div>
               {children}
             </div>
