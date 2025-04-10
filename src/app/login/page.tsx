@@ -14,9 +14,9 @@ export default function DonorLoginPage() {
     <div className="container mx-auto p-4 flex justify-center">
       <div className="w-full sm:w-1/2">
         <Tabs defaultValue="login">
-          <TabsList>
-            <TabsTrigger value="login">Google</TabsTrigger>
-            <TabsTrigger value="register">Other Sign In Providers</TabsTrigger>
+          <TabsList className="rounded-full">
+            <TabsTrigger value="login" className="rounded-full">Google</TabsTrigger>
+            <TabsTrigger value="register" className="rounded-full">Other Sign In Providers</TabsTrigger>
           </TabsList>
           <TabsContent value="login">
             <LoginForm/>
