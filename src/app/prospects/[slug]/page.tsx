@@ -45,7 +45,7 @@ export default async function Page({
 		candidateQualityScore: 4,
 		givingPotential: 5000,
 		realEstateValue: 1200000,
-		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cach! Reach out to Greg soon.",
+		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
 	};
 
 	console.log(prospect.profiles)
