@@ -29,6 +29,10 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
         };
     }
 
+    if (!prospect.userId || (prospect.userId !== (session.user as unknown as any).id)) {
+        throw new Error("Unauthorized access to this prospect");
+    }
+
     try {
         const profile = await getProfile(prospect);
         const updatedProfile = await prospectProfileRepository.create({
