@@ -12,6 +12,7 @@ import PropertyDataDisplay from "./components/property-data";
 import { ProspectProfile } from "@/model/prospects/prospect-profile";
 import {SECData, Filing} from "@/model/profiles/sec-data";
 import InsiderTradingDataDisplay from "./components/insider-trading-data";
+import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 
 export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string }) {
 
@@ -35,65 +36,13 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 	}
 
 	const dates = profiles.map((profile: any) => new Date(profile.createdAt));
-
 	const profileDates = dates.map((date) => ({ date: date.toLocaleString() }));
-
 	const selectedDate = profileDates[0].date;
-
 	const parsed_profile_datas  = profiles.map((profile: any) => {
-		let result =  JSON.parse(profile.data);
-		while (typeof result === 'string') {
-			result = JSON.parse(result);
-		}
-		return result;
+		return ProfileAdapter.toProfileData(profile.data as unknown as string);
 	});
 
-	const propertyData: PropertyData[] = parsed_profile_datas[0]['property_data'].map((data: any) => ({
-		address: data.address,
-		identifier: data.identifier,
-		marketTotalValue: data.market_total_value,
-		mailingAddress: data.mailing_address,
-	}));
-
-	const secData =  parsed_profile_datas[0]['sec_data']
-
-	let secDataComplete: SECData | undefined= undefined;
-
-	if (secData) {
-		secDataComplete = {
-			insiderFilings: {
-				filings: secData.insider_filings.filings.map((filing: any) => {
-					console.log("filing", filing)
-					const f : Filing =  {
-						id: filing.id,
-						ticker: filing.ticker,
-						formType: filing.form_type,
-						accessionNumber: filing.accession_number,
-						cik: filing.cik,
-						companyName: filing.company_name,
-						companyLongName: filing.company_name_long,
-						description: filing.description,
-						linkToText: filing.link_to_txt,
-						filedAt: new Date(filing.filed_at),
-						periodOfReport: new Date(filing.period_of_report),
-						linkToHtml: filing.link_to_html,
-						linkToFilingDetails: filing.link_to_filing_details,
-						entities: filing.entities?.map((entity: any) => ({
-							companyName: entity.company_name,
-							cik: entity.cik,
-							fileNo: entity.file_no,
-							stateOfIncorporation: entity.state_of_incorporation,
-							sic: entity.sic,
-						}))
-					}
-					return f;
-				}),
-				totalFilings: secData.insider_filings.total_filings,
-			}
-		}
-	}
-
-	
+	const currentProfileData = parsed_profile_datas[0];
 
 	return (
 		<div className="container mx-auto">
@@ -128,9 +77,9 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 					Refresh the data
 				</Button>
 			</div>
-			<div className={`grid gap-8 w-full mt-4 ${secDataComplete ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
-				<PropertyDataDisplay data={propertyData} />
-				{secDataComplete && <InsiderTradingDataDisplay data={secDataComplete} />}
+			<div className={`grid gap-8 w-full mt-4 ${currentProfileData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
+				<PropertyDataDisplay data={currentProfileData.propertyData} />
+				{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
 			</div>
 		</div>
 	)
