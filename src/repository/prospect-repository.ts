@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+import { v4 } from "uuid";
 import { Prospect } from "@/model/prospects/prospect";
 
 /**
@@ -144,6 +144,8 @@ export default class ProspectRepository {
      * @returns The updated prospect object or null if not found
      */
     async update(id: string, data: Partial<Prospect>): Promise<Prospect | null> {
+
+        console.log("Updating prospect: ", id, data);
         try {
             const { profiles, socials, ...updateData } = data; // Exclude profiles from being updated
 
@@ -161,7 +163,7 @@ export default class ProspectRepository {
                     },
                     addresses: updateData.addresses ? {
                         upsert: updateData.addresses.map(({prospectId, ...address}) => ({
-                            where: { id: address.id },
+                            where: { id: address.id || v4() }, // Use a unique identifier for the address
                             update: address,
                             create: address,
                         })),
