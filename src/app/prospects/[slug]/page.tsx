@@ -63,8 +63,10 @@ export default async function Page({
 					</BreadcrumbList>
 				</Breadcrumb>
 				<ProspectOverview {...prospect} />
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-4">
-					<WealthSnapshotDisplay data={wealthPlaceholder} />
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-4">
+					<div className="lg:col-span-2">
+						<WealthSnapshotDisplay data={wealthPlaceholder} />
+					</div>
 					<Card className="w-full h-full p-4">
 						<h1 className="text-xl font-semibold">Address & Socials</h1>
 						<div className="flex flex-col gap-8 p-0">
