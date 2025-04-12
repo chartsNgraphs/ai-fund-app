@@ -37,12 +37,12 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const dates = profiles.map((profile: any) => new Date(profile.createdAt));
 	const profileDates = dates.map((date) => ({ date: date.toLocaleString() }));
-	const selectedDate = profileDates[0].date;
+	const selectedDate = profileDates[0]?.date || "";
 	const parsed_profile_datas  = profiles.map((profile: any) => {
 		return ProfileAdapter.toProfileData(profile.data as unknown as string);
 	});
 
-	const currentProfileData = parsed_profile_datas[0];
+	const currentProfileData = parsed_profile_datas?.[0];
 
 	return (
 		<div className="container mx-auto">
@@ -77,10 +77,17 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 					Refresh the data
 				</Button>
 			</div>
-			<div className={`grid gap-8 w-full mt-4 ${currentProfileData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
-				<PropertyDataDisplay data={currentProfileData.propertyData} />
-				{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
-			</div>
+			{   currentProfileData ?
+				<div className={`grid gap-8 w-full mt-4 ${currentProfileData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
+					<PropertyDataDisplay data={currentProfileData.propertyData} />
+					{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
+				</div>
+				:
+				<div className="flex flex-col items-center justify-center w-full mt-4">
+					<p className="text-gray-500">No profile data available. Click refresh to complete the AI profile.</p>
+				</div>
+			}
+			
 		</div>
 	)
 }
