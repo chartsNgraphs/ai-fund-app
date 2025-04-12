@@ -4,8 +4,12 @@ import { Prospect } from '@/model/prospects/prospect';
 import { DefaultSession, getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth-options';
 
+/**
+ * The request body for the profile building service (python microservice).
+ */
 interface ProspectBuildRequest {
     user_id: string;
+    name: string;
     address: string;
 }
 
@@ -28,6 +32,7 @@ export async function getProfile(prospect: Prospect): Promise<any> {
 
     const data: ProspectBuildRequest = {
         user_id: userId,
+        name: `${prospect.firstName} ${prospect.lastName}`,
         address: `${prospect.addresses[0].street} ${prospect.addresses[0].street2 || ""}, ${prospect.addresses[0].city}, ${prospect.addresses[0].state}`,
     };
 

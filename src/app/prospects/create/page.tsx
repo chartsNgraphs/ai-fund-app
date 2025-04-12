@@ -14,8 +14,8 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import createProspectAction from "./create-prospect-action";
-import editProspectAction from "../edit/edit-prospect-action";
+import createProspectAction from "../actions/create-prospect-action";
+import editProspectAction from "../actions/edit-prospect-action";
 import { Address } from "@/model/shared/address";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Prospect } from "@/model/prospects/prospect";
