@@ -4,7 +4,7 @@ import { Pencil, Mail } from "lucide-react";
 import { Phone } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import EditButton from "./edit-button";
+import EditButton from "./components/edit-button";
 
 export default function ProspectOverview(prospect: Prospect) {
     

@@ -1,16 +1,16 @@
 "use server";
 import { authOptions } from "@/utils/auth-options";
-import WealthSnapshotDisplay from "./prospect-wealth-snapshot";
+import WealthSnapshotDisplay from "./components/prospect-wealth-snapshot";
 import { Card } from "@/components/ui/card";
 import { getServerSession } from "next-auth";
 import ProspectRepository from "@/repository/prospect-repository";
 import { notFound } from "next/navigation";
 import ProspectOverview from "./prospect-overview";
 import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
-import ProspectAddressInformation from "./prospect-address-information";
-import ProspectSocialDisplay from "./prospect-social-display";
+import ProspectAddressInformation from "./components/prospect-address-information";
+import ProspectSocialDisplay from "./components/prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
-import updateViewedAtAction from "./update-viewed-at-action";
+import updateViewedAtAction from "../actions/update-viewed-at-action";
 
 export default async function Page({
 	params,
@@ -48,6 +48,8 @@ export default async function Page({
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cach! Reach out to Greg soon.",
 	};
 
+	console.log(prospect.profiles)
+
 	return (
 		<>
 			<div className="container mx-auto flex flex-col items-center justify-center py-2">
@@ -71,7 +73,7 @@ export default async function Page({
 						</div>
 					</Card>
 				</div>
-				<ProfileDetailView profiles={prospect.profiles} prospectId={prospect.id!}/>
+				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!}/>
 			</div>
 
 			{/* <p>{JSON.stringify(prospect)}</p> */}

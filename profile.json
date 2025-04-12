@@ -1,0 +1,56 @@
+{
+    "user_id": "114609029759283218415",
+    "address": "41 Burkhard Pl , Rochester, NY",
+    "prospect_name": "John Sabino",
+    "property_data": [
+        {
+            "address": "41 BURKHARD PL, ROCHESTER, NY 14620",
+            "identifier": "152343073",
+            "market_total_value": 210723,
+            "mailing_address": "32 WYNDHAM RD, IRONDEQUOIT, NY 14609-3247"
+        },
+        {
+            "address": "32 WYNDHAM RD, IRONDEQUOIT, NY 14609",
+            "identifier": "169257812",
+            "market_total_value": 165000,
+            "mailing_address": "32 WYNDHAM RD, IRONDEQUOIT, NY 14609-3247"
+        }
+    ],
+    "sec_data": {
+        "insider_filings": {
+            "filings": [
+                {
+                    "id": "8e0dc38c4b470910194689fdb90304c3",
+                    "ticker": "",
+                    "form_type": "4",
+                    "accession_number": "0001102993-25-000020",
+                    "cik": "2008679",
+                    "company_name_long": "Sabino Anthony John (Reporting)",
+                    "company_name": "Sabino Anthony John",
+                    "description": "Form 4 - Statement of changes in beneficial ownership of securities",
+                    "link_to_txt": "https://www.sec.gov/Archives/edgar/data/2008679/000110299325000020/0001102993-25-000020.txt",
+                    "link_to_html": "https://www.sec.gov/Archives/edgar/data/2008679/000110299325000020/0001102993-25-000020-index.htm",
+                    "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1102993/000110299325000020/xslF345X05/wk-form4_1742509800.xml",
+                    "filed_at": "2025-03-20T18:30:06-04:00",
+                    "period_of_report": "2025-03-18"
+                },
+                {
+                    "id": "94404004cbab0cef0df1e90656ab0f9d",
+                    "ticker": "",
+                    "form_type": "4",
+                    "accession_number": "0001102993-24-000052",
+                    "cik": "2008679",
+                    "company_name_long": "Sabino Anthony John (Reporting)",
+                    "company_name": "Sabino Anthony John",
+                    "description": "Form 4 - Statement of changes in beneficial ownership of securities",
+                    "link_to_txt": "https://www.sec.gov/Archives/edgar/data/2008679/000110299324000052/0001102993-24-000052.txt",
+                    "link_to_html": "https://www.sec.gov/Archives/edgar/data/2008679/000110299324000052/0001102993-24-000052-index.htm",
+                    "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1102993/000110299324000052/xslF345X05/wk-form4_1710898450.xml",
+                    "filed_at": "2024-03-19T21:34:28-04:00",
+                    "period_of_report": "2024-03-15"
+                }
+            ],
+            "total_filings": 2
+        }
+    }
+}
