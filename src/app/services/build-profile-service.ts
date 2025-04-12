@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Prospect } from '@/model/prospects/prospect';
 import { DefaultSession, getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth-options';
-import { array } from 'zod';
 
 /**
  * The request body for the profile building service (python microservice).
