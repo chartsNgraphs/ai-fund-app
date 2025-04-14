@@ -1,9 +1,14 @@
 'use client';
 import { useRouter } from "next/navigation";
-
 import { Card } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 
+/**
+ * CLIENT COMPONENT
+ * React component for displaying a recently viewed prospect in the homepage.
+ * @param params: { id: string; title: string; subtitle: string; } 
+ * @returns 
+ */
 export default function RecentCard({ id, title, subtitle }: { id: string; title: string; subtitle: string; }) {
     const router = useRouter();
 
