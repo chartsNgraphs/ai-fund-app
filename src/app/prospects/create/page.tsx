@@ -110,7 +110,7 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                     {isEditMode ? `Edit Prospect Details` : `Create a Prospect`}
                 </h1>
                 <p className=" m-1 text-s mb-1 md:mb-5">
-                    {isEditMode ? `Update personal & address details here.` : `Add some basic details here, let our magic fill out the rest!`}
+                    {isEditMode ? `Update personal & address details here.` : `Add some basic details here, let our ✨magic✨ fill out the rest!`}
                 </p>
             </div>
             {

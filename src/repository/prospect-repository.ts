@@ -235,7 +235,7 @@ export default class ProspectRepository {
             },
             take: count, // Limit the number of results to the specified count
             include: {
-                addresses: false,
+                addresses: true,
                 socials: false,
                 profiles: false,
             },
@@ -243,7 +243,10 @@ export default class ProspectRepository {
 
         return results.map(result => ({
             ...result,
-            addresses: [],
+            addresses: result.addresses.map(address => ({
+                ...address,
+                street2: address.street2 || "", // Ensure street2 is always a string
+            })),
             socials: [],
             profiles: [],
         }));

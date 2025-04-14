@@ -5,6 +5,7 @@ import ProspectRepository from "@/repository/prospect-repository";
 import RecentCard from "./recent-card";
 import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
+import { LocateIcon } from "lucide-react";
 
 
 export default async function RecentlyViewed() {
@@ -30,7 +31,11 @@ export default async function RecentlyViewed() {
             <h2 className="text-lg">Pick up where you left off</h2>
             <div className="scrollbar-none flex gap-4 overflow-x-auto flex-nowrap md:scrollbar-thin md:scrollbar-thumb-rounded md:scrollbar-thumb-muted md:scrollbar-track-tranparent pb-2">
                 {prospects.map((prospect) => (
-                    <RecentCard key={prospect.id} id={prospect.id!} title={`${prospect.firstName} ${prospect.lastName}`} subtitle={'Filler text, for now.'} />
+                    <RecentCard key={prospect.id} id={prospect.id!} title={`${prospect.firstName} ${prospect.lastName}`} subtitle={
+                        prospect.addresses[0]?.city ? 
+                        `${prospect.addresses[0]?.city ?? ""}, ${prospect.addresses[0]?.state ?? ""}`
+                        : "USA"
+                    } />
                 ))}
             </div>
         </div>
