@@ -110,7 +110,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				</Dialog>
 			</div>
 			{   currentProfileData ?
-				<div className={`grid gap-8 w-full mt-4 ${currentProfileData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
+				<div className={`grid gap-8 w-full mt-4 ${currentProfileData.secData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
 					<PropertyDataDisplay data={currentProfileData.propertyData} />
 					{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
 				</div>
