@@ -8,12 +8,13 @@ export default function RecentCard({ id, title, subtitle }: { id: string; title:
     const router = useRouter();
 
     return (
-        <Card className="w-full h-full bg-background hover:bg-muted hover:text-card-foreground transition-all duration-300 ease-in-out cursor-pointer min-w-[200px] max-w-[220px]"
+        <Card className="w-full h-full bg-background hover:bg-muted hover:text-card-foreground transition-all duration-300 ease-in-out cursor-pointer min-w-[200px] max-w-[220px] overflow-hidden"
             onClick={() => {
                 router.push(`/prospects/${id}`);
             }
         }>
-            <div className="p-4 gap-2 flex flex-col justify-center items-start">
+            <div className="w-full h-4 bg-secondary" /> 
+            <div className="p-4 pt-2 gap-2 flex flex-col justify-center items-start">
                 <h2 className="text-lg font-bold">
                 
                 {title}</h2>
