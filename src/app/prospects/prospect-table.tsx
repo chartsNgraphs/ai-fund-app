@@ -109,8 +109,12 @@ export const columns: ColumnDef<Prospect>[] = [
 ]
 
 export function DataTableDemo(props: { prospects: Prospect[] }) {
+  
   const { prospects } = props
+  
   const router = useRouter()
+  
+  
   const editedProspects = prospects.map((prospect) => {
     return {
       ...prospect,
@@ -148,7 +152,7 @@ export function DataTableDemo(props: { prospects: Prospect[] }) {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown />
@@ -157,7 +161,7 @@ export function DataTableDemo(props: { prospects: Prospect[] }) {
           <DropdownMenuContent align="end">
             
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>
