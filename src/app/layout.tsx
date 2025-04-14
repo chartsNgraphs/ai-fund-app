@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "../components/header/header";
 import "./globals.css";
 import AuthProvider from "@/components/auth-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -26,8 +27,10 @@ export default function RootLayout({
               </div>
               {children}
             </div>
+            <Toaster />
           </ThemeProvider>
         </body>
+        
       </html>
     </AuthProvider>
   );
