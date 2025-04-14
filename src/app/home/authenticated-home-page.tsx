@@ -17,8 +17,8 @@ export default async function AuthenticatedHomePage() {
     const firstName = user?.name?.split(" ")[0] || "";
 
     const welcomeMessage = firstName!== "" ?
-        `Welcome, ${firstName}!`:
-        "Welcome back!";
+        `Welcome, ${firstName}`:
+        "Welcome back";
 
     return (
         <div className="flex flex-col gap-4 w-full">
