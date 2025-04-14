@@ -17,14 +17,14 @@ export default function RecentCard({ id, title, subtitle }: { id: string; title:
             onClick={() => {
                 router.push(`/prospects/${id}`);
             }
-        }>
-            <div className="w-full h-4 bg-secondary" /> 
+            }>
+            <div className="w-full h-4 bg-secondary" />
             <div className="p-4 pt-2 gap-2 flex flex-col justify-center items-start">
                 <h2 className="text-lg font-bold">
-                
-                {title}</h2>
+                    {title}
+                </h2>
                 <p className="text-sm text-muted-foreground flex flex-row items-center">
-                <MapPin className="w-3 h-3 mr-1" /> {subtitle}</p>
+                    <MapPin className="w-3 h-3 mr-1" /> {subtitle}</p>
             </div>
         </Card>
     );
