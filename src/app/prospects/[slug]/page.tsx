@@ -78,10 +78,7 @@ export default async function Page({
 					</Card>
 				</div>
 				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!}/>
-				
 			</div>
-
-			{/* <p>{JSON.stringify(prospect)}</p> */}
 		</>
 	);
 }
