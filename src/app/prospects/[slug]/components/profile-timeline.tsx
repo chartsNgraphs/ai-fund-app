@@ -21,12 +21,12 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
         <div className="w-full mx-auto flex flex-row flex-wrap flex-start mt-4 gap-4">
             <Sheet>
                 <SheetTrigger asChild>
-                    <Card className="w-full flex items-center justify-between p-4 cursor-pointer border-2 border-primary/50 hover:bg-muted transition-all duration-200 ease-in-out">
+                    <Card className="w-full flex items-center justify-between p-4 cursor-pointer border border-primary/50 hover:border-primary/80 hover:bg-muted transition-all duration-200 ease-in-out">
                         <span className="text-sm sm:text-base font-medium">View Timeline</span>
                         <ChevronRight className="w-4 h-4" />
                     </Card>
                 </SheetTrigger>
-                <SheetContent>
+                <SheetContent className="w-full sm:max-w-screen-sm">
                     <SheetHeader>
                     <SheetTitle>Prospect Timeline</SheetTitle>
                     <SheetDescription>
