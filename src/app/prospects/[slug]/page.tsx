@@ -11,6 +11,7 @@ import ProspectAddressInformation from "./components/prospect-address-informatio
 import ProspectSocialDisplay from "./components/prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
+import ProfileTimeline from "./components/profile-timeline";
 
 export default async function Page({
 	params,
@@ -52,7 +53,7 @@ export default async function Page({
 
 	return (
 		<>
-			<div className="container mx-auto flex flex-col items-center justify-center py-2">
+			<div className="container mx-auto flex flex-col items-center justify-center py-2 my-2 px-2 sm:px-0">
 				<Breadcrumb className="w-full m-1 mb-2" aria-label="Breadcrumb">
 					<BreadcrumbList>
 						<BreadcrumbItem>
@@ -63,6 +64,7 @@ export default async function Page({
 					</BreadcrumbList>
 				</Breadcrumb>
 				<ProspectOverview {...prospect} />
+				<ProfileTimeline prospect={prospect}/>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-4">
 					<div className="lg:col-span-2">
 						<WealthSnapshotDisplay data={wealthPlaceholder} />
@@ -76,6 +78,7 @@ export default async function Page({
 					</Card>
 				</div>
 				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!}/>
+				
 			</div>
 
 			{/* <p>{JSON.stringify(prospect)}</p> */}
