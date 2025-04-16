@@ -8,6 +8,17 @@ import { Badge } from "@/components/ui/badge";
 export default function PropertyDataDisplay(props: { data: PropertyData[] }) {
     const { data } = props;
 
+    if (!data || data.length === 0) {
+        return (
+            <Card className="w-full h-full p-4">
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-xl font-semibold">{`Property Data`}</h2>
+                    <span className="text-sm text-muted-foreground">{`No property data available.`}</span>
+                </div>
+            </Card>
+        );
+    }
+
     const totalPropertyValue = data.reduce((acc, property) => acc + property.marketTotalValue, 0);
 
     return (

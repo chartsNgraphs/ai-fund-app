@@ -13,21 +13,39 @@ import InsiderTradingDataDisplay from "./components/insider-trading-data";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string }) {
 
 	const { profiles, prospectId } = props;
 	const { toast } = useToast();
+	const searchParams = useSearchParams();
+	const router = useRouter();
 
 	// sort profiles by createdAt date
 	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [isRefreshDialogOpen, setIsRefreshDialogOpen] = useState(false);
+
+	// Parse profile data
+	const parsedProfileDatas = profiles.map((profile: any) => {
+		return ProfileAdapter.toProfileData(profile.data as unknown as string);
+	});
+
+	// Get the index from the query parameter or default to 0 (latest profile)
+	const profileIndex = parseInt(searchParams.get("profileIndex") || "0", 10);
+	const selectedProfileIndex = isNaN(profileIndex) || profileIndex < 0 || profileIndex >= profiles.length ? 0 : profileIndex;
+
+	const currentProfileData = parsedProfileDatas[selectedProfileIndex];
+
+	// Handle profile selection
+	const handleProfileSelect = (index: number) => {
+		router.push(`?profileIndex=${index}`);
+	};
 
 	const handleRefresh = async () => {
-		setIsDialogOpen(false);
+		setIsRefreshDialogOpen(false);
 		setIsRefreshing(true);
 		const result = await refreshProfileDataAction(prospectId);
 		if (result.success) {
@@ -51,12 +69,6 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const dates = profiles.map((profile: any) => new Date(profile.createdAt));
 	const profileDates = dates.map((date) => ({ date: date.toLocaleString() }));
-	const selectedDate = profileDates[0]?.date || "";
-	const parsed_profile_datas  = profiles.map((profile: any) => {
-		return ProfileAdapter.toProfileData(profile.data as unknown as string);
-	});
-
-	const currentProfileData = parsed_profile_datas?.[0];
 
 	return (
 		<div className="container mx-auto">
@@ -64,13 +76,14 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="outline" className="rounded-full">
-							Data as of {selectedDate} <ChevronDown />
+							Data as of {profileDates[selectedProfileIndex]?.date || "Unknown"} <ChevronDown />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="start">
 						{profileDates.map((dateObj, index) => (
 							<DropdownMenuItem
 								key={dateObj.date + index}
+								onClick={() => handleProfileSelect(index)}
 							>
 								<span className="text-sm font-semibold">{dateObj.date}</span>
 							</DropdownMenuItem>
@@ -81,7 +94,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 					<Switch id="track-prospect" />
 					<Label htmlFor="track-prospect">Automatically update me with changes</Label>
 				</div>
-				<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+				<Dialog open={isRefreshDialogOpen} onOpenChange={setIsRefreshDialogOpen}>
 					<DialogTrigger asChild>
 						<Button variant="secondary" className="rounded-full" disabled={isRefreshing}>
 							{
@@ -99,11 +112,11 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 							<DialogDescription>
 								Are you sure you want to refresh the profile data? Select confirm to proceed.
 								<br />
-								This will take some time, and will also udpate your feed with the latest changes & any new insights.
+								This will take some time, and will also update your feed with the latest changes & any new insights.
 							</DialogDescription>
 						</DialogHeader>
 						<DialogFooter>
-							<Button variant="outline" className="rounded-full" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+							<Button variant="outline" className="rounded-full" onClick={() => setIsRefreshDialogOpen(false)}>Cancel</Button>
 							<Button variant="default" className="rounded-full" onClick={handleRefresh}>Yes, refresh now</Button>
 						</DialogFooter>
 					</DialogContent>
