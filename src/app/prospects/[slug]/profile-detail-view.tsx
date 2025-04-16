@@ -14,13 +14,15 @@ import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams, useRouter } from "next/navigation";
+import updateTrackingAction from "../actions/update-tracking-action";
 
-export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string }) {
+export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string, tracked: boolean }) {
 
 	const { profiles, prospectId } = props;
 	const { toast } = useToast();
 	const searchParams = useSearchParams();
 	const router = useRouter();
+	const track = props.tracked || false;
 
 	// sort profiles by createdAt date
 	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -55,6 +57,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				title: "Profile data refreshed successfully",
 				description: "The profile data has been refreshed successfully.",
 				variant: "default",
+				duration: 5000,
 			});
 		}
 		else {
@@ -63,8 +66,31 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				title: "Error refreshing profile data",
 				description: "There was an error refreshing the profile data. Please try again in a few minutes.",
 				variant: "destructive",
+				duration: 5000,
 			});
 		}
+	}
+
+	const handleTrackingChange = async (checked: boolean) => {
+		const result = await updateTrackingAction(prospectId, checked);
+		if (result.success) {
+			toast({
+				title: "Tracking status updated",
+				description: `You will now ${checked ? "receive" : "not receive"} updates on this profile.`,
+				variant: "default",
+				duration: 5000,
+				});
+			router.refresh(); // Refresh the page
+		}
+		else {
+			toast({
+				title: "Error updating tracking status",
+				description: "There was an error updating the tracking status. Please try again.",
+				variant: "destructive",
+				duration: 5000,
+			});
+		}
+		
 	}
 
 	const dates = profiles.map((profile: any) => new Date(profile.createdAt));
@@ -91,8 +117,8 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 					</DropdownMenuContent>
 				</DropdownMenu>
 				<div className="flex items-center mr-auto space-x-2">
-					<Switch id="track-prospect" />
-					<Label htmlFor="track-prospect">Automatically update me with changes</Label>
+					<Switch id="track-prospect" onCheckedChange={handleTrackingChange} defaultChecked={track}/>
+					<Label htmlFor="track-prospect" >Automatically update me with changes</Label>
 				</div>
 				<Dialog open={isRefreshDialogOpen} onOpenChange={setIsRefreshDialogOpen}>
 					<DialogTrigger asChild>

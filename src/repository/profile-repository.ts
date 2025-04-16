@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-import { ProspectProfile } from "@prisma/client";
 import { ProspectProfile as InternalProspectProfile } from "@/model/prospects/prospect-profile";
 
 

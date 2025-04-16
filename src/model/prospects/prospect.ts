@@ -9,6 +9,7 @@ export interface Prospect {
     dateOfBirth: Date;
     email: string;
     phone: string;
+    tracked: boolean;
     addresses: Address[];
     socials: ProspectSocialLink[];
     profiles?: ProspectProfile[];

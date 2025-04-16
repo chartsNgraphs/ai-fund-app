@@ -77,7 +77,7 @@ export default async function Page({
 						</div>
 					</Card>
 				</div>
-				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!}/>
+				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!} tracked={prospect.tracked}/>
 			</div>
 		</>
 	);
