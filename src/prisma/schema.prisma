@@ -7,6 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// The main entity that contains all the information about the Application User.
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -17,6 +18,8 @@ model User {
   updatedAt DateTime @updatedAt
   prospects  Prospect[]
 }
+
+// The main entity that contains all the information about a prospect, such as name, email, phone number, etc.
 model Prospect {
   id        String   @id @default(cuid())
   firstName String
@@ -32,8 +35,10 @@ model Prospect {
   addresses ProspectAddress[]
   profiles  ProspectProfile[]
   socials   ProspectSocialLink[]
+  events    ProspectEvent[]
 }
 
+// Addresses, such as home address, work address, etc.
 model ProspectAddress {
   id        String   @id @default(cuid())
   street    String
@@ -47,6 +52,24 @@ model ProspectAddress {
   updatedAt DateTime @updatedAt
 }
 
+// Events, such as property sales, birthdays, insider trading, gifts, etc.
+model ProspectEvent {
+  id        String   @id @default(cuid())
+  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospectId String 
+  type      String // The type of the event, such as "birthday", "property sale", "insider trading", "gift", etc.
+  eventRaw     String // The raw text of the event, such as a news article or a social media post (or internal link)
+  eventHtml    String // The raw HTML of the event, such as a news article or a social media post (or internal link)
+  eventDate   DateTime // The date of the event, such as a birthday or a property sale. If none, it will be the date of the event creation.
+  eventUrl    String // The URL of the event, such as a news article or a social media post (or internal link)
+  status    String // The status of the event, such as "new", "viewed", "ignored", etc.
+  viewedAt DateTime? // The date when the event was first viewed by the user
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Profiles, containing detailed information about the prospect's weath and financial status, such as net worth, assets, gifts, etc.
+// This is a JSON field that can be used to store any kind of data, since the structure of the data is not known at this time.
 model ProspectProfile {
   id        String   @id @default(cuid())
   prospect  Prospect @relation(fields: [prospectId], references: [id])
@@ -56,6 +79,7 @@ model ProspectProfile {
   updatedAt DateTime @updatedAt
 }
 
+// Social links, such as LinkedIn, Twitter, Facebook, etc.
 model ProspectSocialLink {
   id        String   @id @default(cuid())
   prospect  Prospect @relation(fields: [prospectId], references: [id])

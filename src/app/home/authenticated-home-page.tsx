@@ -21,7 +21,7 @@ export default async function AuthenticatedHomePage() {
         "Welcome back";
 
     return (
-        <div className="flex flex-col gap-4 w-full">
+        <div suppressHydrationWarning className="flex flex-col gap-4 w-full">
             <h1 className="text-2xl font-bold"><span className="flex flex-row gap-2">{welcomeMessage} <WelcomeIcon/></span></h1>
             <RecentlyViewed />
         </div>

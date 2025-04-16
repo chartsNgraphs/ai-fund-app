@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from "react";
+
 const TimeIcons = {
     Morning: ["🌅", "☕", "🌄"],
     Afternoon: ["🌞", "😎", "🌻"],
@@ -21,12 +23,21 @@ export default function WelcomeIcon() {
         timeOfDay = "Night";
     }
 
-    const icons = TimeIcons[timeOfDay];
-    const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+    const [icon, setIcon] = useState("");
+
+    useEffect(() => {
+
+        const icons = TimeIcons[timeOfDay];
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        setIcon(randomIcon);
+    }
+    , [timeOfDay]);
+
+    
 
     return (
         <div className="text-2xl">
-            {randomIcon}
+            {icon}
         </div>
     );
 
