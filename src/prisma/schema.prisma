@@ -29,6 +29,7 @@ model Prospect {
   phone     String
   createdAt DateTime @default(now())
   userId    String
+  tracked  Boolean  @default(false) // Whether the prospect is being tracked or not
   user      User     @relation(fields: [userId], references: [id])
   updatedAt DateTime @updatedAt
   viewedAt DateTime?

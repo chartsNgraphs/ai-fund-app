@@ -79,7 +79,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				</DropdownMenu>
 				<div className="flex items-center mr-auto space-x-2">
 					<Switch id="track-prospect" />
-					<Label htmlFor="track-prospect">Track this Prospect</Label>
+					<Label htmlFor="track-prospect">Automatically update me with changes</Label>
 				</div>
 				<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 					<DialogTrigger asChild>
