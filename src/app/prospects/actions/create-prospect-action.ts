@@ -69,7 +69,6 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             success: false
         }
     }
-    
 
     const createResult = await prospectRepository.create(prospect);
     if (!createResult.success) {
