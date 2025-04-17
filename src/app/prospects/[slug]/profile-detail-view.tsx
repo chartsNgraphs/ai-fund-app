@@ -58,6 +58,8 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				variant: "default",
 				duration: 5000,
 			});
+			// reolad page
+			router.refresh();
 		}
 		else {
 			setIsRefreshing(false);
