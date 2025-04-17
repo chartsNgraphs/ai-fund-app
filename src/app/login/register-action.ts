@@ -10,13 +10,11 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const client = new PrismaClient();
-    console.log(formData);
 
     if (!email) {
         return { ...state, errors: { email: ['Email is required.'] } };
     }
-    
-    console.log('checking email', email);
+
     // check if email already exists
     const existingUser = await client.user.findUnique({
         where: {
@@ -29,8 +27,6 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
         // return { ...state, errors: { email: ['Email is already in use.'] } }; TODO: RE-ENABLE
     }
 
-    console.log('creating user', email);
-
     const user = await client.user.create({
         data: {
             email,
@@ -39,8 +35,6 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
             name: 'John Doe'
         },
     });
-
-    console.log('user', user);
 
     await createSession(user.id);
     return { ...state, errors: {

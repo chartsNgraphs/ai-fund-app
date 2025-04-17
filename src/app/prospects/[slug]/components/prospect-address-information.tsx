@@ -1,12 +1,8 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Prospect } from "@/model/prospects/prospect";
-import { Address } from "@/model/shared/address";
 
 export default function ProspectAddressInformation(props) {
 
     const { addresses } = props;
-
-    console.log("ProspectAddressInformation", addresses);
 
     return (
         <div className="w-full">

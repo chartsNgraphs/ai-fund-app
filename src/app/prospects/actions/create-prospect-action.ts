@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { getProfile } from "@/app/services/build-profile-service";
 import ProspectProfileRepository from "@/repository/profile-repository";
 import { v4 as uuidv4 } from 'uuid';
+import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 
 /**
  * Server action to create the prospect from the form data
@@ -30,6 +31,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
         dateOfBirth: new Date(Date.parse(data.get("dateOfBirth") as string)),
         email: data.get("email")?.toString()!,
         phone: data.get("phone")?.toString()!,
+        tracked: false, // TODO: allow user to set this on the form.
         addresses: data.get("addresses") ? JSON.parse(data.get("addresses") as string) : [],
         socials: (data.get("socials") ? JSON.parse(data.get("socials") as string) : []).map((social: any) => {
             return {
@@ -47,11 +49,16 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
     
     try {
         const profile = await buildProfile(prospect);
+
+        const profileData = ProfileAdapter.toProfileData(profile as unknown as string);
+        const events = profileData.events || [];
+
         prospect.profiles = [
             {
                 data: JSON.stringify(profile),
             }
         ]
+        prospect.events = events
     }
     catch (error) {
         console.error("Error building profile: ", error);

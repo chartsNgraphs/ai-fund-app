@@ -32,7 +32,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	// Parse profile data
 	const parsedProfileDatas = profiles.map((profile: any) => {
-		return ProfileAdapter.toProfileData(profile.data as unknown as string);
+		return ProfileAdapter.toProfileData(profile.data as unknown as string).data;
 	});
 
 	// Get the index from the query parameter or default to 0 (latest profile)
@@ -51,7 +51,6 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 		setIsRefreshing(true);
 		const result = await refreshProfileDataAction(prospectId);
 		if (result.success) {
-			console.log("Profile data refreshed successfully", result.profile);
 			setIsRefreshing(false);
 			toast({
 				title: "Profile data refreshed successfully",

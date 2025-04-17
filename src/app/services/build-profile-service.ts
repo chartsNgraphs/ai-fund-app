@@ -40,9 +40,6 @@ export async function getProfile(prospect: Prospect): Promise<any> {
         address: `${prospect.addresses[0].street} ${prospect.addresses[0].street2 || ""}, ${prospect.addresses[0].city}, ${prospect.addresses[0].state}`,
     };
 
-    console.log("Data to send: ", data);
-
-
     try {
         const response = await axios.post(`${apiUrl}/profile`, JSON.stringify(data), {
             headers: {

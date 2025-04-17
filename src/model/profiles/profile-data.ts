@@ -1,3 +1,4 @@
+import { Event } from "./events";
 import { PropertyData } from "./property-data";
 import { SECData } from "./sec-data";
 
@@ -6,5 +7,5 @@ export interface ProfileData {
     address: string;
     prospectName: string;
     propertyData: PropertyData[];
-    secData?: SECData
+    secData?: SECData,
 }

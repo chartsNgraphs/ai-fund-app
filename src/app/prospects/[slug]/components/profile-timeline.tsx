@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+"use client";
 import {
     Sheet,
     SheetClose,
@@ -15,7 +15,11 @@ import { ChevronRight } from "lucide-react";
 
 export default function ProfileTimeline(props: { prospect: Prospect}) {
 
-    const { prospect } = props
+    const { prospect } = props;
+
+    console.log("ProfileTimeline", prospect);
+
+    const events = prospect.events || [];
 
     return (
         <div className="w-full mx-auto flex flex-row flex-wrap flex-start mt-4 gap-4">
@@ -34,7 +38,13 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
                     </SheetDescription>
                     </SheetHeader>
                     <div className="grid gap-4 py-4">
-                   
+                        <ul className="list-disc pl-5">
+                            {events.map((event, index) => (
+                                <li key={index} className="text-sm sm:text-base">
+                                    {event.type}: {event.eventDate?.toLocaleDateString()} - {event.eventRaw}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                     <SheetFooter>
                     {/* <SheetClose asChild>

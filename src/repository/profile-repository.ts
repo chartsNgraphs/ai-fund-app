@@ -44,9 +44,7 @@ export default class ProspectProfileRepository {
         const profileToSave = {
             data: JSON.stringify(prospectProfile.data),
         }
-
-        console.log("Profile to save: ", profileToSave);
-
+        
         const result = await this.prisma.prospectProfile.create({
             data: {
                 ...profileToSave,

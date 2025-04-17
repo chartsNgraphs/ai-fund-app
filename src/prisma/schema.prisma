@@ -61,6 +61,7 @@ model ProspectEvent {
   type      String // The type of the event, such as "birthday", "property sale", "insider trading", "gift", etc.
   eventRaw     String // The raw text of the event, such as a news article or a social media post (or internal link)
   eventHtml    String // The raw HTML of the event, such as a news article or a social media post (or internal link)
+  tags     String[] // The tags of the event, such as "birthday", "property sale", "insider trading", "gift", etc.
   eventDate   DateTime // The date of the event, such as a birthday or a property sale. If none, it will be the date of the event creation.
   eventUrl    String // The URL of the event, such as a news article or a social media post (or internal link)
   status    String // The status of the event, such as "new", "viewed", "ignored", etc.

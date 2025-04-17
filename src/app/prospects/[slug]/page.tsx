@@ -49,8 +49,6 @@ export default async function Page({
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
 	};
 
-	console.log(prospect.profiles)
-
 	return (
 		<>
 			<div className="container mx-auto flex flex-col items-center justify-center py-2 my-2 px-2 sm:px-0">

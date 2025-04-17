@@ -4,8 +4,6 @@ import { ProspectSocialLink } from "@/model/prospects/prospect";
 export default function ProspectSocialDisplay(props: { socials: ProspectSocialLink[] }) {
     const { socials } = props;
 
-    console.log("ProspectAddressInformation", socials);
-
     return (
         <div className="w-full">
             <h1 className="text-md font-medium">Social Media & Links</h1>

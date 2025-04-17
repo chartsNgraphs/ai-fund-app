@@ -1,5 +1,6 @@
 import { ProspectProfile } from "./prospect-profile";
 import { Address } from "../shared/address";
+import { Event } from "../profiles/events";
 
 export interface Prospect {
     id?: string;
@@ -13,6 +14,7 @@ export interface Prospect {
     addresses: Address[];
     socials: ProspectSocialLink[];
     profiles?: ProspectProfile[];
+    events?: Event[];
 }
 
 export interface ProspectSocialLink {

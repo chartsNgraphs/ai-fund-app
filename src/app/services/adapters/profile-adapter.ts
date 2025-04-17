@@ -1,7 +1,7 @@
 import { ProfileData } from "@/model/profiles/profile-data"
 import { PropertyData } from "@/model/profiles/property-data";
-import { Filing, SECData } from "@/model/profiles/sec-data";
-import { ProspectProfile } from "@prisma/client";
+import { Filing, SECData } from "@/model/profiles/sec-data";;
+import { Event } from "@/model/profiles/events";
 
 /**
  * ProfileAdapter class to handle the conversion of profile data from string to ProfileData object.
@@ -13,16 +13,12 @@ export class ProfileAdapter {
      * @param string The string representation of the profile data.
      * @returns The ProfileData object.
      */
-    static toProfileData(string: string): ProfileData {
-
-        console.log("string", string, typeof string);
+    static toProfileData(string: string): {data: ProfileData, events: Event[]} {
 
         let result = JSON.parse(string.toString() as unknown as string);
         while (typeof result !== 'object') {
             result = JSON.parse(result);
         }
-
-        console.log("result", result, typeof result);
 
         const propertyData: PropertyData[] = result?.['property_data']?.map((data: any) => ({
             address: data.address,
@@ -33,13 +29,31 @@ export class ProfileAdapter {
 
         const secData = result['sec_data']
 
+        const eventsData = result['events']
+
+        let events: Event[] = [];
+        if (eventsData) {
+            events = eventsData.map((event: any) => {
+                return{
+                id: event.id,
+                prospectId: event.prospect_id,
+                type: event.type,
+                eventRaw: event.event_raw,
+                eventHtml: event.event_html,
+                eventDate: new Date(event.event_date),
+                eventUrl: event.event_url,
+                status: event.status,
+                viewedAt: event.viewed_at ? new Date(event.viewed_at) : undefined,
+                createdAt: new Date(event.created_at),
+            }});
+        }
+
         let secDataComplete: SECData | undefined = undefined;
 
         if (secData) {
             secDataComplete = {
                 insiderFilings: {
                     filings: secData.insider_filings.filings.map((filing: any) => {
-                        console.log("filing", filing)
                         const f: Filing = {
                             id: filing.id,
                             ticker: filing.ticker,
@@ -70,11 +84,14 @@ export class ProfileAdapter {
         }
 
         return {
+            data: {
             userId: result.user_id,
             address: result.address,
             prospectName: result.prospect_name,
             propertyData: propertyData,
-            secData: secDataComplete
+            secData: secDataComplete,
+        },
+            events: events,
         };
     }
 }

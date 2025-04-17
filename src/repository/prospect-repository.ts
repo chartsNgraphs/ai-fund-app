@@ -33,6 +33,7 @@ export default class ProspectRepository {
                     addresses: true,
                     socials: true,
                     profiles: true, // Include profiles in the query
+                    events: true, // Include events in the query
                 }
             },);
 
@@ -50,7 +51,13 @@ export default class ProspectRepository {
                 ...profile,
                 data: (profile.data as unknown as string), // Parse the data field
             })),
+            events: result.events.map(event => ({
+                ...event,
+                eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
+                viewedAt: event.viewedAt || undefined, // Convert null to undefined for viewedAt
+            })),
         }));
+
     }
 
     /**
@@ -65,6 +72,7 @@ export default class ProspectRepository {
                 addresses: true,
                 socials: true,
                 profiles: true, // Include profiles in the query
+                events: true, // Include events in the query
             },
         });
 
@@ -83,6 +91,11 @@ export default class ProspectRepository {
                     ...profile,
                     data: (profile.data as unknown as string), // Parse the data field
                 })),
+                events: result.events.map(event => ({
+                    ...event,
+                    eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
+                    viewedAt: event.viewedAt || undefined, // Convert null to undefined for viewedAt
+                })),
             };
         }
 
@@ -95,8 +108,7 @@ export default class ProspectRepository {
      * @returns True if the prospect was created successfully, false otherwise
      */
     async create(prospect: Prospect): Promise<{prospect: Prospect, success: boolean}> {
-        console.log("Creating prospect: ", prospect);
-        // console.log(this.prisma.prospect);
+
         try {
             await this.prisma.prospect.create({
                 data: {
@@ -117,6 +129,9 @@ export default class ProspectRepository {
                             data: profile.data, // Ensure data is a string
                         })),
                     },
+                    events: {
+                        create: [],
+                    }
 
                 },
                 include: {
@@ -145,7 +160,6 @@ export default class ProspectRepository {
      */
     async update(id: string, data: Partial<Prospect>): Promise<Prospect | null> {
 
-        console.log("Updating prospect: ", id, data);
         try {
             const { profiles, socials, ...updateData } = data; // Exclude profiles from being updated
 
@@ -168,12 +182,20 @@ export default class ProspectRepository {
                             create: address,
                         })),
                     } : undefined,
+                    events: updateData.events ? {
+                        upsert: updateData.events.map(({prospectId, ...event}) => ({
+                            where: { id: event.id || v4() }, // Use a unique identifier for the event
+                            update: event,
+                            create: event,
+                        })),
+                    } : undefined,
                 },
                 include: {
                     addresses: true,
                     socials: true,
                     profiles: true,
-                },
+                    events: true, // Include events in the query
+                } as const, // Ensure TypeScript infers the correct type for included fields
             });
 
             return {
@@ -189,6 +211,11 @@ export default class ProspectRepository {
                 profiles: updatedProspect.profiles.map(profile => ({
                     ...profile,
                     data: (profile.data as unknown as string),
+                })),
+                events: updatedProspect.events.map(event => ({
+                    ...event,
+                    eventDate: new Date(event.eventDate),
+                    viewedAt: event.viewedAt || undefined,
                 })),
             };
         } catch (error) {
