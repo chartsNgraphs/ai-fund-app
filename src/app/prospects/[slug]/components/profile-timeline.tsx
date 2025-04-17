@@ -17,8 +17,6 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
 
     const { prospect } = props;
 
-    console.log("ProfileTimeline", prospect);
-
     const events = prospect.events || [];
 
     return (
@@ -38,13 +36,13 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
                     </SheetDescription>
                     </SheetHeader>
                     <div className="grid gap-4 py-4">
-                        <ul className="list-disc pl-5">
-                            {events.map((event, index) => (
-                                <li key={index} className="text-sm sm:text-base">
-                                    {event.type}: {event.eventDate?.toLocaleDateString()} - {event.eventRaw}
-                                </li>
-                            ))}
-                        </ul>
+                        {events.map((event, index) => (
+                            <Card key={index} className="p-4 border border-primary/50 hover:border-primary/80 hover:bg-muted transition-all duration-200 ease-in-out">
+                                <div className="text-sm sm:text-base font-medium">{event.type}</div>
+                                <div className="text-sm sm:text-base">{event.eventDate?.toLocaleDateString()}</div>
+                                <div className="text-sm sm:text-base">{event.eventRaw}</div>
+                            </Card>
+                        ))}
                     </div>
                     <SheetFooter>
                     {/* <SheetClose asChild>
