@@ -39,26 +39,11 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
         const profile = await getProfile(prospect);
 
         
-        const events = profile.events || [];
-
-        const eventsMapped : Event[] = events.map((event: any) => {
-            const isValidDate = (date: any) => !isNaN(new Date(date).getTime());
-
-            return {
-                id: event.id,
-                prospectId: event.prospect_id,
-                type: event.type,
-                eventRaw: event.description || "",
-                eventHtml: event.event_html || "",
-                eventDate: isValidDate(event.event_date) ? new Date(event.event_date) : null,
-                eventUrl: event.event_url || "",
-                status: event.status ?? "",
-            };
-        });
+        const events = ProfileAdapter.toProfileData(profile).events || [];
 
         try {
             await prospectRepository.update(id, {
-                events: eventsMapped,
+                events: events,
             });
         }
         catch (error) {

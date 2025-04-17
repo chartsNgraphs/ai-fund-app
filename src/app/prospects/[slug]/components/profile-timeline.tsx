@@ -17,7 +17,7 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
 
     const { prospect } = props;
 
-    const events = prospect.events || [];
+    const events = (prospect.events || []).slice().reverse()
 
     return (
         <div className="w-full mx-auto flex flex-row flex-wrap flex-start mt-4 gap-4">
@@ -28,19 +28,19 @@ export default function ProfileTimeline(props: { prospect: Prospect}) {
                         <ChevronRight className="w-4 h-4" />
                     </Card>
                 </SheetTrigger>
-                <SheetContent className="w-full sm:max-w-screen-sm">
+                <SheetContent className="w-full sm:max-w-screen-sm overflow-y-auto">
                     <SheetHeader>
                     <SheetTitle>Prospect Timeline</SheetTitle>
                     <SheetDescription>
                         {`Reach out at the right time to ${prospect.firstName} ${prospect.lastName}`}
                     </SheetDescription>
                     </SheetHeader>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 ">
                         {events.map((event, index) => (
                             <Card key={index} className="p-4 border border-primary/50 hover:border-primary/80 hover:bg-muted transition-all duration-200 ease-in-out">
-                                <div className="text-sm sm:text-base font-medium">{event.type}</div>
+                                <div className="text-sm sm:text-base font-medium">{event.summary}</div>
                                 <div className="text-sm sm:text-base">{event.eventDate?.toLocaleDateString()}</div>
-                                <div className="text-sm sm:text-base">{event.eventRaw}</div>
+                                <div className="text-xs sm:text-sm">{event.eventRaw}</div>
                             </Card>
                         ))}
                     </div>

@@ -9,5 +9,6 @@ export interface Event {
     status: string; // The status of the event, such as "new", "viewed", "ignored", etc.
     viewedAt?: Date; // The date when the event was first viewed by the user
     createdAt: Date; // The date when the event was created
+    summary?: string; // A summary of the event, such as "John's birthday is coming up" or "Property sale in the neighborhood"
     tags?: string[]; // The tags associated with the event, such as "important", "urgent", etc.
 }

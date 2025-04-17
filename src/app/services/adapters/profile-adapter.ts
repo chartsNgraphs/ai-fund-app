@@ -13,11 +13,17 @@ export class ProfileAdapter {
      * @param string The string representation of the profile data.
      * @returns The ProfileData object.
      */
-    static toProfileData(string: string): {data: ProfileData, events: Event[]} {
-
-        let result = JSON.parse(string.toString() as unknown as string);
-        while (typeof result !== 'object') {
-            result = JSON.parse(result);
+    static toProfileData(string: string | object): {data: ProfileData, events: Event[]} {
+        
+        let result;
+        // Check if the input is already an object, if not, parse it as JSON
+        if (typeof string === 'string') {
+            result = JSON.parse(string.toString() as unknown as string);
+            while (typeof result !== 'object') {
+                result = JSON.parse(result);
+            }
+        } else {
+            result = string;
         }
 
         const propertyData: PropertyData[] = result?.['property_data']?.map((data: any) => ({
@@ -34,18 +40,20 @@ export class ProfileAdapter {
         let events: Event[] = [];
         if (eventsData) {
             events = eventsData.map((event: any) => {
-                return{
-                id: event.id,
-                prospectId: event.prospect_id,
-                type: event.type,
-                eventRaw: event.event_raw,
-                eventHtml: event.event_html,
-                eventDate: new Date(event.event_date),
-                eventUrl: event.event_url,
-                status: event.status,
+            return {
+                id: event.id || undefined,
+                type: event.type || '',
+                eventRaw: event.description || '',
+                eventHtml: event.event_html || '',
+                eventDate: event.event_date ? new Date(event.event_date) : undefined,
+                eventUrl: event.event_url || '',
+                status: event.status || '',
+                summary: event.summary || '',
+                tags: event.tags || [],
                 viewedAt: event.viewed_at ? new Date(event.viewed_at) : undefined,
-                createdAt: new Date(event.created_at),
-            }});
+                createdAt: event.created_at ? new Date(event.created_at) : undefined,
+            };
+            });
         }
 
         let secDataComplete: SECData | undefined = undefined;

@@ -67,6 +67,7 @@ model ProspectEvent {
   status    String // The status of the event, such as "new", "viewed", "ignored", etc.
   viewedAt DateTime? // The date when the event was first viewed by the user
   createdAt DateTime @default(now())
+  summary   String  @default("")// The summary of the event, such as "John Doe sold his house for $1 million" or "John Doe's birthday is on January 1st"
   updatedAt DateTime @updatedAt
 }
 

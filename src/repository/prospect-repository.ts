@@ -130,7 +130,16 @@ export default class ProspectRepository {
                         })),
                     },
                     events: {
-                        create: [],
+                        create: prospect.events?.map(event => ({
+                            type: event.type, // Ensure type is a string
+                            eventRaw: event.eventRaw, // Ensure eventRaw is a string
+                            eventHtml: event.eventHtml, // Ensure eventHtml is a string
+                            eventDate: event.eventDate, // Ensure eventDate is a Date object
+                            eventUrl: event.eventUrl, // Ensure eventUrl is a string
+                            status: event.status, // Ensure status is a string
+                            summary: event.summary, // Ensure summary is a string
+                            tags: event.tags, // Ensure tags is an array of strings
+                        })),
                     }
 
                 },
@@ -140,6 +149,7 @@ export default class ProspectRepository {
                 },
             });
         } catch (error) {
+            console.error("Error creating prospect:", error);
             return {
                 prospect: prospect,
                 success: false,

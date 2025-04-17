@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { getProfile } from "@/app/services/build-profile-service";
 import { v4 as uuidv4 } from 'uuid';
 import { Event } from "@/model/profiles/events";
+import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 
 /**
  * Server action to create the prospect from the form data
@@ -49,30 +50,17 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
     try {
         const profile = await buildProfile(prospect);
 
-        const events = profile.events || [];
-        
         // TODO: use the profile adapter to convert the events to the correct format instead of this.
-        const eventsMapped : Event[] = events.map((event: any) => {
-            const isValidDate = (date: any) => !isNaN(new Date(date).getTime());
+        const events = ProfileAdapter.toProfileData(profile).events || [];
 
-            return {
-                id: event.id,
-                prospectId: event.prospect_id,
-                type: event.type,
-                eventRaw: event.description || "",
-                eventHtml: event.event_html || "",
-                eventDate: isValidDate(event.event_date) ? new Date(event.event_date) : null,
-                eventUrl: event.event_url || "",
-                status: event.status ?? "",
-            };
-        });
+        console.log("Events: ", events);
 
         prospect.profiles = [
             {
                 data: JSON.stringify(profile),
             }
         ]
-        prospect.events = eventsMapped
+        prospect.events = events
     }
     catch (error) {
         console.error("Error building profile: ", error);
