@@ -17,7 +17,6 @@ import { getServerSession } from "next-auth";
 export default async function Header() {
   const session = await getServerSession(authOptions);
 
-
   return (
     <Card className="bg-card py-3 px-4 border-0 flex bg-primary items-center justify-between gap-6 rounded-none">
       <HeaderLinks session={!!session} />

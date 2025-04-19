@@ -15,7 +15,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
+import { useRouter } from "next/navigation";
 import { Settings, LogOut, LogIn, User } from "lucide-react";
 
 import Image from "next/image";
@@ -25,20 +27,8 @@ import { ModeToggle } from "../dark-mode-toggle";
 
 export default function LoginButtons() {
   const { data: session } = useSession();
-  const [, setProviders] = useState<Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  > | null>(null);
 
-  useEffect(() => {
-    const setAuthProviders = async () => {
-      const providers = await getProviders();
-
-      setProviders(providers);
-    };
-
-    setAuthProviders();
-  }, []);
+  const router = useRouter();
 
   return (
     <div
@@ -65,24 +55,30 @@ export default function LoginButtons() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="p-1">
             <Card className="p-4 flex flex-col gap-4">
-              <Button className="rounded-full" variant={"default"}>
-                <User className="mr-2" />
-                Profile
-              </Button>
-              <Button className="rounded-full" variant={"secondary"}>
-                <Settings className="mr-2" />
-                Preferences
-              </Button>
-              <Button
-                className="rounded-full"
-                onClick={() => 
-                  signOut({ callbackUrl: `${window.location.origin}/` })
-                }
-                variant={"outline"}
-              >
-                <LogOut className="mr-2" />
-                Logout as {session.user?.name}
-              </Button>
+              <DropdownMenuItem>
+                <Button className="rounded-full w-full" variant={"default"}>
+                  <User className="mr-2" />
+                  Profile
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                  <Button className="rounded-full w-full" variant={"secondary"} onClick={() => router.push("/preferences")}>
+                    <Settings className="mr-2" />
+                      Preferences
+                  </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Button
+                  className="rounded-full"
+                  onClick={() => 
+                    signOut({ callbackUrl: `${window.location.origin}/` })
+                  }
+                  variant={"outline"}
+                >
+                  <LogOut className="mr-2" />
+                  Logout as {session.user?.name}
+                </Button>
+              </DropdownMenuItem>
             </Card>
           </DropdownMenuContent>
         </DropdownMenu>
