@@ -17,6 +17,17 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   prospects  Prospect[]
+  settings  UserSettings?
+}
+
+// User Settings
+model UserSettings {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  settings  Json
 }
 
 // The main entity that contains all the information about a prospect, such as name, email, phone number, etc.
