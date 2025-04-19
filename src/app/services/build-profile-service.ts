@@ -11,6 +11,7 @@ interface ProspectBuildRequest {
     user_id: string;
     name: string;
     address: string;
+    previous_profile: string | null;
 }
 
 /**
@@ -34,10 +35,19 @@ export async function getProfile(prospect: Prospect): Promise<any> {
 
     const apiUrl: string = process.env["PROFILE_SERVICE_BASE_URL"] || ""; // Replace with your API URL
 
+    const sortedProfiles = prospect.profiles?.sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+    ) || [];
+
+    if (sortedProfiles.length === 0) {
+        throw new Error("No profiles found for the prospect");
+    }
+
     const data: ProspectBuildRequest = {
         user_id: userId,
         name: `${prospect.firstName} ${prospect.lastName}`,
         address: `${prospect.addresses[0].street} ${prospect.addresses[0].street2 || ""}, ${prospect.addresses[0].city}, ${prospect.addresses[0].state}`,
+        previous_profile: sortedProfiles[0]?.data || null,
     };
 
     try {

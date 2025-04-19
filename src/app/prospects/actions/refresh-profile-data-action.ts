@@ -47,10 +47,11 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
             };
         }
 
+        const { previous_profile, ...filteredProfile } = profile;
         const updatedProfile = await prospectProfileRepository.create({
             id: uuidv4(),
             prospectId: id,
-            data: JSON.stringify(profile),
+            data: filteredProfile,
         });
 
         return {

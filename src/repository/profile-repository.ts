@@ -41,8 +41,14 @@ export default class ProspectProfileRepository {
      */
     async create(prospectProfile: InternalProspectProfile): Promise<InternalProspectProfile> {
 
+        console.log("prospectProfile", prospectProfile, typeof prospectProfile);
+
+        const jsonData = (typeof prospectProfile.data === "string") ? prospectProfile.data : JSON.stringify(prospectProfile.data);
+
+        console.log("jsonData", jsonData);
+
         const profileToSave = {
-            data: JSON.stringify(prospectProfile.data),
+            data: jsonData,
         }
         
         const result = await this.prisma.prospectProfile.create({
