@@ -27,6 +27,7 @@ export default async function editProspectAction(id: string, data: FormData): Pr
         email: data.get("email")?.toString(),
         phone: data.get("phone")?.toString(),
         addresses: data.get("addresses") ? JSON.parse(data.get("addresses") as string) : undefined,
+        employer: data.get("employer")?.toString(),
         socials: data.get("socials") ? JSON.parse(data.get("socials") as string).map((social: any) => ({
             url: social,
             type: social.type || "linkedin",

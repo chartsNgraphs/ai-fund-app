@@ -33,6 +33,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
         phone: data.get("phone")?.toString()!,
         tracked: false, // TODO: allow user to set this on the form.
         addresses: data.get("addresses") ? JSON.parse(data.get("addresses") as string) : [],
+        employer: data.get("employer")?.toString(),
         socials: (data.get("socials") ? JSON.parse(data.get("socials") as string) : []).map((social: any) => {
             return {
                 url: social,

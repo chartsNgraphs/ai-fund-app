@@ -36,6 +36,8 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
         (social) => social.url
     ) || []);
 
+    const [employer, setEmployer] = useState<string>(initialProspect?.employer || "");
+
     const [prospect, setProspect] = useState<Prospect>(initialProspect || {} as unknown as Prospect);
 
     const [isError, setIsError] = useState(false);
@@ -46,6 +48,9 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
 
         // append array of socials to formData
         formData.append("socials", JSON.stringify(socials));
+
+        // append employer to formData
+        formData.append("employer", employer);
 
         if (isEditMode) {
             const editResults = await editProspectAction(initialProspect?.id!, formData);
@@ -163,6 +168,21 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                             />
                         </FormItem>
                     </div>
+                </Card>
+                <Card className="p-4">
+                    <h1 className="text-xl text-primary font-semibold">Occupation and Education</h1>
+                    <FormItem>
+                        <Label htmlFor="employer">Employer</Label>
+                        <Input
+                            name="employer"
+                            type="text"
+                            placeholder="Employer"
+                            defaultValue={employer}
+                            onChange={(e) => {
+                                setEmployer(e.target.value);
+                            }}
+                        />
+                    </FormItem>
                 </Card>
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
                     <Card className="p-4 lg:col-span-2 flex flex-col gap-4">

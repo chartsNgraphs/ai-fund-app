@@ -15,6 +15,7 @@ export interface Prospect {
     socials: ProspectSocialLink[];
     profiles?: ProspectProfile[];
     events?: Event[];
+    employer?: string;
 }
 
 export interface ProspectSocialLink {

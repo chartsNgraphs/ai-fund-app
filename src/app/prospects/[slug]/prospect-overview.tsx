@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Prospect } from "@/model/prospects/prospect";
 import { Pencil, Mail } from "lucide-react";
 import { Phone } from "lucide-react";
+import { Building } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import EditButton from "./components/edit-button";
@@ -34,6 +35,16 @@ export default function ProspectOverview(prospect: Prospect) {
                     </span>
                     <span className="text-sm pl-2">{prospect.phone}</span>
                 </div>
+                {
+                    prospect.employer && (
+                        <div className="flex flex-row gap-1">
+                            <span className="text-sm font-lg">
+                                <Building className="h-5 w-5" />
+                            </span>
+                            <span className="text-sm pl-2">{prospect.employer}</span>
+                        </div>
+                    )
+                }
             </div>
             
         </Card>

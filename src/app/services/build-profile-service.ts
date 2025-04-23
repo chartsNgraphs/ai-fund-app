@@ -12,6 +12,13 @@ interface ProspectBuildRequest {
     name: string;
     address: string;
     previous_profile: string | null;
+    address_full?: {
+        street: string;
+        city: string;
+        state: string;
+        zip_code: string;
+    };
+    prospect_employer?: string;
 }
 
 /**
@@ -48,6 +55,13 @@ export async function getProfile(prospect: Prospect): Promise<any> {
         name: `${prospect.firstName} ${prospect.lastName}`,
         address: `${prospect.addresses[0].street} ${prospect.addresses[0].street2 || ""}, ${prospect.addresses[0].city}, ${prospect.addresses[0].state}`,
         previous_profile: sortedProfiles[0]?.data || null,
+        address_full: {
+            street: prospect.addresses[0].street,
+            city: prospect.addresses[0].city,
+            state: prospect.addresses[0].state,
+            zip_code: prospect.addresses[0].zip,
+        },
+        prospect_employer: prospect.employer || undefined,
     };
 
     try {

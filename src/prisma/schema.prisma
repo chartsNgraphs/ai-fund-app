@@ -37,6 +37,7 @@ model Prospect {
   lastName  String
   dateOfBirth DateTime
   email     String   @unique
+  employer   String? // The name of the employer, such as "Google", "Apple", etc.
   phone     String
   createdAt DateTime @default(now())
   userId    String
