@@ -15,6 +15,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, Dialo
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams, useRouter } from "next/navigation";
 import updateTrackingAction from "../actions/update-tracking-action";
+import Giving from "./components/giving";
 
 export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string, tracked: boolean }) {
 
@@ -150,10 +151,13 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				</Dialog>
 			</div>
 			{   currentProfileData ?
-				<div className={`grid gap-8 w-full mt-4 ${currentProfileData.secData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
-					<PropertyDataDisplay data={currentProfileData.propertyData} />
-					{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
-				</div>
+				<>
+					<div className={`grid gap-8 w-full mt-4 ${currentProfileData.secData ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
+						<PropertyDataDisplay data={currentProfileData.propertyData} />
+						{currentProfileData.secData && <InsiderTradingDataDisplay data={currentProfileData.secData} />}
+					</div>
+					{(currentProfileData.politicalContributions?.length ? true : true) && <Giving politicalGifts={currentProfileData.politicalContributions ?? []} />}
+				</>
 				:
 				<div className="flex flex-col items-center justify-center w-full mt-4">
 					<p className="text-gray-500">No profile data available. Click refresh to complete the AI profile.</p>

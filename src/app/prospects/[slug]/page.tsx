@@ -13,6 +13,7 @@ import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
 import ProfileTimeline from "./components/profile-timeline";
 
+
 export default async function Page({
 	params,
 }: {

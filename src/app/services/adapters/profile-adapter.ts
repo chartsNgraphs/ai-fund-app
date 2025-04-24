@@ -37,6 +37,39 @@ export class ProfileAdapter {
 
         const eventsData = result['events']
 
+        const politicalContributionsData = result['political_contributions']
+
+        const politicalContributions: any[] = politicalContributionsData ? politicalContributionsData.map((data: any) => ({
+            candidateId: data.candidate_id,
+            committee: {
+                id: data.committee.id,
+                name: data.committee.name,
+                type: data.committee.type,
+                state: data.committee.state,
+                city: data.committee.city,
+                zip: data.committee.zip,
+                createdAt: data.committee.created_at,
+                cycle: data.committee.cycle,
+                party: data.committee.party,
+            },
+            candidateName: data.candidate_name,
+            candidateLastName: data.candidate_last_name,
+            candidateMiddleName: data.candidate_middle_name,
+            contributionReceiptAmount: data.contribution_receipt_amount,
+            contributorFirstName: data.contributor_first_name,
+            contributorLastName: data.contributor_last_name,
+            contributorAddress: {
+                addressOne: data.contributor_address.address_one,
+                addressTwo: data.contributor_address.address_two,
+                city: data.contributor_address.city,
+                state: data.contributor_address.state,
+                zip: data.contributor_address.zip
+            },
+            contributorEmployer: data.contributor_employer,
+            contributorOccupation: data.contributor_occupation,
+            contributionReceiptDate: new Date(data.contribution_receipt_date),
+        })) : [];
+
         let events: Event[] = [];
         if (eventsData) {
             events = eventsData.map((event: any) => {
@@ -98,6 +131,7 @@ export class ProfileAdapter {
             prospectName: result.prospect_name,
             propertyData: propertyData,
             secData: secDataComplete,
+            politicalContributions: politicalContributions,
         },
             events: events,
         };
