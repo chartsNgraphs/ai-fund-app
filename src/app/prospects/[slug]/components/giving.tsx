@@ -23,7 +23,7 @@ export default function Giving(props: { politicalGifts: PoliticalContribution[] 
                 city: "Los Angeles",
                 zip: "90001",
                 createdAt: "2023-01-01",
-                cycle: "2024",
+                cycle: 2024,
                 party: "Independent"
             },
             candidateName: "John",
