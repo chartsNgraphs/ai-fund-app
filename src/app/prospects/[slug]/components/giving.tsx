@@ -13,6 +13,8 @@ export default function Giving(props: { politicalGifts: PoliticalContribution[] 
     const [gifts, setGifts] = useState<PoliticalContribution[]>(politicalGifts || []);
 
     useEffect(() => {
+        // This is a placeholder and will go away after testing.
+        // TODO: Remove this fake contribution after testing.
         const fakeContribution: PoliticalContribution = {
             candidateId: "12345",
             committee: {
@@ -44,7 +46,10 @@ export default function Giving(props: { politicalGifts: PoliticalContribution[] 
             contributionReceiptDate: "2023-10-01"
         };
 
-        setGifts([fakeContribution]);
+        if (!politicalGifts || politicalGifts.length === 0) {
+            setGifts([fakeContribution]);
+            return;
+        }
     }, []);
 
     return (
