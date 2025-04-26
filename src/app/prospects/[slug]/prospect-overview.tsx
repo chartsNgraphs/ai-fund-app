@@ -1,13 +1,13 @@
+"use server";
 import { Card } from "@/components/ui/card";
 import { Prospect } from "@/model/prospects/prospect";
 import { Pencil, Mail } from "lucide-react";
 import { Phone } from "lucide-react";
 import { Building } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import EditButton from "./components/edit-button";
 
-export default function ProspectOverview(prospect: Prospect) {
+export default async function ProspectOverview(prospect: Prospect) {
     
     if (!prospect || !prospect.id) {
         return <div>No prospect data available</div>;

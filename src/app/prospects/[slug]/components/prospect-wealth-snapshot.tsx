@@ -21,10 +21,6 @@ export default function WealthSnapshotDisplay(props: {data: WealthSnapshot}) {
                     <span className="text-sm font-medium">{`Giving Potential: $${data.givingPotential.toLocaleString()}`}</span>
                     <Progress value={data.givingPotential * 15} className="w-full mt-2" />
                 </div>
-                <div>
-                    <span className="text-sm font-medium">{`Real Estate Value: $${data.realEstateValue.toLocaleString()}`}</span>
-                    <Progress value={data.realEstateValue / 2000000 * 100} className="w-full mt-2" />
-                </div>
                 <div className="mt-4">
                     <p className="text-sm">{data.summary}</p>
                 </div>

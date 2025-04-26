@@ -2,6 +2,7 @@ import { ProfileData } from "@/model/profiles/profile-data"
 import { PropertyData } from "@/model/profiles/property-data";
 import { Filing, SECData } from "@/model/profiles/sec-data";;
 import { Event } from "@/model/profiles/events";
+import { ProfileSummary } from "@/model/profiles/summary";
 
 /**
  * ProfileAdapter class to handle the conversion of profile data from string to ProfileData object.
@@ -38,6 +39,7 @@ export class ProfileAdapter {
         const eventsData = result['events']
 
         const politicalContributionsData = result['political_contributions']
+
 
         const politicalContributions: any[] = politicalContributionsData ? politicalContributionsData.map((data: any) => ({
             candidateId: data.candidate_id,
@@ -124,6 +126,14 @@ export class ProfileAdapter {
             }
         }
 
+        const profileSummaryData = result['summary']
+        const summary : ProfileSummary = {
+            netWorth: profileSummaryData?.net_worth || 0,
+            givingScore: profileSummaryData?.giving_score || 0,
+            givingCapacity: profileSummaryData?.giving_capacity || 0,
+        }
+
+
         return {
             data: {
             userId: result.user_id,
@@ -132,6 +142,7 @@ export class ProfileAdapter {
             propertyData: propertyData,
             secData: secDataComplete,
             politicalContributions: politicalContributions,
+            summary: summary,
         },
             events: events,
         };

@@ -12,6 +12,7 @@ import ProspectSocialDisplay from "./components/prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
 import ProfileTimeline from "./components/profile-timeline";
+import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 
 
 export default async function Page({
@@ -42,11 +43,14 @@ export default async function Page({
 	// This is a server action, so it will run on the server side
 	updateViewedAtAction(slug);
 
+	let profiles = prospect.profiles || [];
+	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+	const currentProfileSummary = ProfileAdapter.toProfileData(prospect.profiles?.[0].data as unknown as string).data.summary;
+
 	const wealthPlaceholder: WealthSnapshot = {
-		estimatedNetWorth: 2800000,
+		estimatedNetWorth: currentProfileSummary?.netWorth || 0,
 		candidateQualityScore: 4,
-		givingPotential: 5000,
-		realEstateValue: 1200000,
+		givingPotential: currentProfileSummary?.givingCapacity || 0,
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
 	};
 
