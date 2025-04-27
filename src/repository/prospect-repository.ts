@@ -39,6 +39,7 @@ export default class ProspectRepository {
 
         return results.map(result => ({
             ...result,
+            employer: result.employer || undefined, // Convert null to undefined for employer
             addresses: result.addresses.map(address => ({
                 ...address,
                 street2: address.street2 || "", // Ensure street2 is always a string
@@ -79,6 +80,7 @@ export default class ProspectRepository {
         if (result) {
             return {
                 ...result,
+                employer: result.employer || undefined, // Convert null to undefined for employer
                 addresses: result.addresses.map(address => ({
                     ...address,
                     street2: address.street2 || "", // Provide a default value for street2
@@ -210,6 +212,7 @@ export default class ProspectRepository {
 
             return {
                 ...updatedProspect,
+                employer: updatedProspect.employer || undefined, // Convert null to undefined for employer
                 addresses: updatedProspect.addresses.map(address => ({
                     ...address,
                     street2: address.street2 || "",
@@ -280,6 +283,7 @@ export default class ProspectRepository {
 
         return results.map(result => ({
             ...result,
+            employer: result.employer || undefined, // Convert null to undefined for employer
             addresses: result.addresses.map(address => ({
                 ...address,
                 street2: address.street2 || "", // Ensure street2 is always a string
