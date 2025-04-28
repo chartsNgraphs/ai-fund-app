@@ -6,6 +6,7 @@ import { ProfileSummary } from "./summary";
 
 export interface ProfileData {
     userId: string;
+    dateCreated: string;
     address: string;
     prospectName: string;
     propertyData: PropertyData[];

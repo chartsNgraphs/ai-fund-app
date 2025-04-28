@@ -137,6 +137,7 @@ export class ProfileAdapter {
         return {
             data: {
             userId: result.user_id,
+            dateCreated: result.date_created,
             address: result.address,
             prospectName: result.prospect_name,
             propertyData: propertyData,
