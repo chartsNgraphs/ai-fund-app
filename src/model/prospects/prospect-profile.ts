@@ -7,7 +7,7 @@ export interface ProspectProfile {
     data: string;
     createdAt?: Date;
     updatedAt?: Date;
-    netWorth?: number;
+    netWorth?: number | null;
     givingScore?: string;
     givingCapacity?: number;
 }

@@ -34,6 +34,7 @@ export default class ProspectRepository {
                     socials: true,
                     profiles: true, // Include profiles in the query
                     events: true, // Include events in the query
+                    additionalPersons: true, // Include additional individuals in the query
                 }
             },);
 
@@ -57,6 +58,11 @@ export default class ProspectRepository {
                 eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
                 viewedAt: event.viewedAt || undefined, // Convert null to undefined for viewedAt
             })),
+            additionalPersons: result.additionalPersons.map(individual => ({
+                ...individual,
+                dateOfBirth: individual.dateOfBirth.toISOString() || "", // Ensure dateOfBirth is always a string
+                relationship: individual.relationship, // Map relationship to relationShip
+            })),
         }));
 
     }
@@ -72,8 +78,9 @@ export default class ProspectRepository {
             include: {
                 addresses: true,
                 socials: true,
-                profiles: true, // Include profiles in the query
-                events: true, // Include events in the query
+                profiles: true,
+                events: true,
+                additionalPersons: true,
             },
         });
 
@@ -98,6 +105,12 @@ export default class ProspectRepository {
                     eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
                     viewedAt: event.viewedAt || undefined, // Convert null to undefined for viewedAt
                 })),
+                additionalPersons: result.additionalPersons.map(individual => ({
+                    ...individual,
+                    dateOfBirth: individual.dateOfBirth.toISOString() || "", // Ensure dateOfBirth is always a string
+                    relationship: individual.relationship, // Map relationship to relationShip
+                })),
+
             };
         }
 
@@ -129,6 +142,14 @@ export default class ProspectRepository {
                     profiles: {
                         create: prospect.profiles?.map(profile => ({
                             data: profile.data, // Ensure data is a string
+                        })),
+                    },
+                    additionalPersons: {
+                        create: prospect.additionalPersons?.map(individual => ({
+                            firstName: individual.firstName, // Ensure firstName is a string
+                            lastName: individual.lastName, // Ensure lastName is a string
+                            dateOfBirth: new Date(individual.dateOfBirth), // Ensure dateOfBirth is a Date object
+                            relationship: individual.relationship, // Ensure relationship is a string
                         })),
                     },
                     events: {
@@ -173,9 +194,8 @@ export default class ProspectRepository {
     async update(id: string, data: Partial<Prospect>): Promise<Prospect | null> {
 
         try {
-            const { profiles, socials, ...updateData } = data; // Exclude profiles from being updated
+            const { profiles, socials, additionalPersons, addresses, ...updateData } = data; // Exclude profiles and socials from being updated
 
-            // Remove all existing socials and recreate them
             const updatedProspect = await this.prisma.prospect.update({
                 where: { id },
                 data: {
@@ -187,18 +207,51 @@ export default class ProspectRepository {
                             type: social.type || "linkedin", // Ensure type is always a string
                         })),
                     },
-                    addresses: updateData.addresses ? {
-                        upsert: updateData.addresses.map(({prospectId, ...address}) => ({
-                            where: { id: address.id || v4() }, // Use a unique identifier for the address
+                    addresses: addresses ? {
+                        deleteMany: {
+                            id: {
+                                notIn: addresses.map(address => address.id || v4()),
+                            },
+                        },
+                        upsert: addresses.map(({ prospectId, ...address }) => ({
+                            where: { id: address.id || v4() },
                             update: address,
                             create: address,
                         })),
-                    } : undefined,
+                    } : {
+                        deleteMany: {},
+                    },
+                    additionalPersons: additionalPersons ? {
+                        deleteMany: {
+                            id: {
+                                notIn: additionalPersons.map(individual => individual.id || v4()),
+                            },
+                        },
+                        upsert: additionalPersons.map(({ prospectId, ...individual }) => ({
+                            where: { id: individual.id || v4() }, // Use a unique identifier for the individual
+                            update: {
+                                ...individual,
+                                dateOfBirth: new Date(individual.dateOfBirth), // Convert string date to Date object
+                            },
+                            create: {
+                                ...individual,
+                                dateOfBirth: new Date(individual.dateOfBirth), // Convert string date to Date object
+                            },
+                        })),
+                    } : {
+                        deleteMany: {},
+                    },
                     events: updateData.events ? {
-                        upsert: updateData.events.map(({prospectId, ...event}) => ({
+                        upsert: updateData.events.map(({ prospectId, ...event }) => ({
                             where: { id: event.id || v4() }, // Use a unique identifier for the event
-                            update: event,
-                            create: event,
+                            update: {
+                                ...event,
+                                eventDate: new Date(event.eventDate), // Convert string date to Date object
+                            },
+                            create: {
+                                ...event,
+                                eventDate: new Date(event.eventDate), // Convert string date to Date object
+                            },
                         })),
                     } : undefined,
                 },

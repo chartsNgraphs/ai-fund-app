@@ -32,6 +32,7 @@ export default async function editProspectAction(id: string, data: FormData): Pr
             url: social,
             type: social.type || "linkedin",
         })) : undefined,
+        additionalPersons: data.get("additionalPersons") ? JSON.parse(data.get("additionalPersons") as string) : undefined,
     };
 
     if (!updatedData.firstName || !updatedData.lastName) {

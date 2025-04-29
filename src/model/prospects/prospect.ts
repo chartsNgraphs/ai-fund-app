@@ -16,6 +16,16 @@ export interface Prospect {
     profiles?: ProspectProfile[];
     events?: Event[];
     employer?: string;
+    additionalPersons?: AdditionalPerson[];
+}
+
+export interface AdditionalPerson {
+    id?: string;
+    firstName: string;
+    prospectId?: string;
+    lastName: string;
+    dateOfBirth: string;
+    relationship: string;
 }
 
 export interface ProspectSocialLink {

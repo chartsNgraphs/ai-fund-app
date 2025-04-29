@@ -49,6 +49,17 @@ model Prospect {
   profiles  ProspectProfile[]
   socials   ProspectSocialLink[]
   events    ProspectEvent[]
+  additionalPersons AdditionalPerson[] // The additional persons related to the prospect, such as spouse, child, parent, etc.
+}
+
+model AdditionalPerson {
+  id String @id @default(cuid())
+  prospectId String
+  firstName String
+  lastName String
+  relationship String // The relationship to the prospect, such as "spouse", "child", "parent", etc.
+  dateOfBirth DateTime
+  prospect Prospect @relation(fields: [prospectId], references: [id])
 }
 
 // Addresses, such as home address, work address, etc.
@@ -93,9 +104,9 @@ model ProspectProfile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // TODO: Make these non-nullable and re-gerenate the database
-  netWorth  Float? // The net worth of the prospect, if known
-  givingScore String? // The giving score of the prospect, if known
-  givingCapacity Float? // The giving capacity of the prospect, if known
+  netWorth  Float @default(0.00)// The net worth of the prospect, if known
+  givingScore String @default("U") // The giving score of the prospect, if known
+  givingCapacity Float @default(0.00) // The giving capacity of the prospect, if known
 }
 
 // Social links, such as LinkedIn, Twitter, Facebook, etc.

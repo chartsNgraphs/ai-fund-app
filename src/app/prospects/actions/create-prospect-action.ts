@@ -39,6 +39,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
                 url: social,
                 type: social.type || "linkedin",
             }}),
+        additionalPersons: data.get("additionalPersons") ? JSON.parse(data.get("additionalPersons") as string) : [],
     };
 
     if (!prospect.firstName || !prospect.lastName) {

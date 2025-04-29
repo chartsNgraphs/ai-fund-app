@@ -17,10 +17,14 @@ import {
 import createProspectAction from "../actions/create-prospect-action";
 import editProspectAction from "../actions/edit-prospect-action";
 import { Address } from "@/model/shared/address";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Prospect } from "@/model/prospects/prospect";
 import { permanentRedirect, redirect } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import AdditionalIndividualSubform from "./additional-individual-subform";
+import { AdditionalPerson } from "@/model/prospects/prospect";
+import AddressSubform from "./address-subform";
+import SocialsSubform from "./socials-subform";
 
 /**
  * 
@@ -35,6 +39,7 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
     const [socials, setSocials] = useState<Array<string>>(initialProspect?.socials.map(
         (social) => social.url
     ) || []);
+    const [additionalPersons, setAdditionalIndividuals] = useState<Array<AdditionalPerson>>(initialProspect?.additionalPersons || []);
 
     const [employer, setEmployer] = useState<string>(initialProspect?.employer || "");
 
@@ -51,6 +56,9 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
 
         // append employer to formData
         formData.append("employer", employer);
+
+        // append array of additional individuals to formData
+        formData.append("additionalPersons", JSON.stringify(additionalPersons));
 
         if (isEditMode) {
             const editResults = await editProspectAction(initialProspect?.id!, formData);
@@ -164,7 +172,6 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                                 name="dateOfBirth"
                                 type="date"
                                 placeholder="Date of Birth"
-                                defaultValue={prospect?.dateOfBirth?.toString()}
                             />
                         </FormItem>
                     </div>
@@ -185,179 +192,17 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                     </FormItem>
                 </Card>
                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
-                    <Card className="p-4 lg:col-span-2 flex flex-col gap-4">
-                        <h1 className="text-xl font-semibold text-primary">
-                            Address Information
-                        </h1>
-                        {addresses.map((address, index) => (
-                            <div
-                                key={index}
-                                className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg border border-black-900 p-4"
-                            >
-                                <div className="flex flex-row justify-end gap-1 w-full col-span-2">
-                                    <Button
-                                        size={"default"}
-                                        variant="ghost"
-                                        className="flex items-center gap-1 rounded-full hover:bg-red-500 hover:text-white"
-                                        onClick={(event) => {
-                                            // suppress form submit
-                                            event.preventDefault();
-                                            setAddresses(addresses.filter((_, i) => i !== index));
-                                        }}
-                                    >
-                                        <Trash size={64} />
-                                    </Button>
-                                </div>
-                                <div className="grid row-span-2 gap-4">
-                                    <FormItem>
-                                        <Label htmlFor={`street-${index}`}>Street Address</Label>
-                                        <Input
-                                            type="text"
-                                            placeholder="Street"
-                                            onChange={(e) => {
-                                                const updatedAddresses = [...addresses];
-                                                updatedAddresses[index] = {
-                                                    ...updatedAddresses[index],
-                                                    street: e.target.value,
-                                                };
-                                                setAddresses(updatedAddresses);
-                                            }}
-                                            defaultValue={address.street || ""}
-                                        />
-                                    </FormItem>
-                                    <FormItem>
-                                        <Label htmlFor={`street2-${index}`}>Street Address 2</Label>
-                                        <Input
-                                            type="text"
-                                            placeholder="Street"
-                                            onChange={(e) => {
-                                                const updatedAddresses = [...addresses];
-                                                updatedAddresses[index] = {
-                                                    ...updatedAddresses[index],
-                                                    street2: e.target.value,
-                                                };
-                                                setAddresses(updatedAddresses);
-                                            }}
-                                            defaultValue={address.street2 || ""}
-                                        />
-                                    </FormItem>
-                                </div>
-                                <FormItem>
-                                    <Label htmlFor={`city-${index}`}>City</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="City"
-                                        onChange={(e) => {
-                                            const updatedAddresses = [...addresses];
-                                            updatedAddresses[index] = {
-                                                ...updatedAddresses[index],
-                                                city: e.target.value,
-                                            };
-                                            setAddresses(updatedAddresses);
-                                        }}
-                                        defaultValue={address.city || ""}
-                                    />
-                                </FormItem>
-                                <FormItem>
-                                    <Label htmlFor={`state-${index}`}>State</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="State"
-                                        onChange={(e) => {
-                                            const updatedAddresses = [...addresses];
-                                            updatedAddresses[index] = {
-                                                ...updatedAddresses[index],
-                                                state: e.target.value,
-                                            };
-                                            setAddresses(updatedAddresses);
-                                        }}
-                                        defaultValue={address.state || ""}
-                                    />
-                                </FormItem>
-                                <FormItem>
-                                    <Label htmlFor={`zip-${index}`}>Zip</Label>
-                                    <Input
-                                        type="text"
-                                        placeholder="Zip"
-                                        onChange={(e) => {
-                                            const updatedAddresses = [...addresses];
-                                            updatedAddresses[index] = {
-                                                ...updatedAddresses[index],
-                                                zip: e.target.value,
-                                            };
-                                            setAddresses(updatedAddresses);
-                                        }}
-                                        defaultValue={address.zip || ""}
-                                    />
-                                </FormItem>
-                            </div>
-                        ))}
-                        <div className="flex justify-center p-4">
-                            <Button
-                                onClick={(event) => {
-                                    // suppress form submit
-                                    event.preventDefault();
-                                    setAddresses([...addresses, {} as unknown as Address]);
-                                }}
-                                variant="outline"
-                                className="rounded-full"
-                            >
-                                <Plus size={24} />
-                                Add Address
-                            </Button>
-                        </div>
-                    </Card>
+                    <AddressSubform addresses={addresses} setAddresses={setAddresses} />
                     <Card className="p-4 lg:col-span-1 flex flex-col gap-4">
-                        <h1 className="text-xl font-semibold text-primary">
-                            Socials & Links
-                        </h1>
-                        {!socials.length && (
-                            <p>Add links to LinkedIn, professional websites, etc.</p>
-                        )}
-                        {socials.map((social, index) => (
-                            <div key={index} className="flex flex-row gap-1 w-full">
-                                <FormItem className="flex flex-row gap-2 w-full">
-                                    <Input
-                                        type="text"
-                                        placeholder="https://platform.com/johndoe"
-                                        onChange={(e) => {
-                                            socials[index] = e.target.value;
-                                            setSocials([...socials]);
-                                        }}
-                                        defaultValue={social || ""}
-                                    />
-                                </FormItem>
-                                <Button
-                                    size={"default"}
-                                    variant="ghost"
-                                    className="flex items-center gap-1 rounded-full"
-                                    onClick={(event) => {
-                                        // suppress form submit
-                                        event.preventDefault();
-                                        setSocials(socials.filter((_, i) => i !== index));
-                                    }}
-                                >
-                                    <X size={64} />
-                                </Button>
-                            </div>
-                        ))}
-                        <div className="flex justify-center p-4">
-                            <Button
-                                disabled={socials[socials.length - 1] === ""}
-                                onClick={(event) => {
-                                    // suppress form submit
-                                    event.preventDefault();
-                                    setSocials([...socials, ""]);
-                                }}
-                                variant="outline"
-                                className={`rounded-full`}
-                            >
-                                <Plus size={24} />
-                                Add Social
-                            </Button>
-                        </div>
+                        <SocialsSubform socials={socials} setSocials={setSocials} />
                     </Card>
                 </div>
+                <Card className="p-4 lg:col-span-2 flex flex-col gap-4">
+                    <AdditionalIndividualSubform
+                        additionalIndividuals={additionalPersons}
+                        setAdditionalIndividuals={setAdditionalIndividuals}
+                    />
+                </Card>
                 <div className="grid grid-cols-1 md:flex md:justify-end gap-4 w-full">
                     <Button
                         variant="ghost"
