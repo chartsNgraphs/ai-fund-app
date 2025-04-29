@@ -31,6 +31,9 @@ export default class ProspectProfileRepository {
 
         return results.map(result => ({
             ...result,
+            netWorth: result.netWorth ?? undefined,
+            givingScore: result.givingScore ?? undefined,
+            givingCapacity: result.givingCapacity ?? undefined,
             data: JSON.parse(result.data as unknown as string),
         }));
     }
@@ -48,6 +51,9 @@ export default class ProspectProfileRepository {
         console.log("jsonData", jsonData);
 
         const profileToSave = {
+            netWorth: prospectProfile.netWorth,
+            givingScore: prospectProfile.givingScore,
+            givingCapacity: prospectProfile.givingCapacity,
             data: jsonData,
         }
         
@@ -62,6 +68,9 @@ export default class ProspectProfileRepository {
         
         return {
             ...result,
+            netWorth: result.netWorth ?? undefined,
+            givingScore: result.givingScore ?? undefined,
+            givingCapacity: result.givingCapacity ?? undefined,
             data: JSON.parse(result.data as unknown as string),
         };
     }

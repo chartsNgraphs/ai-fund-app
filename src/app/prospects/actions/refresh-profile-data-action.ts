@@ -34,7 +34,15 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
 
     try {
         const profile = await getProfile(prospect);
-        const events = ProfileAdapter.toProfileData(profile).events || [];
+
+        // console.log("Profile data: ", profile);
+
+        const profileData = ProfileAdapter.toProfileData(profile);
+        const events = profileData.events || [];
+        const summary = profileData.data.summary || null;
+        
+        console.log("Summary: ", summary);
+
         try {
             await prospectRepository.update(id, {
                 events: events,
@@ -52,6 +60,9 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
             id: uuidv4(),
             prospectId: id,
             data: filteredProfile,
+            netWorth: summary?.netWorth,
+            givingScore: summary?.givingScore,
+            givingCapacity: summary?.givingCapacity,
         });
 
         return {

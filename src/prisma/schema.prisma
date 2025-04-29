@@ -92,6 +92,10 @@ model ProspectProfile {
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // TODO: Make these non-nullable and re-gerenate the database
+  netWorth  Float? // The net worth of the prospect, if known
+  givingScore String? // The giving score of the prospect, if known
+  givingCapacity Float? // The giving capacity of the prospect, if known
 }
 
 // Social links, such as LinkedIn, Twitter, Facebook, etc.

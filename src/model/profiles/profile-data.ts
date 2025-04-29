@@ -1,4 +1,3 @@
-import { Event } from "./events";
 import { PropertyData } from "./property-data";
 import { SECData } from "./sec-data";
 import { PoliticalContribution } from "./political-contribution";
