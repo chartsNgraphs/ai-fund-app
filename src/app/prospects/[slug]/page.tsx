@@ -13,6 +13,7 @@ import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
 import ProfileTimeline from "./components/profile-timeline";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
+import Automations from "./components/automations";
 
 
 export default async function Page({
@@ -68,6 +69,7 @@ export default async function Page({
 				</Breadcrumb>
 				<ProspectOverview {...prospect} />
 				<ProfileTimeline prospect={prospect}/>
+				<Automations />
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-4">
 					<div className="lg:col-span-2">
 						<WealthSnapshotDisplay data={wealthPlaceholder} />
