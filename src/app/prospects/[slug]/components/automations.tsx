@@ -14,9 +14,11 @@ import {
 
 export default async function Automations() {
 
+    console.log(process.env)
+
     // Placeholder Automations
     const automations = [
-        { name: "Send me a period summary", description: "Send an email to the prospect", properties: [
+        { name: "Send me a periodic summary", description: "Send an email to the prospect", properties: [
             {
                 'text': 'Alert on profile changes',
                 'icon': <Bell className="text-black" size={16} />,
@@ -31,6 +33,7 @@ export default async function Automations() {
     ];
 
     const automationCard = (automation: { name: string; description: string; properties: {text: string, icon: any}[] }) => {
+
         return (
             <div key={automation.name} className="h-full flex flex-col gap-2 p-4 cursor-auto border-2 border-secondary transition-all duration-200 ease-in-out rounded-xl">
                 <div className="flex items-center justify-between">
@@ -65,6 +68,11 @@ export default async function Automations() {
                 </div>
             </div>
         );
+    }
+
+    const isEnabled = process.env.FEATURE_AUTOMATIONS === "true";
+    if (!isEnabled) {
+        return null;
     }
 
     return (
