@@ -100,8 +100,8 @@ export default function ProspectSearchBar({
                             recents.map((recent, index) => (
                                 <div key={`${recent}-${index}`} className="py-2 flex">
                                     <Badge
-                                        className="mr-2 cursor-pointer"
-                                        variant="secondary"
+                                        className="mr-2 cursor-pointer hover:bg-muted hover:text-foreground transition-all duration-200"
+                                        variant="outline"
                                         onClick={() => {
                                             handleSearch(recent);
                                         }}
