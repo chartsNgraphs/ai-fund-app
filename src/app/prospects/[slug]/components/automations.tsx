@@ -14,8 +14,6 @@ import {
 
 export default async function Automations() {
 
-    console.log(process.env)
-
     // Placeholder Automations
     const automations = [
         { name: "Send me a periodic summary", description: "Send an email to the prospect", properties: [

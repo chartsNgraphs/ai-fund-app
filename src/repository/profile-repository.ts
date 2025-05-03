@@ -51,8 +51,8 @@ export default class ProspectProfileRepository {
         console.log("jsonData", jsonData);
 
         const profileToSave = {
-            netWorth: prospectProfile.netWorth,
-            givingScore: prospectProfile.givingScore,
+            netWorth: prospectProfile.netWorth ?? undefined,
+            givingScore: prospectProfile.givingScore?.toString() ?? 'U',
             givingCapacity: prospectProfile.givingCapacity,
             data: jsonData,
         }

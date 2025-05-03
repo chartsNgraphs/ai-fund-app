@@ -1,6 +1,6 @@
-import { ProfileData } from "@/model/profiles/profile-data"
+import { ProfileData } from "@/model/profiles/profile-data";
 import { PropertyData } from "@/model/profiles/property-data";
-import { Filing, SECData } from "@/model/profiles/sec-data";;
+import { SECData, SECFiling, Transaction, Coding, Amounts, PostTransactionAmounts, Issuer, ReportingOwner } from "@/model/profiles/sec-data";
 import { Event } from "@/model/profiles/events";
 import { ProfileSummary } from "@/model/profiles/summary";
 
@@ -34,12 +34,11 @@ export class ProfileAdapter {
             mailingAddress: data.mailing_address,
         }));
 
-        const secData = result['sec_data']
+        const secData = result['sec_data'];
 
-        const eventsData = result['events']
+        const eventsData = result['events'];
 
-        const politicalContributionsData = result['political_contributions']
-
+        const politicalContributionsData = result['political_contributions'];
 
         const politicalContributions: any[] = politicalContributionsData ? politicalContributionsData.map((data: any) => ({
             candidateId: data.candidate_id,
@@ -95,44 +94,72 @@ export class ProfileAdapter {
 
         if (secData) {
             secDataComplete = {
+                version: '2',
                 insiderFilings: {
                     filings: secData.insider_filings.filings.map((filing: any) => {
-                        const f: Filing = {
+                        const transactions: Transaction[] = filing.transactions?.map((transaction: any) => ({
+                            securityTitle: transaction.security_title,
+                            transactionDate: new Date(transaction.transaction_date),
+                            coding: {
+                                formType: transaction.coding.form_type,
+                                code: transaction.coding.code,
+                                equitySwapInvolved: transaction.coding.equity_swap_involved,
+                            },
+                            amounts: {
+                                shares: transaction.amounts.shares,
+                                sharesFootnoteId: transaction.amounts.shares_footnote_id,
+                                pricePerShare: transaction.amounts.price_per_share,
+                                acquiredDisposedCode: transaction.amounts.acquired_disposed_code,
+                            },
+                            postTransactionAmounts: transaction.post_transaction_amounts ? {
+                                sharesOwnedFollowingTransaction: transaction.post_transaction_amounts.shares_owned_following_transaction,
+                                sharesOwnedFollowingTransactionFootnoteId: transaction.post_transaction_amounts.shares_owned_following_transaction_footnote_id,
+                            } : undefined,
+                            ownershipNature: transaction.ownership_nature,
+                        }));
+
+                        const reportingOwner : ReportingOwner = {
+                            name: filing.reporting_owner?.name,
+                            cik: filing.reporting_owner?.cik,
+                            relationship: {
+                                isOfficer: filing.reporting_owner?.relationship.is_officer,
+                                isDirector: filing.reporting_owner?.relationship.is_director,
+                                isTenPercentOwner: filing.reporting_owner?.relationship.is_ten_percent_owner,
+                                isOther: filing.reporting_owner?.relationship.is_other,
+                            }
+                        }; 
+
+                        const issuer: Issuer = {
+                            name: filing.issuer?.name,
+                            cik: filing.issuer?.cik,
+                            tradingSymbol: filing.issuer?.trading_symbol,
+                        };
+
+                        const f: SECFiling = {
                             id: filing.id,
-                            ticker: filing.ticker,
-                            formType: filing.form_type,
                             accessionNumber: filing.accession_number,
-                            cik: filing.cik,
-                            companyName: filing.company_name,
-                            companyLongName: filing.company_name_long,
-                            description: filing.description,
-                            linkToText: filing.link_to_txt,
                             filedAt: new Date(filing.filed_at),
-                            periodOfReport: new Date(filing.period_of_report),
-                            linkToHtml: filing.link_to_html,
-                            linkToFilingDetails: filing.link_to_filing_details,
-                            entities: filing.entities?.map((entity: any) => ({
-                                companyName: entity.company_name,
-                                cik: entity.cik,
-                                fileNo: entity.file_no,
-                                stateOfIncorporation: entity.state_of_incorporation,
-                                sic: entity.sic,
-                            }))
-                        }
+                            documentType: filing.document_type,
+                            periodOfReport: filing.period_of_report,
+                            notSubjectToSection16: filing.not_subject_to_section_16,
+                            footnotes: filing.footnotes,
+                            transactions: transactions,
+                            reportingOwner: reportingOwner,
+                            issuer: issuer,
+                        };
                         return f;
                     }),
                     totalFilings: secData.insider_filings.total_filings,
                 }
-            }
+            };
         }
 
-        const profileSummaryData = result['summary']
+        const profileSummaryData = result['summary'];
         const summary : ProfileSummary = {
             netWorth: profileSummaryData?.net_worth || 0,
             givingScore: profileSummaryData?.giving_score || 0,
             givingCapacity: profileSummaryData?.giving_capacity || 0,
-        }
-
+        };
 
         return {
             data: {
