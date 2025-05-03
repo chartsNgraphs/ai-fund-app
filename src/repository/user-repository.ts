@@ -19,7 +19,15 @@ export default class UserRepository {
     async getById(id: string): Promise<(User & { settings: UserSettings | null }) | null> {
         const user = await this.prisma.user.findUnique({
             where: { id },
-            include: { settings: true },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                settings: true,
+                image: true,
+                createdAt: true,
+                updatedAt: true,
+            },
         });
 
         if (user) {
@@ -29,6 +37,7 @@ export default class UserRepository {
                     ? {
                           ...user.settings,
                           settings: user.settings.settings as UserSettings["settings"],
+                          recentSearches: (user.settings?.recentSearches?.['searches']) || [], // The casting is bc that JSONValue is actually correct already.
                       }
                     : null,
             };
@@ -45,6 +54,9 @@ export default class UserRepository {
      * @returns The updated user object with settings or null if not found
      */
     async update(id: string, data: Partial<User>, settings?: Partial<UserSettings>): Promise<(User & { settings: UserSettings | null }) | null> {
+
+        console.log("Updating user with ID:", id, "Data:", data, "Settings:", settings);
+
         try {
             if (data) {
                 await this.prisma.user.update({
@@ -57,8 +69,21 @@ export default class UserRepository {
             if (settings) {
                 await this.prisma.userSettings.upsert({
                     where: { userId: id },
-                    update: settings,
-                    create: { ...settings, userId: id, settings: {} }, // Replace {} with a valid default value for settings
+                    update: {
+                        ...settings,
+                        settings: {
+                            ...settings.settings,
+                        },
+                        recentSearches: { searches: settings.recentSearches || [] },
+                    },
+                    create: { 
+                        ...settings, 
+                        userId: id, 
+                        settings: {
+                            ...settings.settings, 
+                        },
+                        recentSearches: { searches: settings.recentSearches || [] },
+                    },
                 });
             }
 
@@ -74,6 +99,7 @@ export default class UserRepository {
                         ? {
                               ...user.settings,
                               settings: user.settings.settings as UserSettings["settings"],
+                              recentSearches: user.settings?.recentSearches?.['searches'] || {searches: []},
                           }
                         : null,
                 };
