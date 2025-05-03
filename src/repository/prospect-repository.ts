@@ -2,6 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import { v4 } from "uuid";
 import { Prospect } from "@/model/prospects/prospect";
 
+export interface QueryResult {
+    count: number;
+    prospects: Prospect[];
+}
+
 /**
  * ProspectRepository class to handle all the database operations related to prospects.
  * It uses PrismaClient to interact with the database.
@@ -19,9 +24,15 @@ export default class ProspectRepository {
      * @returns An array of prospects for the user
      */
     async getAll(
-        userId
-    ): Promise<Prospect[]> {
-        const results = await this.prisma.prospect.findMany(
+        userId,
+        query: string = "",
+        page: number = 1,
+        pageSize: number = 25,
+    ): Promise<QueryResult> {
+
+        console.log("ProspectRepository.getAll", userId, query, page, pageSize);
+
+        let results = await this.prisma.prospect.findMany(
             {
                 where: {
                     userId: userId,
@@ -38,7 +49,24 @@ export default class ProspectRepository {
                 }
             },);
 
-        return results.map(result => ({
+        // Filter results based on the query string
+        if (query) {
+            const lowerCaseQuery = query.toLowerCase();
+            results =  results.filter((result) => {
+                const fullName = `${result.firstName} ${result.lastName}`.toLowerCase();
+                return fullName.includes(lowerCaseQuery) || result.email.toLowerCase().includes(lowerCaseQuery);
+            });
+        }
+
+        const count = results.length;
+
+        // return the correct page of results
+        const startIndex = (page-1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        results = results.slice(startIndex, endIndex);
+
+        return {
+            prospects: results.map(result => ({
             ...result,
             employer: result.employer || undefined, // Convert null to undefined for employer
             addresses: result.addresses.map(address => ({
@@ -63,7 +91,9 @@ export default class ProspectRepository {
                 dateOfBirth: individual.dateOfBirth.toISOString() || "", // Ensure dateOfBirth is always a string
                 relationship: individual.relationship, // Map relationship to relationShip
             })),
-        }));
+        })),
+            count: count,
+        };
 
     }
 

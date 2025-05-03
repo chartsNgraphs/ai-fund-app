@@ -5,16 +5,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Plus, Search, Upload } from "lucide-react";
-import { useState } from "react";
+import { useState} from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function ProspectSearchBar() {
 
     const [searchActive, setSearchActive] = useState(false);
     const recents = ["John Doe", "John Doe NY"]
+    const router = useRouter();
+    
+    const searchParams = useSearchParams();
+    const query = searchParams.get("query") || "";
+
+    const [search, setSearch] = useState(query);
+
+    const handleSearch = () => {
+        // get the current url and add the search query to it
+        const url = new URL(window.location.href);
+        url.searchParams.set("query", search);
+        url.searchParams.set("page", "0");
+
+        router.push(url.toString());
+        router.refresh();
+
+    };
 
     return (
         <div className={`w-full transition p-4 bg-card border rounded-lg shadow-md ${searchActive ? "z-999" : ""}`}
             onBlur={() => setSearchActive(false)}>
+            
             <div className="flex items-center justify-between grid lg:grid-cols-2 gap-2 md: grid-cols-1">
                 <div className="flex flex-row">
                     <Input
@@ -22,8 +42,15 @@ export default function ProspectSearchBar() {
                         placeholder="Search your prospects..."
                         className="flex-grow mr-2 rounded-full border-primary"
                         onFocus={() => setSearchActive(true)}
+                        onChange={(e) => setSearch(e.target.value)}
+                        defaultValue={query}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSearch();
+                            }
+                        }}
                     />
-                    <Button className="p-2 rounded-full" variant={"default"}>
+                    <Button className="p-2 rounded-full" variant={"default"} onClick={handleSearch}>
                         <Search className="w-5 h-5" />
                         Search
                     </Button>
