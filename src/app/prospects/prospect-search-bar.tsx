@@ -8,6 +8,7 @@ import { Plus, Search, Upload } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
 
 export default function ProspectSearchBar({
     history = [],
@@ -25,9 +26,20 @@ export default function ProspectSearchBar({
     const [search, setSearch] = useState(query);
 
     const handleSearch = async (recent?) => {
-        const searchTerm = recent || search;
+        console.log("searching for: ", recent);
+        const searchTerm = recent !== undefined ? recent : search;
         if (!searchTerm || searchTerm.length < 1) {
-            return;
+            setSearchActive(false);
+            setSearch("");
+            const url = new URL(window.location.href);
+            url.searchParams.delete("query");
+            url.searchParams.delete("page");
+            const input = document.getElementById("search-input") as HTMLInputElement;
+            if (input) {
+                input.value = "";
+            }
+            router.push(url.toString());
+            router.refresh();
         }
         const url = new URL(window.location.href);
         url.searchParams.set("query", searchTerm);
@@ -35,7 +47,7 @@ export default function ProspectSearchBar({
 
         router.push(url.toString());
         router.refresh();
-
+        setSearch(searchTerm);
     };
 
     return (
@@ -43,12 +55,13 @@ export default function ProspectSearchBar({
             <div className="flex items-center justify-between grid lg:grid-cols-2 gap-2 md: grid-cols-1">
                 <div className="flex flex-row">
                     <Input
+                        id="search-input"
                         type="text"
                         placeholder="Search your prospects..."
                         className="flex-grow mr-2 rounded-full border-primary"
                         onFocus={() => setSearchActive(true)}
                         onChange={(e) => setSearch(e.target.value)}
-                        defaultValue={query}
+                        defaultValue={search}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 handleSearch();
@@ -101,6 +114,15 @@ export default function ProspectSearchBar({
                 </div>
             </div>
             }
+            {
+                        query && search &&
+                        <Button className="p-2 rounded-full" variant={"destructive"} onClick={() => {
+                            handleSearch("");
+                        }}>
+                            <X className="w-5 h-5" />
+                            Clear Search
+                        </Button>
+                    }
             
         </div>
     );
