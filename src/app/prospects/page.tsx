@@ -32,7 +32,7 @@ export default async function Prospects({ searchParams }) {
             <ProspectSearchBar />
             <React.Suspense fallback={<ProspectResultsSkeleton />}>
                 <ProspectResultsTable
-                    prospects={prospects} page={pageNumber} totalPages={Math.ceil(count / limitNumber)}
+                    prospects={prospects} page={pageNumber} totalPages={Math.ceil(count / limitNumber)} limit={limitNumber}
                 />
             </React.Suspense>
         </div>
