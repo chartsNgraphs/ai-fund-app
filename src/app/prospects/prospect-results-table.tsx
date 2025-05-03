@@ -83,7 +83,7 @@ export default function ProspectResultsTable({
     const visiblePages = getVisiblePages(page, totalPages);
 
     return (
-        <div className="container mx-auto p-4 flex flex-col gap-5">
+        <div className="container mx-auto p-4 flex flex-col gap-5 bg-card border rounded-xl shadow-md">
             <div className="flex justify-end mb-4 items-center">
                 <label htmlFor="limit" className="mr-2">
                     Items per page:

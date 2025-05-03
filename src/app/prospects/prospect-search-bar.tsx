@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Plus, Search, Upload } from "lucide-react";
+import { ChevronUp, Plus, Search, Upload } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -12,14 +12,14 @@ import { X } from "lucide-react";
 
 export default function ProspectSearchBar({
     history = [],
-} : {
+}: {
     history: string[],
 }) {
 
     const [searchActive, setSearchActive] = useState(false);
     const recents = history;
     const router = useRouter();
-    
+
     const searchParams = useSearchParams();
     const query = searchParams.get("query") || "";
 
@@ -92,38 +92,45 @@ export default function ProspectSearchBar({
             </div>
             {    /* Recent searches section */}
             {
-                recents && 
+                recents &&
                 <div className={`fw-full ${searchActive ? "block" : "hidden"} p-1 mt-2`}>
                     <h1 className="text-md">Recent Searches</h1>
                     <div className="flex flex-row">
-                    {
-                        recents.map((recent, index) => (
-                            <div key={`${recent}-${index}`} className="py-2 flex">
-                                <Badge 
-                                    className="mr-2 cursor-pointer" 
-                                    variant="secondary"
-                                    onClick={() => {
-                                        handleSearch(recent);
-                                    }}
-                                >
-                                    {recent}
-                                </Badge>
-                            </div>
-                        ))
-                    }
+                        {
+                            recents.map((recent, index) => (
+                                <div key={`${recent}-${index}`} className="py-2 flex">
+                                    <Badge
+                                        className="mr-2 cursor-pointer"
+                                        variant="secondary"
+                                        onClick={() => {
+                                            handleSearch(recent);
+                                        }}
+                                    >
+                                        {recent}
+                                    </Badge>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
-            </div>
             }
             {
-                        query && search &&
-                        <Button className="p-2 rounded-full" variant={"destructive"} onClick={() => {
-                            handleSearch("");
-                        }}>
-                            <X className="w-5 h-5" />
-                            Clear Search
-                        </Button>
-                    }
-            
+                query && search &&
+                <Button className="p-2 rounded-full" variant={"destructive"} onClick={() => {
+                    handleSearch("");
+                }}>
+                    <X className="w-5 h-5" />
+                    Clear Search
+                </Button>
+            }
+           {
+            searchActive && 
+            <div className="w-full flex flex-row justify-center mt-2">
+                <Button className="rounded-full" size={'icon'} variant={'ghost'} onClick={() => setSearchActive(!searchActive)}>
+                    <ChevronUp className="w-5 h-5" />
+                </Button>
+            </div>
+           }
         </div>
     );
 }
