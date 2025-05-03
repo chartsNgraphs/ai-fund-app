@@ -1,33 +1,69 @@
-// TODO: add separate types for filings.
-
-export interface FilingEntity {
-    companyName: string;
+export interface Issuer {
+    name: string;
     cik: string;
-    fileNo: string;
-    stateOfIncorporation: string;
-    sic: string;
+    tradingSymbol?: string;
 }
 
-export interface Filing {
-    id: string;
-    ticker: string;
-    formType: string;
-    accessionNumber: string;
+export interface ReportingOwnerRelationship {
+    isDirector: boolean;
+    isOfficer: boolean;
+    officerTitle?: string;
+    isTenPercentOwner: boolean;
+    isOther: boolean;
+}
+
+export interface ReportingOwner {
+    name: string;
     cik: string;
-    companyName: string;
-    companyLongName: string;
-    description: string;
-    linkToText: string;
+    relationship: ReportingOwnerRelationship;
+}
+
+export interface Coding {
+    formType: string;
+    code: string;
+    equitySwapInvolved: boolean;
+}
+
+export interface Amounts {
+    shares: number;
+    sharesFootnoteId?: string[];
+    pricePerShare?: number;
+    acquiredDisposedCode: string;
+}
+
+export interface PostTransactionAmounts {
+    sharesOwnedFollowingTransaction: number;
+    sharesOwnedFollowingTransactionFootnoteId?: string[];
+}
+
+export interface Transaction {
+    securityTitle: string;
+    transactionDate: Date;
+    coding: Coding;
+    amounts: Amounts;
+    postTransactionAmounts?: PostTransactionAmounts;
+    ownershipNature: Record<string, any>;
+}
+
+export interface SECFiling {
+    id: string;
+    accessionNumber: string;
     filedAt: Date;
-    periodOfReport: Date;
-    linkToHtml: string;
-    linkToFilingDetails: string;
-    entities: FilingEntity[];
+    documentType: string;
+    periodOfReport: string;
+    notSubjectToSection16: boolean;
+    footnotes?: Record<string, string>;
+    transactions?: Transaction[];
+    reportingOwner: ReportingOwner;
+    issuer?: Issuer;
+}
+
+export interface InsiderFilings {
+    filings?: SECFiling[];
+    totalFilings?: number;
 }
 
 export interface SECData {
-    insiderFilings: {
-        filings: Filing[];
-        totalFilings: number;
-    };
+    version?: string;
+    insiderFilings?: InsiderFilings;
 }

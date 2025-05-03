@@ -208,19 +208,17 @@ export default class ProspectRepository {
                         })),
                     },
                     addresses: addresses ? {
-                        deleteMany: {
-                            id: {
-                                notIn: addresses.map(address => address.id || v4()),
-                            },
-                        },
+                        // deleteMany: {
+                        //     id: {
+                        //         notIn: addresses.map(address => address.id || v4()),
+                        //     },
+                        // },
                         upsert: addresses.map(({ prospectId, ...address }) => ({
                             where: { id: address.id || v4() },
                             update: address,
                             create: address,
                         })),
-                    } : {
-                        deleteMany: {},
-                    },
+                    } :{},
                     additionalPersons: additionalPersons ? {
                         deleteMany: {
                             id: {

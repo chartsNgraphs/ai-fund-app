@@ -71,6 +71,9 @@ export async function getProfile(prospect: Prospect): Promise<any> {
             },
         }
         );
+        if (response.status !== 200) {
+            throw new Error(`Error: ${response.status} received from profile building service`);
+        }
         return response.data;
     } catch (error) {
         console.error('Error fetching profile:', error);

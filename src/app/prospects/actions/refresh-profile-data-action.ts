@@ -33,6 +33,7 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
     }
 
     try {
+        console.log("Prospect data: ", prospect);
         const profile = await getProfile(prospect);
 
         // console.log("Profile data: ", profile);
