@@ -8,6 +8,8 @@ import { User } from "@/model/users/user";
 import ProspectResultsTable from "./prospect-results-table";
 import { ProspectResultsSkeleton } from "./prospect-results-skeleton";
 import React from "react";
+import { getSearchHistory } from "./actions/search-history-actions";
+import { addSearchToHistory } from "./actions/search-history-actions";
 
 
 export default async function Prospects({ searchParams }) {
@@ -21,7 +23,17 @@ export default async function Prospects({ searchParams }) {
         notFound();
     }
 
+    if (query) {
+        console.log("Adding search to history:", query);
+        await addSearchToHistory(query);
+    }
+
     const prospectRepository = new ProspectRepository();
+
+    // Get the search history for the user
+    const searchHistory = await getSearchHistory(user.id);
+
+    console.log("Search history:", searchHistory, typeof searchHistory);
 
     const prospectsPromise = prospectRepository.getAll(user.id, query, pageNumber, limitNumber);
 
@@ -29,7 +41,7 @@ export default async function Prospects({ searchParams }) {
 
     return (
         <div className="container mx-auto p-4 flex flex-col gap-5">
-            <ProspectSearchBar />
+            <ProspectSearchBar history={searchHistory} />
             <React.Suspense fallback={<ProspectResultsSkeleton />}>
                 <ProspectResultsTable
                     prospects={prospects} page={pageNumber} totalPages={Math.ceil(count / limitNumber)} limit={limitNumber}

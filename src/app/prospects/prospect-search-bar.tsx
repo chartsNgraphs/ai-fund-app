@@ -5,14 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Plus, Search, Upload } from "lucide-react";
-import { useState} from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export default function ProspectSearchBar() {
+export default function ProspectSearchBar({
+    history = [],
+} : {
+    history: string[],
+}) {
 
     const [searchActive, setSearchActive] = useState(false);
-    const recents = ["John Doe", "John Doe NY"]
+    const recents = history;
     const router = useRouter();
     
     const searchParams = useSearchParams();
@@ -20,10 +24,13 @@ export default function ProspectSearchBar() {
 
     const [search, setSearch] = useState(query);
 
-    const handleSearch = () => {
-        // get the current url and add the search query to it
+    const handleSearch = async (recent?) => {
+        const searchTerm = recent || search;
+        if (!searchTerm || searchTerm.length < 1) {
+            return;
+        }
         const url = new URL(window.location.href);
-        url.searchParams.set("query", search);
+        url.searchParams.set("query", searchTerm);
         url.searchParams.set("page", "0");
 
         router.push(url.toString());
@@ -32,9 +39,7 @@ export default function ProspectSearchBar() {
     };
 
     return (
-        <div className={`w-full transition p-4 bg-card border rounded-lg shadow-md ${searchActive ? "z-999" : ""}`}
-            onBlur={() => setSearchActive(false)}>
-            
+        <div className={`w-full transition p-4 bg-card border rounded-xl shadow-md ${searchActive ? "z-999" : ""}`}>
             <div className="flex items-center justify-between grid lg:grid-cols-2 gap-2 md: grid-cols-1">
                 <div className="flex flex-row">
                     <Input
@@ -50,7 +55,7 @@ export default function ProspectSearchBar() {
                             }
                         }}
                     />
-                    <Button className="p-2 rounded-full" variant={"default"} onClick={handleSearch}>
+                    <Button className="p-2 rounded-full" variant={"default"} onClick={() => handleSearch()}>
                         <Search className="w-5 h-5" />
                         Search
                     </Button>
@@ -81,10 +86,17 @@ export default function ProspectSearchBar() {
                     {
                         recents.map((recent, index) => (
                             <div key={`${recent}-${index}`} className="py-2 flex">
-                            <Badge className="mr-2 cursor-pointer" variant="secondary">
-                                John Doe
-                            </Badge>
-                        </div>))
+                                <Badge 
+                                    className="mr-2 cursor-pointer" 
+                                    variant="secondary"
+                                    onClick={() => {
+                                        handleSearch(recent);
+                                    }}
+                                >
+                                    {recent}
+                                </Badge>
+                            </div>
+                        ))
                     }
                 </div>
             </div>
@@ -93,28 +105,3 @@ export default function ProspectSearchBar() {
         </div>
     );
 }
-
-
-// const fakeProspects = [
-//     {
-//         id: '1',
-//         name: "John Doe",
-//         location: "New York, NY",
-//         company: "Acme Corp",
-//         givingAbility: "High",
-//     },
-//     {
-//         id: '2',
-//         name: "Jane Smith",
-//         location: "Los Angeles, CA",
-//         company: "Tech Innovations",
-//         givingAbility: "Medium",
-//     },
-//     {
-//         id: '3',
-//         name: "Michael Johnson",
-//         location: "Chicago, IL",
-//         company: "Finance Group",
-//         givingAbility: "Low",
-//     },
-// ]
