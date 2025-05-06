@@ -68,8 +68,6 @@ export default async function Page({
 					</BreadcrumbList>
 				</Breadcrumb>
 				<ProspectOverview {...prospect} />
-				<ProfileTimeline prospect={prospect}/>
-				<Automations />
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-4">
 					<div className="lg:col-span-2">
 						<WealthSnapshotDisplay data={wealthPlaceholder} />
@@ -82,6 +80,8 @@ export default async function Page({
 						</div>
 					</Card>
 				</div>
+				<ProfileTimeline prospect={prospect}/>
+				<Automations />
 				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!} tracked={prospect.tracked}/>
 			</div>
 		</>
