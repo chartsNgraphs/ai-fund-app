@@ -1,6 +1,6 @@
 interface WealthSnapshot {
     estimatedNetWorth: number;
     givingPotential: number;
-    candidateQualityScore: number;
+    prospectGivingScore: string;
     summary: string;
 }

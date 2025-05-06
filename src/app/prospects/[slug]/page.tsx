@@ -50,7 +50,7 @@ export default async function Page({
 
 	const wealthPlaceholder: WealthSnapshot = {
 		estimatedNetWorth: currentProfileSummary?.netWorth || 0,
-		candidateQualityScore: 4,
+		prospectGivingScore: currentProfileSummary?.givingScore || "99",
 		givingPotential: currentProfileSummary?.givingCapacity || 0,
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
 	};
