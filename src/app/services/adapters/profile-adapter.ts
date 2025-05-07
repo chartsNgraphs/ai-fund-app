@@ -150,7 +150,14 @@ export class ProfileAdapter {
                         return f;
                     }),
                     totalFilings: secData.insider_filings.total_filings,
-                }
+                },
+                currentHoldings: secData.current_holdings?.map((holding: any) => ({
+                    name: holding.name,
+                    ticker: holding.ticker,
+                    sharesOwned: holding.shares_owned,
+                    sharePrice: holding.share_price,
+                    totalValue: holding.total_value,
+                })) || [],
             };
         }
 

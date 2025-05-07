@@ -53,7 +53,7 @@ export default function Giving(props: { politicalGifts: PoliticalContribution[] 
     }, []);
 
     return (
-        <Card className="w-full p-4 mt-8">
+        <Card className="w-full p-4 mt-0">
             <h2 className="text-xl font-semibold mb-4">Giving History</h2>
             <Accordion type="single" className="w-full" collapsible>
                 <AccordionItem value="political-gifts" className="w-full">

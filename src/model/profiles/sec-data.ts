@@ -63,7 +63,16 @@ export interface InsiderFilings {
     totalFilings?: number;
 }
 
+export interface SecurityHolding {
+    ticker: string;
+    name: string;
+    sharesOwned: number;
+    sharePrice: number;
+    totalValue: number;
+}
+
 export interface SECData {
     version?: string;
     insiderFilings?: InsiderFilings;
+    currentHoldings?: SecurityHolding[];
 }
