@@ -17,6 +17,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import updateTrackingAction from "../actions/update-tracking-action";
 import Giving from "./components/giving";
 import SecurityHoldingsDisplay from "./components/security-holdings";
+import ProfileselectDialog from "./components/profile-select-dialog";
 
 export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string, tracked: boolean }) {
 
@@ -31,6 +32,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isRefreshDialogOpen, setIsRefreshDialogOpen] = useState(false);
+	const [isSelectDialogOpen, setIsSelectDialogOpen] = useState(false);
 
 	// Parse profile data
 	const parsedProfileDatas = profiles.map((profile: any) => {
@@ -102,23 +104,10 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 	return (
 		<div className="container mx-auto">
 			<div className="w-full mt-4 flex flex-row gap-4 flex-wrap">
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="rounded-full">
-							Data as of {profileDates[selectedProfileIndex]?.date || "Unknown"} <ChevronDown />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="start">
-						{profileDates.map((dateObj, index) => (
-							<DropdownMenuItem
-								key={dateObj.date + index}
-								onClick={() => handleProfileSelect(index)}
-							>
-								<span className="text-sm font-semibold">{dateObj.date}</span>
-							</DropdownMenuItem>
-						))}
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<Button variant="outline" className="rounded-full" onClick={() => setIsSelectDialogOpen(true)}>
+					Data as of {profileDates[selectedProfileIndex]?.date || "Unknown"} <ChevronDown />
+				</Button>
+				<ProfileselectDialog profiles={profiles} selectedProfileIndex={selectedProfileIndex} onSelect={handleProfileSelect} onClose={() => setIsSelectDialogOpen(false)} isOpen={isSelectDialogOpen}/>
 				<div className="flex items-center mr-auto space-x-2">
 					<Switch id="track-prospect" onCheckedChange={handleTrackingChange} defaultChecked={track}/>
 					<Label htmlFor="track-prospect" >Automatically update me with changes</Label>
