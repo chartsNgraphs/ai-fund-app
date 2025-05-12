@@ -50,17 +50,16 @@ ENV NODE_ENV=production
 
 ENV NEXTAUTH_URL="http://localhost:3000"
 ENV GOOGLE_CLIENT_SECRET=
-ENV GOOGLE_CLIENT_ID="457601566323-krlquu0g17lkkio28g20qfvn7lfkfdgj.apps.googleusercontent.com"
-ENV NEXTAUTH_PUBLIC_API_DOMAIN="http://localhost:3000/api"
-ENV NEXTAUTH_PUBLIC_DOMAIN="http://localhost:3000"
-ENV NEXTAUTH_INTERNAL_URL="http://localhost:3000"
+ENV GOOGLE_CLIENT_ID=
+ENV NEXTAUTH_PUBLIC_API_DOMAIN="http://0.0.0.0:3000/api"
+ENV NEXTAUTH_PUBLIC_DOMAIN="http://0.0.0.0:3000"
+ENV NEXTAUTH_INTERNAL_URL="http://0.0.0.0:3000"
 ENV AUTH_SECRET=
 ENV PROFILE_SERVICE_BASE_URL="http://localhost:8000"
 ENV FEATURE_AUTOMATIONS="false"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-
 
 
 COPY --from=builder /app/public ./public
@@ -73,6 +72,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
+EXPOSE 5432
 
 ENV PORT=3000
 
