@@ -115,7 +115,7 @@ export default function CreateProspectPage(props: { prospect?: Prospect, mode?: 
                         <BreadcrumbLink href="/prospects">Prospects</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
-                    <BreadcrumbItem>Create</BreadcrumbItem>
+                    <BreadcrumbItem>{isEditMode ? `Edit ${prospect.firstName} ${prospect.lastName}`: 'Create'}</BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
             <div>

@@ -64,7 +64,7 @@ export default async function Page({
 							<BreadcrumbLink href="/prospects">Prospects</BreadcrumbLink>
 						</BreadcrumbItem>
 						<BreadcrumbSeparator />
-						<BreadcrumbItem>{`View`}</BreadcrumbItem>
+						<BreadcrumbItem>{`${prospect.firstName} ${prospect.lastName}`}</BreadcrumbItem>
 					</BreadcrumbList>
 				</Breadcrumb>
 				<ProspectOverview {...prospect} />
