@@ -1,6 +1,7 @@
 import { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google'
 import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/client';
 
 const authOptions : AuthOptions = {
     
@@ -23,7 +24,7 @@ const authOptions : AuthOptions = {
                 // if no profile, return false to deny sign in
                 return false;
             }
-            const client = new PrismaClient();
+            const client = prisma;
             // connect to the DB
             // check if user exists
             const user = await client.user.findUnique({
@@ -52,7 +53,7 @@ const authOptions : AuthOptions = {
             // assign userID from session
             // return the session
 
-            const client = new PrismaClient();
+            const client = prisma;
             // connect to the DB
             // check if user exists
             const user = await client.user.findUnique({
