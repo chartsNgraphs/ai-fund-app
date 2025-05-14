@@ -46,10 +46,6 @@ export async function getProfile(prospect: Prospect): Promise<any> {
         new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     ) || [];
 
-    if (sortedProfiles.length === 0) {
-        throw new Error("No profiles found for the prospect");
-    }
-
     const data: ProspectBuildRequest = {
         user_id: userId,
         name: `${prospect.firstName} ${prospect.lastName}`,
