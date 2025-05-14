@@ -48,11 +48,11 @@ ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
-ENV NEXTAUTH_URL="http://localhost:3000"
+ENV NEXTAUTH_URL="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV GOOGLE_CLIENT_SECRET=
 ENV GOOGLE_CLIENT_ID=
-ENV NEXTAUTH_PUBLIC_API_DOMAIN="http://0.0.0.0:3000/api"
-ENV NEXTAUTH_PUBLIC_DOMAIN="http://0.0.0.0:3000"
+ENV NEXTAUTH_PUBLIC_API_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/api"
+ENV NEXTAUTH_PUBLIC_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV NEXTAUTH_INTERNAL_URL="http://0.0.0.0:3000"
 ENV AUTH_SECRET=
 ENV PROFILE_SERVICE_BASE_URL="http://localhost:8000"
