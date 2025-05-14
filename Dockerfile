@@ -55,7 +55,7 @@ ENV NEXTAUTH_PUBLIC_API_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus
 ENV NEXTAUTH_PUBLIC_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV NEXTAUTH_INTERNAL_URL="http://0.0.0.0:3000"
 ENV AUTH_SECRET=
-ENV PROFILE_SERVICE_BASE_URL="http://localhost:8000"
+ENV PROFILE_SERVICE_BASE_URL="https://pl-profileservice-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV FEATURE_AUTOMATIONS="false"
 
 RUN addgroup --system --gid 1001 nodejs
