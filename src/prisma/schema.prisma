@@ -1,6 +1,7 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:PostgresAdmin@localhost:5432/SECAGENT?schema=app"
+  // url      = "postgresql://postgres:PostgresAdmin@localhost:5432/SECAGENT?schema=app"
+  url = "postgresql://FundraisingDevOps:RkH.inVjcfXj6gA@pl-db-np.postgres.database.azure.com:5432/postgres?schema=app&sslmode=require"
 }
 
 generator client {
