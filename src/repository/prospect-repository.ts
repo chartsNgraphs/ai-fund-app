@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { v4 } from "uuid";
 import { Prospect } from "@/model/prospects/prospect";
+import prisma from "@/prisma/client";
 
 export interface QueryResult {
     count: number;
@@ -15,7 +16,7 @@ export default class ProspectRepository {
     private prisma: PrismaClient;
 
     constructor() {
-        this.prisma = new PrismaClient();
+        this.prisma = prisma;
     }
 
     /**
@@ -374,5 +375,21 @@ export default class ProspectRepository {
         }));
     }
 
+    /**
+     * Delete a prospect by ID
+     * @param id The ID of the prospect to delete
+     * @returns True if the prospect was deleted successfully, false otherwise
+     */
+    async delete(id: string): Promise<boolean> {
+        try {
+            await this.prisma.prospect.delete({
+                where: { id },
+            });
+            return true;
+        } catch (error) {
+            console.error("Error deleting prospect:", error);
+            return false;
+        }
+    }
 
 }
