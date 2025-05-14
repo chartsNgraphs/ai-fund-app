@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+import prisma from "@/prisma/client";
 import { ProspectProfile as InternalProspectProfile } from "@/model/prospects/prospect-profile";
 
 
@@ -11,7 +11,7 @@ export default class ProspectProfileRepository {
     private prisma: PrismaClient;
 
     constructor() {
-        this.prisma = new PrismaClient();
+        this.prisma = prisma;
     }
 
     /**

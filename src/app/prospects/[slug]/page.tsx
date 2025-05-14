@@ -13,7 +13,9 @@ import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
 import ProfileTimeline from "./components/profile-timeline";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
+import ProspectActions from "./components/prospect-actions";
 import Automations from "./components/automations";
+import deleteProspectAction from "../actions/delete-prospect-action";
 
 
 export default async function Page({
@@ -83,6 +85,7 @@ export default async function Page({
 				<ProfileTimeline prospect={prospect}/>
 				<Automations />
 				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!} tracked={prospect.tracked}/>
+				<ProspectActions prospectId={prospect.id!} action={deleteProspectAction}/>
 			</div>
 		</>
 	);

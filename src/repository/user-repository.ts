@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { User, UserSettings } from "@/model/users/user";
-
+import prisma from "@/prisma/client";
 /**
  * UserRepository class to handle all the database operations related to users.
  */
@@ -8,7 +8,7 @@ export default class UserRepository {
     private prisma: PrismaClient;
 
     constructor() {
-        this.prisma = new PrismaClient();
+        this.prisma = prisma;
     }
 
     /**

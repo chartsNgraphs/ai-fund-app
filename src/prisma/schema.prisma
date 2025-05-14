@@ -61,7 +61,7 @@ model AdditionalPerson {
   lastName String
   relationship String // The relationship to the prospect, such as "spouse", "child", "parent", etc.
   dateOfBirth DateTime
-  prospect Prospect @relation(fields: [prospectId], references: [id])
+  prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
 }
 
 // Addresses, such as home address, work address, etc.
@@ -72,7 +72,7 @@ model ProspectAddress {
   city      String
   state     String
   zip       String
-  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
   prospectId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,7 +81,7 @@ model ProspectAddress {
 // Events, such as property sales, birthdays, insider trading, gifts, etc.
 model ProspectEvent {
   id        String   @id @default(cuid())
-  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
   prospectId String 
   type      String // The type of the event, such as "birthday", "property sale", "insider trading", "gift", etc.
   eventRaw     String // The raw text of the event, such as a news article or a social media post (or internal link)
@@ -100,7 +100,7 @@ model ProspectEvent {
 // This is a JSON field that can be used to store any kind of data, since the structure of the data is not known at this time.
 model ProspectProfile {
   id        String   @id @default(cuid())
-  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
   prospectId String
   data      Json
   createdAt DateTime @default(now())
@@ -114,7 +114,7 @@ model ProspectProfile {
 // Social links, such as LinkedIn, Twitter, Facebook, etc.
 model ProspectSocialLink {
   id        String   @id @default(cuid())
-  prospect  Prospect @relation(fields: [prospectId], references: [id])
+  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
   prospectId String
   type      String
   url       String
