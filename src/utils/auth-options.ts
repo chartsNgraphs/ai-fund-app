@@ -53,6 +53,15 @@ const authOptions : AuthOptions = {
             // assign userID from session
             // return the session
 
+            const allowedEmails = [
+                "dwaynethomson14@gmail.com",
+                "alexei1safronov@gmail.com"
+            ]
+
+            if (!allowedEmails.includes(session.user?.email || '')) {
+                throw new Error("You are not allowed to access this application");
+            }
+
             const client = prisma;
             // connect to the DB
             // check if user exists
