@@ -2,7 +2,7 @@
 import { v4 } from "uuid";
 import { ServiceBusClient } from "@azure/service-bus";
 
-import { sendMessage}  from "./auto-refresh-client";
+import AutoRefreshServiceBusClient from "./auto-refresh-client";
 
 interface RefreshMessageBody {
     prospectId: string;
@@ -19,7 +19,8 @@ export default async function sendRefreshScheduleMessage(
     }
 
     try {
-        await sendMessage(connectionString, queueName, messageBody);
+        const serviceBusClient = new AutoRefreshServiceBusClient(connectionString, queueName);
+        await serviceBusClient.sendMessage(messageBody);
         console.log("Message sent to Service Bus queue:", messageBody);
         return true;
     } catch (error) {
