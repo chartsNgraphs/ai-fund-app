@@ -14,6 +14,7 @@ export default async function sendRefreshScheduleMessage(
     const connectionString = process.env.AZURE_SERVICE_BUS_CONNECTION_STRING;
     const queueName = process.env.AZURE_SERVICE_BUS_QUEUE_NAME;
     if (!connectionString || !queueName) {
+        console.error("Service Bus connection string or queue name is not defined.");
         throw new Error("Service Bus connection string or queue name is not defined.");
     }
 
