@@ -18,6 +18,7 @@ import updateTrackingAction from "../actions/update-tracking-action";
 import Giving from "./components/giving";
 import SecurityHoldingsDisplay from "./components/security-holdings";
 import ProfileselectDialog from "./components/profile-select-dialog";
+import sendRefreshScheduleMessage from "@/utils/automation/servicebus/send-refresh-schedule-message";
 
 export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string, tracked: boolean }) {
 
@@ -77,6 +78,20 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 	}
 
 	const handleTrackingChange = async (checked: boolean) => {
+		if (checked) {
+			const refreshStatus = await sendRefreshScheduleMessage({ prospectId });
+			if (!refreshStatus) {
+				toast({
+					title: "Error scheduling refresh",
+					description: "There was an error scheduling the refresh. Please try again.",
+					variant: "destructive",
+					duration: 5000,
+				});
+				router.refresh(); // Refresh the page
+				return;
+			}
+		}
+		
 		const result = await updateTrackingAction(prospectId, checked);
 		if (result.success) {
 			toast({
