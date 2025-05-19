@@ -3,13 +3,14 @@ import { UserSettings } from '@/model/users/user';
 import UserRepository from '@/repository/user-repository';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth-options';
+import { checkAuth } from '@/utils/check-auth';
 
 export async function getSearchHistory(userId: string): Promise<string[]> {
     const userRepository = new UserRepository();
 
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user || userId !== (session.user as unknown as any).id) {
-        throw new Error("Session not found");
+    const session = await checkAuth();
+    if (!session) {
+        return [];
     }
 
     const user = await userRepository.getById(userId);
@@ -23,13 +24,14 @@ export async function addSearchToHistory(search: string): Promise<void> {
     if (!searchTerm || searchTerm.length < 3) {
         return;
     }
+    const session = await checkAuth();
+    if (!session) {
+        return;
+    }
 
     const userRepository = new UserRepository();
 
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-        throw new Error("Session not found");
-    }
+    
 
     const userId = (session.user as unknown as any).id;
 

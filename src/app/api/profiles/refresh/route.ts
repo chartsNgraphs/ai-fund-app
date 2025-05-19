@@ -28,3 +28,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, message: "Failed to refresh profiles." }, { status: 500 });
     }
 }
+
+// TODO: Protect the middleware with authentication
+// https://github.com/nextauthjs/next-auth/issues/6922

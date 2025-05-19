@@ -15,7 +15,7 @@ import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 
 export default async function Header() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions); // Do not use `checkAuth` here, as it will redirect to the login page if the user is not authenticated.
 
   return (
     <Card className="bg-card py-3 px-4 border-0 flex bg-primary items-center justify-between gap-6 rounded-none">

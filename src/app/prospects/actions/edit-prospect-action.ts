@@ -3,6 +3,7 @@
 import { Prospect } from "@/model/prospects/prospect";
 import ProspectRepository from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
+import { checkAuth } from "@/utils/check-auth";
 import { getServerSession } from "next-auth";
 
 /**
@@ -13,10 +14,12 @@ import { getServerSession } from "next-auth";
 export default async function editProspectAction(id: string, data: FormData): Promise<{ prospect: Prospect | null, success: boolean }> {
     const prospectRepository = new ProspectRepository();
 
-    // Get the session from the server
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-        throw new Error("Session not found");
+    const session = await checkAuth();
+    if (!session) {
+        return {
+            prospect: null,
+            success: false
+        };
     }
 
     // create the prospect object from the form data

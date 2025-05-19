@@ -2,6 +2,7 @@
 
 import ProspectRepository from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
+import { checkAuth } from "@/utils/check-auth";
 import { getServerSession } from "next-auth";
 
 export default async function updateTrackingAction(prospectId: string, trackingStatus: boolean): Promise<{ success: boolean }> {
@@ -13,9 +14,11 @@ export default async function updateTrackingAction(prospectId: string, trackingS
     const prospectRepository = new ProspectRepository();
 
     // Get the session from the server
-    const session = await getServerSession(authOptions);
+    const session = await checkAuth();
     if (!session || !session.user) {
-        throw new Error("Session not found");
+        return {
+            success: false
+        };
     }
 
     // check if the user is the owner of the prospect

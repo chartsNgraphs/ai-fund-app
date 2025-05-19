@@ -5,14 +5,14 @@ import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 import { ProspectProfile } from "@/model/prospects/prospect-profile";
 import { refreshProspectProfile } from "./helpers/refresh";
+import { checkAuth } from "@/utils/check-auth";
 
 export async function refreshProfileDataAction(id: string): Promise<{ profile: ProspectProfile | null, success: boolean }> {
     const prospectRepository = new ProspectRepository();
 
-    // Get the session from the server
-    const session = await getServerSession(authOptions);
+    const session = await checkAuth();
     if (!session || !session.user) {
-        throw new Error("Session not found");
+        throw new Error("Session not found. Cannot refresh profile data.");
     }
 
     // Get the prospect from the database

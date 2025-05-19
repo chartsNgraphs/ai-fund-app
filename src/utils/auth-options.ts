@@ -18,6 +18,9 @@ const authOptions : AuthOptions = {
         }
         })
     ],
+    pages: {
+        signIn: '/login',
+    },
     callbacks: {
         async signIn({ profile }) {
             if (!profile || !profile.email || !profile.name) {
@@ -55,7 +58,8 @@ const authOptions : AuthOptions = {
 
             const allowedEmails = [
                 "dwaynethomson14@gmail.com",
-                "alexei1safronov@gmail.com"
+                "alexei1safronov@gmail.com",
+                "keith@rallyadvisors.com"
             ]
 
             if (!allowedEmails.includes(session.user?.email || '')) {
