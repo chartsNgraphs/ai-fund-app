@@ -50,7 +50,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
     }
     
     try {
-        const profile = await buildProfile(prospect);
+        const profile = await buildProfile((session.user as unknown as any).id, prospect);
 
         // TODO: use the profile adapter to convert the events to the correct format instead of this.
         const events = ProfileAdapter.toProfileData(profile).events || [];
@@ -85,8 +85,8 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
 
 }
 
-async function buildProfile(prospect: Prospect): Promise<any> {
-    const profile = await getProfile(prospect).then((result) => {
+async function buildProfile(userId: string, prospect: Prospect): Promise<any> {
+    const profile = await getProfile(userId, prospect).then((result) => {
         return result;
     }).catch((error) => {
         console.error("Error building profile: ", error);
