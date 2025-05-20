@@ -3,7 +3,7 @@ import { authOptions } from "@/utils/auth-options";
 import ProspectSearchBar from "./prospect-search-bar";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { User } from "@/model/users/user";
 import ProspectResultsTable from "./prospect-results-table";
 import { ProspectResultsSkeleton } from "./prospect-results-skeleton";
@@ -28,7 +28,7 @@ export default async function Prospects({ searchParams }) {
         await addSearchToHistory(query);
     }
 
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     // Get the search history for the user
     const searchHistory = await getSearchHistory(user.id);

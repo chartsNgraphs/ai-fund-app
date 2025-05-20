@@ -1,9 +1,7 @@
 'use server';
 
-import ProspectRepository from "@/repository/prospect-repository";
-import { authOptions } from "@/utils/auth-options";
+import { repo } from "@/repository/prospect-repository";
 import { checkAuth } from "@/utils/check-auth";
-import { getServerSession } from "next-auth";
 
 export default async function updateTrackingAction(prospectId: string, trackingStatus: boolean): Promise<{ success: boolean }> {
 
@@ -11,7 +9,7 @@ export default async function updateTrackingAction(prospectId: string, trackingS
         throw new Error("Invalid tracking status. It should be either true or false.");
     }
 
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     // Get the session from the server
     const session = await checkAuth();

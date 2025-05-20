@@ -1,10 +1,10 @@
 "use server";
 
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { checkAuth } from "@/utils/check-auth";
 
 export default async function deleteProspectAction(id: string): Promise<{ success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     const session = await checkAuth();
     if (!session) {

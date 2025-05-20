@@ -1,9 +1,8 @@
 "use server";
-import { authOptions } from "@/utils/auth-options";
+
 import WealthSnapshotDisplay from "./components/prospect-wealth-snapshot";
 import { Card } from "@/components/ui/card";
-import { getServerSession } from "next-auth";
-import ProspectRepository from "@/repository/prospect-repository";
+import {repo} from "@/repository/prospect-repository";
 import { notFound } from "next/navigation";
 import ProspectOverview from "./prospect-overview";
 import { Breadcrumb,  BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
@@ -30,7 +29,7 @@ export default async function Page({
 
 	const userId = (session?.user as unknown as any).id;
 
-	const prospectRepository = new ProspectRepository();
+	const prospectRepository = repo;
 	const prospect = await prospectRepository.getById(slug);
 	if (!prospect) {
 		notFound();

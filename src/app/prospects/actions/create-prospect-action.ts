@@ -1,7 +1,7 @@
 'use server';
 
 import { Prospect } from "@/model/prospects/prospect";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 import { getProfile } from "@/app/services/build-profile-service";
@@ -14,7 +14,7 @@ import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
  * @param data FormData
  */
 export default async function createProspectAction(data: FormData): Promise<{ prospect: Prospect, success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     // Get the session from the server
     const session = await getServerSession(authOptions);
@@ -38,7 +38,8 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             return {
                 url: social,
                 type: social.type || "linkedin",
-            }}),
+            }
+        }),
         additionalPersons: data.get("additionalPersons") ? JSON.parse(data.get("additionalPersons") as string) : [],
     };
 
@@ -48,7 +49,7 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             success: false
         }
     }
-    
+
     try {
         const profile = await buildProfile((session.user as unknown as any).id, prospect);
 

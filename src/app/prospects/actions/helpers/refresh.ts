@@ -1,6 +1,6 @@
 import { getProfile } from "@/app/services/build-profile-service";
 import ProspectProfileRepository from "@/repository/profile-repository";
-import ProspectRepository from "@/repository/prospect-repository";
+import  { repo } from "@/repository/prospect-repository";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 import { Prospect } from "@/model/prospects/prospect";
 import { v4 as uuidv4 } from 'uuid';
@@ -13,7 +13,7 @@ import { ProspectProfile } from "@/model/prospects/prospect-profile";
  * @returns An object containing the updated profile and success status.
  */
 export async function refreshProspectProfile(id: string, prospect?: Prospect): Promise<{ profile: ProspectProfile | null, success: boolean }> {
-        const prospectRepository = new ProspectRepository();
+        const prospectRepository = repo
         const prospectProfileRepository = new ProspectProfileRepository();
         prospect = (prospect || await prospectRepository.getById(id)) || undefined;
         if (!prospect) {

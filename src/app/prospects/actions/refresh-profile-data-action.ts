@@ -1,14 +1,12 @@
 'use server';
 
-import ProspectRepository from "@/repository/prospect-repository";
-import { authOptions } from "@/utils/auth-options";
-import { getServerSession } from "next-auth";
+import { repo } from "@/repository/prospect-repository";
 import { ProspectProfile } from "@/model/prospects/prospect-profile";
 import { refreshProspectProfile } from "./helpers/refresh";
 import { checkAuth } from "@/utils/check-auth";
 
 export async function refreshProfileDataAction(id: string): Promise<{ profile: ProspectProfile | null, success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     const session = await checkAuth();
     if (!session || !session.user) {

@@ -1,16 +1,12 @@
 "use server";
 
 import { Card } from "../../ui/card";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import RecentCard from "./recent-card";
-import { authOptions } from "@/utils/auth-options";
-import { getServerSession } from "next-auth";
-import { LocateIcon } from "lucide-react";
 import { checkAuth } from "@/utils/check-auth";
 
 
 export default async function RecentlyViewed() {
-
     const noneViewed = (
             <Card className="w-full h-full bg-background border-2 border-muted hover:bg-muted hover:text-card-foreground transition-all duration-300 ease-in-out">
                 <div className="p-4">
@@ -24,7 +20,7 @@ export default async function RecentlyViewed() {
         return noneViewed;
     }
 
-    const prospectRepo = new ProspectRepository();
+    const prospectRepo = repo;
     const prospects = await prospectRepo.getRecentlyViewed((session?.user as unknown as any).id, 5);
 
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { Prospect } from "@/model/prospects/prospect";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
 import { checkAuth } from "@/utils/check-auth";
 import { getServerSession } from "next-auth";
@@ -12,7 +12,7 @@ import { getServerSession } from "next-auth";
  * @param data FormData
  */
 export default async function editProspectAction(id: string, data: FormData): Promise<{ prospect: Prospect | null, success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     const session = await checkAuth();
     if (!session) {
