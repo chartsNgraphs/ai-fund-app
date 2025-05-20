@@ -3,8 +3,9 @@ import { Card } from "@/components/ui/card";
 import { SECFiling, SECData } from "@/model/profiles/sec-data";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import getSecUrl from "../../actions/get-sec-url";
+import { Button } from "@/components/ui/button";
+
 
 export default function InsiderTradingDataDisplay(props: { data: SECData }) {
     const { data } = props;
@@ -77,6 +78,14 @@ function FilingData(props: {filing: SECFiling}) {
                     <div className="flex flex-row gap-4 items-center w-full">
                         <Badge variant='default' className="badge-sm text-xs font-medium" >{'$' + filing.issuer?.tradingSymbol}</Badge>
                         <Badge variant='default' className="badge-sm text-xs font-medium" >{`Document type ${filing.documentType}`}</Badge>
+                        <Button variant="ghost" className="text-xs font-medium rounded-full" onClick={async () => {
+                            const url = await getSecUrl(filing.issuer?.tradingSymbol!, filing.accessionNumber);
+                            window.open(url, '_blank');
+                        }}>
+                            {`View SEC Filing`}
+                        </Button>
+                        
+
                     </div>
                     {
                         filing.transactions?.map((transaction, index) => (
