@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import getSecUrl from "../../actions/get-sec-url";
 import { Button } from "@/components/ui/button";
+import { ExternalLink } from "lucide-react";
 
 
 export default function InsiderTradingDataDisplay(props: { data: SECData }) {
@@ -83,6 +84,7 @@ function FilingData(props: {filing: SECFiling}) {
                             window.open(url, '_blank');
                         }}>
                             {`View SEC Filing`}
+                            <ExternalLink className="ml-1 h-4 w-4" />
                         </Button>
                         
 
