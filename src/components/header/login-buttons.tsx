@@ -4,13 +4,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import {
   signOut,
-  getProviders,
   useSession,
-  LiteralUnion,
-  ClientSafeProvider,
 } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { BuiltInProviderType } from "next-auth/providers/index";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +33,9 @@ export default function LoginButtons() {
     >
       {session ? (
         <>
-        <ModeToggle />
+        <div className="hidden md:flex">
+        <ModeToggle/>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
             <div className="flex items-center gap-2 bg-white p-1 md:p-1.5 md:pl-2 m-0 rounded-full md:bg-white hover:bg-secondary transition duration-200 dark:text-primary-foreground dark:hover:text-secondary-foreground">
