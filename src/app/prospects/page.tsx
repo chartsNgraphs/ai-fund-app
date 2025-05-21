@@ -16,7 +16,6 @@ export default async function Prospects({ searchParams }) {
     const { query, page, limit } = await searchParams;
     const pageNumber = parseInt(page, 10) || 1;
     const limitNumber = parseInt(limit, 10) || 25;
-
     const session = await getServerSession(authOptions);
     const user = session?.user as User;
     if (!user || !user.id) {
@@ -29,14 +28,8 @@ export default async function Prospects({ searchParams }) {
     }
 
     const prospectRepository = repo;
-
-    // Get the search history for the user
     const searchHistory = await getSearchHistory(user.id);
-
-    console.log("Search history:", searchHistory, typeof searchHistory);
-
     const prospectsPromise = prospectRepository.getAll(user.id, query, pageNumber, limitNumber);
-
     const {prospects, count} = await prospectsPromise;
 
     return (

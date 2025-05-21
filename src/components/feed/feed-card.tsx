@@ -71,7 +71,7 @@ export default function FeedCard({
       <h3 className="text-lg font-bold">{title}</h3>
       <p className="text-xs font-bold text-muted-foreground">{date}</p>
       <p className="text-sm text-muted-foreground">{description}</p>
-      <div className="flex flex-row justify-between items-center mt-2">
+      <div className="flex flex-row justify-between items-center mt-2 flex-wrap gap-2">
         <Button
           variant="secondary"
           size="sm"
@@ -79,7 +79,7 @@ export default function FeedCard({
         >
           Learn More
         </Button>
-        <div className="flex flex-row gap-2 wrap items-end">
+        <div className="flex flex-row gap-2 wrap items-end flex-wrap">
           <Button
             variant="ghost"
             size="sm"
