@@ -1,5 +1,6 @@
-import { ServiceBusClient } from "@azure/service-bus";
+import { ServiceBusClient, ServiceBusMessage } from "@azure/service-bus";
 import { v4 } from "uuid";
+import { delayCalculator } from "./delay-calculator";
 
 class AutoRefreshServiceBusClient {
     client;
@@ -11,8 +12,9 @@ class AutoRefreshServiceBusClient {
     }
 
     async sendMessage(messageBody) {
+        const scheduledEnqueueTimeUtc = delayCalculator(7) // Schedule for one week from now
         const sender = this.client.createSender(this.queueName);
-        const message = { messageId: v4(), body: messageBody };
+        const message: ServiceBusMessage = { messageId: v4(), body: messageBody, scheduledEnqueueTimeUtc: scheduledEnqueueTimeUtc};
         try {
             await sender.sendMessages(message);
         } finally {
