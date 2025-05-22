@@ -11,10 +11,16 @@ class AutoRefreshServiceBusClient {
         this.queueName = queueName;
     }
 
-    async sendMessage(messageBody) {
-        const scheduledEnqueueTimeUtc = delayCalculator(7) // Schedule for one week from now
+    async sendMessage(messageBody, delay: boolean = false) {
         const sender = this.client.createSender(this.queueName);
-        const message: ServiceBusMessage = { messageId: v4(), body: messageBody, scheduledEnqueueTimeUtc: scheduledEnqueueTimeUtc};
+        let message: ServiceBusMessage;
+        if (delay) {
+            const scheduledEnqueueTimeUtc = delayCalculator(7) // Schedule for one week from now
+         message  = { messageId: v4(), body: messageBody, scheduledEnqueueTimeUtc: scheduledEnqueueTimeUtc};
+        } else {
+            message = { messageId: v4(), body: messageBody };
+        }
+        
         try {
             await sender.sendMessages(message);
         } finally {

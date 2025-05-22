@@ -79,7 +79,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const handleTrackingChange = async (checked: boolean) => {
 		if (checked) {
-			const refreshStatus = await sendRefreshScheduleMessage({ prospectId });
+			const refreshStatus = await sendRefreshScheduleMessage({ prospectId, recurring: true });
 			if (!refreshStatus) {
 				toast({
 					title: "Error scheduling refresh",

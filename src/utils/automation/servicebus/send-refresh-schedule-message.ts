@@ -1,11 +1,10 @@
 "use server";
-import { v4 } from "uuid";
-import { ServiceBusClient } from "@azure/service-bus";
 
 import AutoRefreshServiceBusClient from "./auto-refresh-client";
 
 interface RefreshMessageBody {
     prospectId: string;
+    recurring: boolean;
 }
 
 export default async function sendRefreshScheduleMessage(
@@ -20,7 +19,7 @@ export default async function sendRefreshScheduleMessage(
 
     try {
         const serviceBusClient = new AutoRefreshServiceBusClient(connectionString, queueName);
-        await serviceBusClient.sendMessage(messageBody);
+        await serviceBusClient.sendMessage(messageBody, process.env.DELAY_MESSAGE === "true");
         console.log("Message sent to Service Bus queue:", messageBody);
         return true;
     } catch (error) {
