@@ -33,6 +33,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isRefreshDialogOpen, setIsRefreshDialogOpen] = useState(false);
+	const [isTrackingUpdating, setIsTrackingUpdating] = useState(false);
 	const [isSelectDialogOpen, setIsSelectDialogOpen] = useState(false);
 
 	// Parse profile data
@@ -78,6 +79,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 	}
 
 	const handleTrackingChange = async (checked: boolean) => {
+		setIsTrackingUpdating(true);
 		if (checked) {
 			const refreshStatus = await sendRefreshScheduleMessage({ prospectId, recurring: true });
 			if (!refreshStatus) {
@@ -88,6 +90,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 					duration: 5000,
 				});
 				router.refresh(); // Refresh the page
+				setIsTrackingUpdating(false);
 				return;
 			}
 		}
@@ -110,6 +113,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				duration: 5000,
 			});
 		}
+		setIsTrackingUpdating(false);
 		
 	}
 
@@ -126,6 +130,7 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				<div className="flex items-center mr-auto space-x-2">
 					<Switch id="track-prospect" onCheckedChange={handleTrackingChange} defaultChecked={track}/>
 					<Label htmlFor="track-prospect" >Automatically update me with changes</Label>
+					{ isTrackingUpdating && <Loader2 className="animate-spin" size={16} /> }
 				</div>
 				<Dialog open={isRefreshDialogOpen} onOpenChange={setIsRefreshDialogOpen}>
 					<DialogTrigger asChild>
