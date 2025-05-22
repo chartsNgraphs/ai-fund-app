@@ -51,9 +51,24 @@ export default function ProspectActions(
                             Are you sure you want to delete this prospect? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="outline" className="rounded-full" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-                        <Button variant="destructive" className="rounded-full" onClick={() => { setIsDeleteDialogOpen(false); onDelete(); }}>Yes, delete</Button>
+                    <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                        <Button
+                            variant="outline"
+                            className="rounded-full w-full sm:w-auto"
+                            onClick={() => setIsDeleteDialogOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            className="rounded-full w-full sm:w-auto"
+                            onClick={() => {
+                                setIsDeleteDialogOpen(false);
+                                onDelete();
+                            }}
+                        >
+                            Yes, delete
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
