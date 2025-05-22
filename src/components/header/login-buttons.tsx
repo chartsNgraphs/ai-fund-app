@@ -82,7 +82,9 @@ export default function LoginButtons() {
         </>
       ) : (
         <>
-        <ModeToggle />
+        <div className="hidden md:flex">
+          <ModeToggle />
+        </div>
         <Link href="/login">
           <Button size={'lg'} className="rounded-full" variant={"secondary"}>
             <LogIn className="mr-2" />
