@@ -24,8 +24,8 @@ export default async function Header() {
           <div className="flex md:hidden mr-2 items-center gap-4">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="default" size="icon">
-                  <Menu className="h-10 w-10 rotate-0 scale-100" />
+                <Button variant="default" size="icon" className="rounded-full shadow-none text-md">
+                  <Menu className="h-12 w-12 rotate-0 scale-120" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0">
