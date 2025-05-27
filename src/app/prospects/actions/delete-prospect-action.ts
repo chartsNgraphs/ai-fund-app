@@ -1,16 +1,16 @@
 "use server";
 
-import ProspectRepository from "@/repository/prospect-repository";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/auth-options";
+import { repo } from "@/repository/prospect-repository";
+import { checkAuth } from "@/utils/check-auth";
 
 export default async function deleteProspectAction(id: string): Promise<{ success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
-    // Get the session from the server
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-        throw new Error("Session not found");
+    const session = await checkAuth();
+    if (!session) {
+        return {
+            success: false
+        };
     }
 
     // Check if the user owns the prospect

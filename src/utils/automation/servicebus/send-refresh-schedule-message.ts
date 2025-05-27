@@ -1,0 +1,29 @@
+"use server";
+
+import AutoRefreshServiceBusClient from "./auto-refresh-client";
+
+interface RefreshMessageBody {
+    prospectId: string;
+    recurring: boolean;
+}
+
+export default async function sendRefreshScheduleMessage(
+    messageBody: RefreshMessageBody,
+) : Promise<boolean> {
+    const connectionString = process.env.AZURE_SERVICE_BUS_CONNECTION_STRING;
+    const queueName = process.env.AZURE_SERVICE_BUS_QUEUE_NAME;
+    if (!connectionString || !queueName) {
+        console.error("Service Bus connection string or queue name is not defined.");
+        throw new Error("Service Bus connection string or queue name is not defined.");
+    }
+
+    try {
+        const serviceBusClient = new AutoRefreshServiceBusClient(connectionString, queueName);
+        await serviceBusClient.sendMessage(messageBody, process.env.DELAY_MESSAGE === "true");
+        console.log("Message sent to Service Bus queue:", messageBody);
+        return true;
+    } catch (error) {
+        console.error("Error sending message to Service Bus queue:", error);
+        return false;
+    }
+}

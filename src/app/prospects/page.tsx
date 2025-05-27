@@ -3,7 +3,7 @@ import { authOptions } from "@/utils/auth-options";
 import ProspectSearchBar from "./prospect-search-bar";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { User } from "@/model/users/user";
 import ProspectResultsTable from "./prospect-results-table";
 import { ProspectResultsSkeleton } from "./prospect-results-skeleton";
@@ -16,7 +16,6 @@ export default async function Prospects({ searchParams }) {
     const { query, page, limit } = await searchParams;
     const pageNumber = parseInt(page, 10) || 1;
     const limitNumber = parseInt(limit, 10) || 25;
-
     const session = await getServerSession(authOptions);
     const user = session?.user as User;
     if (!user || !user.id) {
@@ -28,15 +27,9 @@ export default async function Prospects({ searchParams }) {
         await addSearchToHistory(query);
     }
 
-    const prospectRepository = new ProspectRepository();
-
-    // Get the search history for the user
+    const prospectRepository = repo;
     const searchHistory = await getSearchHistory(user.id);
-
-    console.log("Search history:", searchHistory, typeof searchHistory);
-
     const prospectsPromise = prospectRepository.getAll(user.id, query, pageNumber, limitNumber);
-
     const {prospects, count} = await prospectsPromise;
 
     return (

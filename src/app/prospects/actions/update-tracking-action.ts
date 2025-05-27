@@ -1,8 +1,7 @@
 'use server';
 
-import ProspectRepository from "@/repository/prospect-repository";
-import { authOptions } from "@/utils/auth-options";
-import { getServerSession } from "next-auth";
+import { repo } from "@/repository/prospect-repository";
+import { checkAuth } from "@/utils/check-auth";
 
 export default async function updateTrackingAction(prospectId: string, trackingStatus: boolean): Promise<{ success: boolean }> {
 
@@ -10,12 +9,14 @@ export default async function updateTrackingAction(prospectId: string, trackingS
         throw new Error("Invalid tracking status. It should be either true or false.");
     }
 
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     // Get the session from the server
-    const session = await getServerSession(authOptions);
+    const session = await checkAuth();
     if (!session || !session.user) {
-        throw new Error("Session not found");
+        return {
+            success: false
+        };
     }
 
     // check if the user is the owner of the prospect

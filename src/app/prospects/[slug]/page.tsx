@@ -1,12 +1,11 @@
 "use server";
-import { authOptions } from "@/utils/auth-options";
+
 import WealthSnapshotDisplay from "./components/prospect-wealth-snapshot";
 import { Card } from "@/components/ui/card";
-import { getServerSession } from "next-auth";
-import ProspectRepository from "@/repository/prospect-repository";
+import {repo} from "@/repository/prospect-repository";
 import { notFound } from "next/navigation";
 import ProspectOverview from "./prospect-overview";
-import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
+import { Breadcrumb,  BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
 import ProspectAddressInformation from "./components/prospect-address-information";
 import ProspectSocialDisplay from "./components/prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
@@ -16,6 +15,7 @@ import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 import ProspectActions from "./components/prospect-actions";
 import Automations from "./components/automations";
 import deleteProspectAction from "../actions/delete-prospect-action";
+import { checkAuth } from "@/utils/check-auth";
 
 
 export default async function Page({
@@ -25,21 +25,18 @@ export default async function Page({
 }) {
 	const { slug } = await params;
 
-	const session = await getServerSession(authOptions);
-	if (!session || !session.user) {
-		throw new Error("Session not found");
-	}
+	const session = await checkAuth();
 
 	const userId = (session?.user as unknown as any).id;
 
-	const prospectRepository = new ProspectRepository();
+	const prospectRepository = repo;
 	const prospect = await prospectRepository.getById(slug);
 	if (!prospect) {
 		notFound();
 	}
 
 	if (!prospect?.userId || (prospect?.userId !== userId)) {
-		throw new Error("Unauthorized access to this prospect");
+		notFound();
 	}
 
 	// Update the viewedAt timestamp for the prospect

@@ -1,6 +1,5 @@
 import { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaClient } from '@prisma/client';
 import prisma from '@/prisma/client';
 
 const authOptions : AuthOptions = {
@@ -18,6 +17,9 @@ const authOptions : AuthOptions = {
         }
         })
     ],
+    pages: {
+        signIn: '/login',
+    },
     callbacks: {
         async signIn({ profile }) {
             if (!profile || !profile.email || !profile.name) {
@@ -52,6 +54,16 @@ const authOptions : AuthOptions = {
             // get user from DB
             // assign userID from session
             // return the session
+
+            const allowedEmails = [
+                "dwaynethomson14@gmail.com",
+                "alexei1safronov@gmail.com",
+                "keith@rallyadvisors.com"
+            ]
+
+            if (!allowedEmails.includes(session.user?.email || '')) {
+                throw new Error("You are not allowed to access this application");
+            }
 
             const client = prisma;
             // connect to the DB

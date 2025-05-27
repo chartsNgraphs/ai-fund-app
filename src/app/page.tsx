@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 
 export default async function Home() {
 
+  // Do not use `checkAuth` here, as it will redirect to the login page if the user is not authenticated.
   const session = await getServerSession(authOptions);
 
   return (

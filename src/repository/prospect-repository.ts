@@ -393,3 +393,5 @@ export default class ProspectRepository {
     }
 
 }
+
+export const repo = new ProspectRepository();

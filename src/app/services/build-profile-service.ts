@@ -24,20 +24,10 @@ interface ProspectBuildRequest {
 /**
  * Calls the profile building service to get a new profile for the prospect.
  */
-export async function getProfile(prospect: Prospect): Promise<any> {
+export async function getProfile(userId: string, prospect: Prospect): Promise<any> {
 
     if (!validateInput(prospect)) {
         throw new Error("Invalid input data for prospect profile building service");
-    }
-
-    const session : DefaultSession | null = await getServerSession(authOptions);
-    if (!session || !session.user) {
-        throw new Error("Session not found");
-    }
-
-    const userId = (session.user as unknown as any).id;
-    if (!userId) {
-        throw new Error("User ID not found in session");
     }
 
     const apiUrl: string = process.env["PROFILE_SERVICE_BASE_URL"] || ""; // Replace with your API URL

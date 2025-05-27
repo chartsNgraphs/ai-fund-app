@@ -15,7 +15,7 @@ export interface UserSettings {
     id: string;
     userId: string;
     settings: UserSettingsData;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     recentSearches: string[]; // Array of recent search strings
 }

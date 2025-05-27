@@ -1,7 +1,7 @@
 'use server';
 
 import { Prospect } from "@/model/prospects/prospect";
-import ProspectRepository from "@/repository/prospect-repository";
+import { repo } from "@/repository/prospect-repository";
 import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 import { getProfile } from "@/app/services/build-profile-service";
@@ -14,7 +14,7 @@ import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
  * @param data FormData
  */
 export default async function createProspectAction(data: FormData): Promise<{ prospect: Prospect, success: boolean }> {
-    const prospectRepository = new ProspectRepository();
+    const prospectRepository = repo;
 
     // Get the session from the server
     const session = await getServerSession(authOptions);
@@ -38,7 +38,8 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             return {
                 url: social,
                 type: social.type || "linkedin",
-            }}),
+            }
+        }),
         additionalPersons: data.get("additionalPersons") ? JSON.parse(data.get("additionalPersons") as string) : [],
     };
 
@@ -48,9 +49,9 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
             success: false
         }
     }
-    
+
     try {
-        const profile = await buildProfile(prospect);
+        const profile = await buildProfile((session.user as unknown as any).id, prospect);
 
         // TODO: use the profile adapter to convert the events to the correct format instead of this.
         const events = ProfileAdapter.toProfileData(profile).events || [];
@@ -85,8 +86,8 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
 
 }
 
-async function buildProfile(prospect: Prospect): Promise<any> {
-    const profile = await getProfile(prospect).then((result) => {
+async function buildProfile(userId: string, prospect: Prospect): Promise<any> {
+    const profile = await getProfile(userId, prospect).then((result) => {
         return result;
     }).catch((error) => {
         console.error("Error building profile: ", error);
