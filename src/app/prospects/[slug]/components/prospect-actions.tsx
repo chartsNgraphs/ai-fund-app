@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function ProspectActions(
     props: {
@@ -37,42 +38,49 @@ export default function ProspectActions(
     }
 
     return (
-        <div className="flex flex-row gap-2 justify-end p-4 w-full rounded-xl bg-background shadow-md mt-4 border border-muted">
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogTrigger asChild>
-                    <Button variant="ghost" className="rounded-full">
-                        Delete this Prospect
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Confirm Deletion</DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to delete this prospect? This action cannot be undone.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-                        <Button
-                            variant="outline"
-                            className="rounded-full w-full sm:w-auto"
-                            onClick={() => setIsDeleteDialogOpen(false)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="destructive"
-                            className="rounded-full w-full sm:w-auto"
-                            onClick={() => {
-                                setIsDeleteDialogOpen(false);
-                                onDelete();
-                            }}
-                        >
-                            Yes, delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </div>
+        <Accordion type="single" collapsible className="w-full mt-4">
+            <AccordionItem value="actions">
+                <AccordionTrigger className="text-xl font-semibold">Actions</AccordionTrigger>
+                <AccordionContent>
+                    <div className="flex flex-row gap-2 justify-end">
+                        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" className="rounded-full">
+                                    Delete this Prospect
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Confirm Deletion</DialogTitle>
+                                    <DialogDescription>
+                                        Are you sure you want to delete this prospect? This action cannot be undone.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                                    <Button
+                                        variant="outline"
+                                        className="rounded-full w-full sm:w-auto"
+                                        onClick={() => setIsDeleteDialogOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="destructive"
+                                        className="rounded-full w-full sm:w-auto"
+                                        onClick={() => {
+                                            setIsDeleteDialogOpen(false);
+                                            onDelete();
+                                        }}
+                                    >
+                                        Yes, delete
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
     )
 
 }
