@@ -3,7 +3,7 @@
 import { repo } from "@/repository/prospect-repository";
 import { checkAuth } from "@/utils/check-auth";
 
-export default async function updateTrackingAction(prospectId: string, trackingStatus: boolean): Promise<{ success: boolean }> {
+export default async function updateTrackingAction(prospectId: string, trackingStatus: boolean, refreshSequenceId?: string): Promise<{ success: boolean }> {
 
     if (trackingStatus !== true && trackingStatus !== false) {
         throw new Error("Invalid tracking status. It should be either true or false.");
@@ -33,7 +33,7 @@ export default async function updateTrackingAction(prospectId: string, trackingS
     }
 
     try {
-        const updatedProspect = await prospectRepository.update(prospectId, {tracked: trackingStatus});
+        const updatedProspect = await prospectRepository.update(prospectId, {tracked: trackingStatus, refreshSeriesId: refreshSequenceId});
 
         if (!updatedProspect) {
             return {

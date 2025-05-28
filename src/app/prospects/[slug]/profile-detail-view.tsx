@@ -80,9 +80,10 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const handleTrackingChange = async (checked: boolean) => {
 		setIsTrackingUpdating(true);
+		let seriesId;
 		if (checked) {
 			const refreshStatus = await sendRefreshScheduleMessage({ prospectId, recurring: true });
-			if (!refreshStatus) {
+			if (!refreshStatus.success) {
 				toast({
 					title: "Error scheduling refresh",
 					description: "There was an error scheduling the refresh. Please try again.",
@@ -93,9 +94,11 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 				setIsTrackingUpdating(false);
 				return;
 			}
+
+			seriesId = refreshStatus.seriesId;
 		}
 		
-		const result = await updateTrackingAction(prospectId, checked);
+		const result = await updateTrackingAction(prospectId, checked, seriesId);
 		if (result.success) {
 			toast({
 				title: "Tracking status updated",

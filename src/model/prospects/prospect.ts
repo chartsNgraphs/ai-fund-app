@@ -11,6 +11,7 @@ export interface Prospect {
     email: string;
     phone: string;
     tracked: boolean;
+    refreshSeriesId?: string;
     addresses: Address[];
     socials: ProspectSocialLink[];
     profiles?: ProspectProfile[];
