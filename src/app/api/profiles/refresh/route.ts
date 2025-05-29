@@ -9,7 +9,7 @@ import { refreshProspectProfile } from '@/app/prospects/actions/helpers/refresh'
  */
 export async function POST(request: Request) {
     const requestData: RefreshRequest = await request.json();
-    const { prospectId, recurring } = requestData;
+    const { prospectId, recurring, seriesId } = requestData;
 
     if (!prospectId) {
         return NextResponse.json({ success: false, message: "Prospect ID is required." }, { status: 400 });
@@ -17,15 +17,15 @@ export async function POST(request: Request) {
     
     try {
         console.log("Refreshing profiles for prospect ID:", prospectId);
-        const result = await refreshProspectProfile(prospectId);
+        const result = await refreshProspectProfile(prospectId, true);
         if (!result.success) {
             console.error("Failed to refresh profile data.");
-            return NextResponse.json({ success: false, message: "Failed to refresh profile data." }, { status: 500 });
+            return NextResponse.json({ success: false, message: "Failed to refresh profile data.", cancelled: result.cancelled}, { status: 500 });
         }
-        return NextResponse.json({ success: true, message: "Profiles refreshed successfully." }, { status: 200 });
+        return NextResponse.json({ success: true, message: "Profiles refreshed successfully.", cancelled: result.cancelled}, { status: 200 });
     } catch (error) {
         console.error("Error refreshing profiles:", error);
-        return NextResponse.json({ success: false, message: "Failed to refresh profiles." }, { status: 500 });
+        return NextResponse.json({ success: false, message: "Failed to refresh profiles.", cancelled: false}, { status: 500 });
     }
 }
 

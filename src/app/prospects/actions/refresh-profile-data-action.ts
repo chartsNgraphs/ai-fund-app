@@ -5,6 +5,11 @@ import { ProspectProfile } from "@/model/prospects/prospect-profile";
 import { refreshProspectProfile } from "./helpers/refresh";
 import { checkAuth } from "@/utils/check-auth";
 
+/**
+ * SERVER ACTION: Refreshes the profile data for a given prospect.
+ * @param id 
+ * @returns 
+ */
 export async function refreshProfileDataAction(id: string): Promise<{ profile: ProspectProfile | null, success: boolean }> {
     const prospectRepository = repo;
 
@@ -27,7 +32,7 @@ export async function refreshProfileDataAction(id: string): Promise<{ profile: P
     }
 
     try {
-        const result = await refreshProspectProfile(id, prospect);
+        const result = await refreshProspectProfile(id, false, prospect); // Automated is false since this is a manual refresh action.
         if (!result.success) {
             return {
                 profile: null,

@@ -92,6 +92,7 @@ export default class ProspectRepository {
                 dateOfBirth: individual.dateOfBirth.toISOString() || "", // Ensure dateOfBirth is always a string
                 relationship: individual.relationship, // Map relationship to relationShip
             })),
+            refreshSeriesId: result.refreshSeriesId || undefined, // Convert null to undefined for refreshSeriesId
         })),
             count: count,
         };
@@ -141,7 +142,7 @@ export default class ProspectRepository {
                     dateOfBirth: individual.dateOfBirth.toISOString() || "", // Ensure dateOfBirth is always a string
                     relationship: individual.relationship, // Map relationship to relationShip
                 })),
-
+                refreshSeriesId: result.refreshSeriesId || undefined, // Convert null to undefined for refreshSeriesId
             };
         }
 
@@ -312,6 +313,7 @@ export default class ProspectRepository {
                     eventDate: new Date(event.eventDate),
                     viewedAt: event.viewedAt || undefined,
                 })),
+                refreshSeriesId: updatedProspect.refreshSeriesId || undefined, // Convert null to undefined for refreshSeriesId
             };
         } catch (error) {
             console.error("Error updating prospect:", error);
@@ -372,6 +374,7 @@ export default class ProspectRepository {
             })),
             socials: [],
             profiles: [],
+            refreshSeriesId: result.refreshSeriesId || undefined, // Convert null to undefined for refreshSeriesId
         }));
     }
 
