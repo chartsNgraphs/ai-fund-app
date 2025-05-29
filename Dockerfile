@@ -44,19 +44,29 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
+# Accept build args for secrets
+ARG AUTH_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG SEC_API_KEY
+
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 ENV NEXTAUTH_URL="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
-ENV GOOGLE_CLIENT_SECRET=
-ENV GOOGLE_CLIENT_ID=
 ENV NEXTAUTH_PUBLIC_API_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/api"
 ENV NEXTAUTH_PUBLIC_DOMAIN="https://pl-app-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV NEXTAUTH_INTERNAL_URL="http://0.0.0.0:3000"
-ENV AUTH_SECRET=
 ENV PROFILE_SERVICE_BASE_URL="https://pl-profileservice-np.victoriouswave-bf3be38c.westus2.azurecontainerapps.io/"
 ENV FEATURE_AUTOMATIONS="false"
+ENV DELAY_MESSAGE="true"
+
+# Use build args as env vars
+ENV AUTH_SECRET=${AUTH_SECRET}
+ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+ENV GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+ENV SEC_API_KEY=${SEC_API_KEY}
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

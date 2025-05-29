@@ -42,7 +42,10 @@ jobs:
           containerAppName: pl-app-np
           resourceGroup: fundraising-dev
           imageToBuild: prospectliveacr.azurecr.io/pl-app-np:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
+          buildArguments: |
+            AUTH_SECRET=${{ secrets.AUTH_SECRET }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            SEC_API_KEY=${{ secrets.SEC_API_KEY }}
 
 
