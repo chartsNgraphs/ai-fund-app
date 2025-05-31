@@ -3,4 +3,5 @@ interface WealthSnapshot {
     givingPotential: number;
     prospectGivingScore: string;
     summary: string;
+    netWorthHistory?: number[];
 }

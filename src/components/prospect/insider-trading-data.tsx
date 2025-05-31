@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { SECFiling, SECData } from "@/model/profiles/sec-data";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import getSecUrl from "../../actions/get-sec-url";
+import getSecUrl from "../../app/prospects/actions/get-sec-url";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 

@@ -6,7 +6,6 @@ import { authOptions } from "@/utils/auth-options";
 import { getServerSession } from "next-auth";
 import { getProfile } from "@/app/services/build-profile-service";
 import { v4 as uuidv4 } from 'uuid';
-import { Event } from "@/model/profiles/events";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 
 /**

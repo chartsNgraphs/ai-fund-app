@@ -1,19 +1,19 @@
 "use server";
 
-import WealthSnapshotDisplay from "./components/prospect-wealth-snapshot";
+import WealthSnapshotDisplay from "../../../components/prospect/prospect-wealth-snapshot";
 import { Card } from "@/components/ui/card";
 import {repo} from "@/repository/prospect-repository";
 import { notFound } from "next/navigation";
 import ProspectOverview from "./prospect-overview";
 import { Breadcrumb,  BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbList } from "@/components/ui/breadcrumb";
-import ProspectAddressInformation from "./components/prospect-address-information";
-import ProspectSocialDisplay from "./components/prospect-social-display";
+import ProspectAddressInformation from "../../../components/prospect/prospect-address-information";
+import ProspectSocialDisplay from "../../../components/prospect/prospect-social-display";
 import ProfileDetailView from "./profile-detail-view";
 import updateViewedAtAction from "../actions/update-viewed-at-action";
-import ProfileTimeline from "./components/profile-timeline";
+import ProfileTimeline from "../../../components/prospect/profile-timeline";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
-import ProspectActions from "./components/prospect-actions";
-import Automations from "./components/automations";
+import ProspectActions from "../../../components/prospect/prospect-actions";
+import Automations from "../../../components/prospect/automations";
 import deleteProspectAction from "../actions/delete-prospect-action";
 import { checkAuth } from "@/utils/check-auth";
 
@@ -24,11 +24,8 @@ export default async function Page({
 	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
-
 	const session = await checkAuth();
-
 	const userId = (session?.user as unknown as any).id;
-
 	const prospectRepository = repo;
 	const prospect = await prospectRepository.getById(slug);
 	if (!prospect) {
@@ -45,14 +42,22 @@ export default async function Page({
 
 	let profiles = prospect.profiles || [];
 	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-	const currentProfileSummary = ProfileAdapter.toProfileData(prospect.profiles?.[0].data as unknown as string).data.summary;
+	const prifileDatas = profiles.map((profile: any) => {
+		return ProfileAdapter.toProfileData(profile.data as unknown as string).data;
+	});
+
+	const currentProfileSummary = prifileDatas.length > 0 ? prifileDatas[0].summary : null;
+	const lastFiveNetWorth = prifileDatas.slice(0, 5).map((data: any) => data.summary.netWorth);
 
 	const wealthPlaceholder: WealthSnapshot = {
 		estimatedNetWorth: currentProfileSummary?.netWorth || 0,
 		prospectGivingScore: currentProfileSummary?.givingScore || "99",
 		givingPotential: currentProfileSummary?.givingCapacity || 0,
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
+		netWorthHistory: lastFiveNetWorth.length > 0 ? lastFiveNetWorth : [0, 0, 0, 0, 0],
 	};
+
+	
 
 	return (
 		<>
@@ -81,7 +86,7 @@ export default async function Page({
 				</div>
 				<ProfileTimeline prospect={prospect}/>
 				<Automations />
-				<ProfileDetailView profiles={prospect.profiles || []} prospectId={prospect.id!} tracked={prospect.tracked}/>
+				<ProfileDetailView profiles={prospect.profiles || []} data={prifileDatas} prospectId={prospect.id!} tracked={prospect.tracked}/>
 				<ProspectActions prospectId={prospect.id!} action={deleteProspectAction}/>
 			</div>
 		</>
