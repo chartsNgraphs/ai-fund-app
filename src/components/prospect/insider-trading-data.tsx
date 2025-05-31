@@ -11,6 +11,8 @@ import { ExternalLink } from "lucide-react";
 export default function InsiderTradingDataDisplay(props: { data: SECData }) {
     const { data } = props;
 
+    console.log("Insider Trading Data:", data);
+
     const emptyData = ()=> {
         return (
             <Card className="w-full h-full p-4">
@@ -22,7 +24,7 @@ export default function InsiderTradingDataDisplay(props: { data: SECData }) {
         );
     }
 
-    if (data.version !== '2' || !data.insiderFilings?.filings) {
+    if (data.version == '1' || !data.insiderFilings?.filings) {
         return emptyData();
     }
 
@@ -69,6 +71,8 @@ export default function InsiderTradingDataDisplay(props: { data: SECData }) {
 function FilingData(props: {filing: SECFiling}) {
 
     const { filing } = props;
+
+    console.log("Filing Data:", filing);
 
     return (
         <AccordionItem value={filing.id} className="w-full">

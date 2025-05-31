@@ -47,7 +47,11 @@ export default class ProspectRepository {
                             properties: true, // Include properties in the query
                             politicalContributions: true, // Include political contributions in the query
                             securityHoldings: true, // Include security holdings in the query
-                            insiderFilings: true, // Include insider filings in the query
+                            insiderFilings: {
+                                include: {
+                                    transactions: true, // Include transactions in the insider filings
+                                }
+                            }
                         }
                     }, // Include profiles in the query
                     events: true, // Include events in the query
@@ -116,7 +120,11 @@ export default class ProspectRepository {
                         properties: true, // Include properties in the query
                         politicalContributions: true, // Include political contributions in the query
                         securityHoldings: true, // Include security holdings in the query
-                        insiderFilings: true, // Include insider filings in the query
+                        insiderFilings: {
+                            include: {
+                                transactions: true, // Include transactions in the insider filings
+                            }
+                        }, // Include insider filings in the query
                     }
                 },
                 events: true,

@@ -44,6 +44,8 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 
 	const currentProfileData = parsedProfileDatas[selectedProfileIndex];
 
+	console.log("Current Profile Data:", currentProfileData);
+
 	// Handle profile selection
 	const handleProfileSelect = (index: number) => {
 		router.push(`?profileIndex=${index}`);

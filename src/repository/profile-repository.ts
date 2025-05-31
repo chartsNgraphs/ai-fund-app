@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import prisma from "@/prisma/client";
 import { ProspectProfile as InternalProspectProfile } from "@/model/prospects/prospect-profile";
 import { adaptModelToPrisma } from "./adapters/profile-adapter";
+import { fi } from "date-fns/locale";
 
 
 /**
@@ -44,15 +45,10 @@ export default class ProspectProfileRepository {
      * @param prospectProfile The prospect profile object to create
      * NOTE: prospectProfile must include properties, politicalContributions, securityHoldings, and insiderFilings arrays for nested creation.
      */
-    async create(prospectProfile: InternalProspectProfile & {
-        properties?: any[];
-        politicalContributions?: any[];
-        securityHoldings?: any[];
-        insiderFilings?: any[];
-    }): Promise<InternalProspectProfile> {
+    async create(prospectProfile: InternalProspectProfile): Promise<InternalProspectProfile> {
         const jsonData = (typeof prospectProfile.data === "string") ? prospectProfile.data : JSON.stringify(prospectProfile.data);
 
-        const prismaProfile = adaptModelToPrisma(prospectProfile);
+        const prismaProfile = adaptModelToPrisma(prospectProfile) as any;
 
         const profileToSave = {
             ...prismaProfile,
@@ -64,6 +60,8 @@ export default class ProspectProfileRepository {
         
         const { id, prospectId, createdAt, updatedAt, ...profileData } = profileToSave;
 
+        console.log("Creating Prospect Profile:", profileData);
+
         const result = await this.prisma.prospectProfile.create({
             data: {
                 ...profileData,
@@ -71,17 +69,25 @@ export default class ProspectProfileRepository {
                     connect: { id: prospectProfile.prospectId },
                 },
                 data: jsonData, // TODO: remove this once the data field is removed from the model
-                properties: prospectProfile.properties ? {
-                    create: prospectProfile.properties.map((prop: any) => ({ ...prop }))
+                properties: prismaProfile.properties ? {
+                    create: prismaProfile.properties.map((prop: any) => ({ ...prop }))
                 } : undefined,
-                politicalContributions: prospectProfile.politicalContributions ? {
-                    create: prospectProfile.politicalContributions.map((contrib: any) => ({ ...contrib }))
+                politicalContributions: prismaProfile.politicalContributions ? {
+                    create: prismaProfile.politicalContributions.map((contrib: any) => ({ ...contrib }))
                 } : undefined,
-                securityHoldings: prospectProfile.securityHoldings ? {
-                    create: prospectProfile.securityHoldings.map((holding: any) => ({ ...holding }))
+                securityHoldings: prismaProfile.securityHoldings ? {
+                    create: prismaProfile.securityHoldings.map((holding: any) => ({ ...holding }))
                 } : undefined,
-                insiderFilings: prospectProfile.insiderFilings ? {
-                    create: prospectProfile.insiderFilings.map((filing: any) => ({ ...filing }))
+                insiderFilings: prismaProfile.insiderFilings ? {
+                    create: prismaProfile.insiderFilings.map((filing: any) => {
+                        const { id, ...filingData } = filing;
+                        return { ...filingData,
+                            transactions: filing.transactions ? {
+                                create: filing.transactions?.map((transaction: any) => ({ ...transaction }))
+                            } : undefined
+                        }
+
+                })
                 } : undefined,
             },
             include: {

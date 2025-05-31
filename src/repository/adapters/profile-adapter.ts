@@ -5,8 +5,6 @@ export function adaptModelToPrisma(profile: ProspectProfile): PrismaProfile {
 
     const profileData = profile.data;
 
-    console.log("Adapting profile data to Prisma format", profileData);
-
     const properties = profileData.propertyData.map(property => ({
         address: property.address,
         identifier: property.identifier,
@@ -74,14 +72,14 @@ export function adaptModelToPrisma(profile: ProspectProfile): PrismaProfile {
             ownershipNature: transaction.ownershipNature
         })),
         issuerName: filing.issuer?.name || '',
-        issuerTicker: filing.issuer?.tradingSymbol,
+        issuerTradingSymbol: filing.issuer?.tradingSymbol,
         issuerCik: filing.issuer?.cik || '',
         reportingOwnerName: filing.reportingOwner?.name,
         reportingOwnerCik: filing.reportingOwner?.cik,
-        reportingOwnersIsDirector: filing.reportingOwner?.relationship.isDirector,
-        reportingOwnersIsOfficer: filing.reportingOwner?.relationship.isOfficer,
-        reportingOwnersIsTenPercentOwner: filing.reportingOwner?.relationship.isTenPercentOwner,
-        reportingOwnersIsOther: filing.reportingOwner?.relationship.isOther,
+        reportingOwnerIsDirector: filing.reportingOwner?.relationship.isDirector,
+        reportingOwnerIsOfficer: filing.reportingOwner?.relationship.isOfficer,
+        reportingOwnerIsTenPercentOwner: filing.reportingOwner?.relationship.isTenPercentOwner,
+        reportingOwnerIsOther: filing.reportingOwner?.relationship.isOther,
         reportingOwnersOfficerTitle: filing.reportingOwner?.relationship.officerTitle,
     } as unknown as InsiderFiling;
         return _filing;
@@ -192,17 +190,17 @@ export function adaptPrismaToModel(prismaProfile: any): ProspectProfile {
         })),
         issuer: {
             name: filing.issuerName,
-            tradingSymbol: filing.issuerTicker,
+            tradingSymbol: filing.issuerTradingSymbol,
             cik: filing.issuerCik
         },
         reportingOwner: {
             name: filing.reportingOwnerName,
             cik: filing.reportingOwnerCik,
             relationship: {
-                isDirector: filing.reportingOwnersIsDirector,
-                isOfficer: filing.reportingOwnersIsOfficer,
-                isTenPercentOwner: filing.reportingOwnersIsTenPercentOwner,
-                isOther: filing.reportingOwnersIsOther,
+                isDirector: filing.reportingOwnerIsDirector,
+                isOfficer: filing.reportingOwnerIsOfficer,
+                isTenPercentOwner: filing.reportingOwnerIsTenPercentOwner,
+                isOther: filing.reportingOwnerIsOther,
                 officerTitle: filing.reportingOwnersOfficerTitle
             }
         }

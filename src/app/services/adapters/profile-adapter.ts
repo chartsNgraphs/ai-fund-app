@@ -92,6 +92,8 @@ export class ProfileAdapter {
 
         let secDataComplete: SECData | undefined = undefined;
 
+        console.log('ProfileAdapter.toProfileData', secData);
+
         if (secData) {
             secDataComplete = {
                 version: '2',
@@ -188,8 +190,15 @@ export class ProfileAdapter {
      * @param profile Convert back into python API data format.
      * @returns 
      */
-    static toApiData(profile: {data: ProfileData}): any {
+    static toApiData(profile: {data: ProfileData}, userId: string, prospectName: string): any {
         const { data } = profile;
+
+        if ((data as any).user_id ) {
+            return data; // Already in API format
+        }
+
+        console.log('ProfileAdapter.toApiData', data);
+
         const property_data = data.propertyData?.map((p: any) => ({
             address: p.address,
             identifier: p.identifier,
@@ -295,15 +304,19 @@ export class ProfileAdapter {
         })) || [];
 
 
-        return {
-            user_id: data.userId,
+        const result =  {
+            user_id:  userId,
             date_created: data.dateCreated,
             address: data.address,
-            prospect_name: data.prospectName,
+            prospect_name: prospectName,
             property_data,
             sec_data,
             political_contributions,
             summary,
         };
+
+        console.log('ProfileAdapter.toApiData', result);
+
+        return result;
     }
 }
