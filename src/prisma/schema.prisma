@@ -97,21 +97,6 @@ model ProspectEvent {
   updatedAt DateTime @updatedAt
 }
 
-// Profiles, containing detailed information about the prospect's weath and financial status, such as net worth, assets, gifts, etc.
-// This is a JSON field that can be used to store any kind of data, since the structure of the data is not known at this time.
-model ProspectProfile {
-  id        String   @id @default(cuid())
-  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
-  prospectId String
-  data      Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // TODO: Make these non-nullable and re-gerenate the database
-  netWorth  Float @default(0.00)// The net worth of the prospect, if known
-  givingScore String @default("U") // The giving score of the prospect, if known
-  givingCapacity Float @default(0.00) // The giving capacity of the prospect, if known
-}
-
 // Social links, such as LinkedIn, Twitter, Facebook, etc.
 model ProspectSocialLink {
   id        String   @id @default(cuid())
@@ -121,4 +106,130 @@ model ProspectSocialLink {
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Profiles, containing detailed information about the prospect's weath and financial status, such as net worth, assets, gifts, etc.
+// This is a JSON field that can be used to store any kind of data, since the structure of the data is not known at this time.
+model ProspectProfile {
+  id        String   @id @default(cuid())
+  prospect  Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  prospectId String
+  data      Json // To be removed in the future, as it is not used anymore.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // TODO: Make these non-nullable and re-gerenate the database
+  netWorth  Float @default(0.00)// The net worth of the prospect, if known
+  givingScore String @default("U") // The giving score of the prospect, if known
+  givingCapacity Float @default(0.00) // The giving capacity of the prospect, if known
+  properties ProfileProperty[] // List of properties belonging to this profile
+  politicalContributions PoliticalContribution[] // List of political contributions made by the prospect
+  securityHoldings SecurityHolding[] // List of security holdings owned by the prospect
+  insiderFilings InsiderFiling[] // List of insider filings owned by the prospect profile
+}
+
+model ProfileProperty {
+  id String @id @default(cuid())
+  profile ProspectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  address String
+  identifier String
+  marketTotalValue Float
+  mailingAddress String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+	@@map("ProfileProperty")
+}
+
+model PoliticalContribution {
+  id                        String   @id @default(cuid())
+  profileId                 String
+  profile                   ProspectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  candidateId               String
+  committeeId               String
+  committeeName             String
+  committeeType             String
+  committeeState            String
+  committeeCity             String
+  committeeZip              String
+  committeeCreatedAt        String
+  committeeCycle            Int
+  committeeParty            String
+  candidateName             String
+  candidateLastName         String
+  candidateMiddleName       String
+  contributionReceiptAmount Float
+  contributorFirstName      String
+  contributorLastName       String
+  contributorAddressOne     String
+  contributorAddressTwo     String
+  contributorCity           String
+  contributorState          String
+  contributorZip            String
+  contributorEmployer       String
+  contributorOccupation     String
+  contributionReceiptDate   String
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+}
+
+model SecurityHolding {
+  id          String  @id @default(cuid())
+  profileId   String
+  profile     ProspectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  ticker      String
+  name        String
+  sharesOwned Float
+  sharePrice  Float
+  totalValue  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model InsiderFiling {
+  id                  String   @id @default(cuid())
+  profileId           String
+  profile             ProspectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  accessionNumber     String
+  filedAt             DateTime
+  documentType        String
+  periodOfReport      String
+  notSubjectToSection16 Boolean
+  footnotes           Json?
+  reportingOwnerName  String
+  reportingOwnerCik   String
+  reportingOwnerIsDirector Boolean
+  reportingOwnerIsOfficer Boolean
+  reportingOwnerOfficerTitle String?
+  reportingOwnerIsTenPercentOwner Boolean
+  reportingOwnerIsOther Boolean
+  issuerName          String
+  issuerCik           String
+  issuerTradingSymbol String
+  transactions        InsiderFilingTransaction[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model InsiderFilingTransaction {
+  id                        String   @id @default(cuid())
+  insiderFilingId           String
+  insiderFiling             InsiderFiling @relation(fields: [insiderFilingId], references: [id], onDelete: Cascade)
+  securityTitle             String
+  transactionDate           DateTime
+  // Coding fields
+  formType                  String
+  code                      String
+  equitySwapInvolved        Boolean
+  // Amounts fields
+  shares                    Float
+  sharesFootnoteId          String[]
+  pricePerShare             Float?
+  acquiredDisposedCode      String
+  // PostTransactionAmounts fields
+  sharesOwnedFollowingTransaction Float
+  sharesOwnedFollowingTransactionFootnoteId String[]
+  // OwnershipNature remains as Json
+  ownershipNature           Json
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 }

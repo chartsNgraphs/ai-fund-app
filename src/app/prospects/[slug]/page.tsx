@@ -16,6 +16,7 @@ import ProspectActions from "../../../components/prospect/prospect-actions";
 import Automations from "../../../components/prospect/automations";
 import deleteProspectAction from "../actions/delete-prospect-action";
 import { checkAuth } from "@/utils/check-auth";
+import { ProfileData } from "@/model/profiles/profile-data";
 
 
 export default async function Page({
@@ -42,12 +43,13 @@ export default async function Page({
 
 	let profiles = prospect.profiles || [];
 	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-	const prifileDatas = profiles.map((profile: any) => {
-		return ProfileAdapter.toProfileData(profile.data as unknown as string).data;
-	});
 
-	const currentProfileSummary = prifileDatas.length > 0 ? prifileDatas[0].summary : null;
-	const lastFiveNetWorth = prifileDatas.slice(0, 5).map((data: any) => data.summary.netWorth);
+	const profileDatas: ProfileData[] = profiles.map(
+		(profile) => profile.data
+	)
+
+	const currentProfileSummary = profileDatas.length > 0 ? profileDatas[0].summary : null;
+	const lastFiveNetWorth = profileDatas.slice(0, 5).map((data: any) => data.summary.netWorth);
 
 	const wealthPlaceholder: WealthSnapshot = {
 		estimatedNetWorth: currentProfileSummary?.netWorth || 0,
@@ -56,8 +58,6 @@ export default async function Page({
 		summary: "Greg is a is a great potential donor due to his high net worth and giving potential. Recent real estate transactions indicate a strong financial position, and stock market insider activity means some liquid cash! Reach out to Greg soon.",
 		netWorthHistory: lastFiveNetWorth.length > 0 ? lastFiveNetWorth : [0, 0, 0, 0, 0],
 	};
-
-	
 
 	return (
 		<>
@@ -86,7 +86,7 @@ export default async function Page({
 				</div>
 				<ProfileTimeline prospect={prospect}/>
 				<Automations />
-				<ProfileDetailView profiles={prospect.profiles || []} data={prifileDatas} prospectId={prospect.id!} tracked={prospect.tracked}/>
+				<ProfileDetailView profiles={prospect.profiles || []} data={profileDatas} prospectId={prospect.id!} tracked={prospect.tracked}/>
 				<ProspectActions prospectId={prospect.id!} action={deleteProspectAction}/>
 			</div>
 		</>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Prospect } from '@/model/prospects/prospect';
 import { DefaultSession, getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth-options';
+import { ProfileAdapter } from './adapters/profile-adapter';
 
 /**
  * The request body for the profile building service (python microservice).
@@ -40,7 +41,7 @@ export async function getProfile(userId: string, prospect: Prospect): Promise<an
         user_id: userId,
         name: `${prospect.firstName} ${prospect.lastName}`,
         address: `${prospect.addresses[0].street} ${prospect.addresses[0].street2 || ""}, ${prospect.addresses[0].city}, ${prospect.addresses[0].state}`,
-        previous_profile: sortedProfiles[0]?.data || null,
+        previous_profile: JSON.stringify(ProfileAdapter.toApiData(sortedProfiles[0]) || null),
         address_full: {
             street: prospect.addresses[0].street,
             city: prospect.addresses[0].city,

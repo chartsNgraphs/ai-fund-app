@@ -52,12 +52,13 @@ export default async function createProspectAction(data: FormData): Promise<{ pr
     try {
         const profile = await buildProfile((session.user as unknown as any).id, prospect);
 
+        const profile_data = ProfileAdapter.toProfileData(profile);
         // TODO: use the profile adapter to convert the events to the correct format instead of this.
-        const events = ProfileAdapter.toProfileData(profile).events || [];
+        const events = profile_data.events || [];
 
         prospect.profiles = [
             {
-                data: JSON.stringify(profile),
+                data: profile_data.data,
             }
         ]
         prospect.events = events
