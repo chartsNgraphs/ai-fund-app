@@ -25,8 +25,7 @@ export default function ProspectSearchBar({
 
     const [search, setSearch] = useState(query);
 
-    const handleSearch = async (recent?) => {
-        console.log("searching for: ", recent);
+    const handleSearch = async (recent?) => {;
         const searchTerm = recent !== undefined ? recent : search;
         if (!searchTerm || searchTerm.length < 1) {
             setSearchActive(false);

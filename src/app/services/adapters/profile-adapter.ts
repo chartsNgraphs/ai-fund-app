@@ -182,4 +182,136 @@ export class ProfileAdapter {
             events: events,
         };
     }
+
+    /**
+     * 
+     * @param profile Convert back into python API data format.
+     * @returns 
+     */
+    static toApiData(profile: {data: ProfileData}, userId: string, prospectName: string, employer): any {
+        const { data } = profile;
+
+        if ((data as any).user_id ) {
+            return data; // Already in API format
+        }
+
+        const property_data = data.propertyData?.map((p: any) => ({
+            address: p.address,
+            identifier: p.identifier,
+            market_total_value: p.marketTotalValue,
+            mailing_address: p.mailingAddress,
+        })) || [];
+
+        let sec_data: any = undefined;
+        if (data.secData) {
+            sec_data = {
+                insider_filings: {
+                    filings: data.secData.insiderFilings?.filings?.map((f: any) => ({
+                        id: f.id,
+                        accession_number: f.accessionNumber,
+                        filed_at: f.filedAt instanceof Date ? f.filedAt.toISOString() : f.filedAt,
+                        document_type: f.documentType,
+                        period_of_report: f.periodOfReport,
+                        not_subject_to_section_16: f.notSubjectToSection16,
+                        footnotes: f.footnotes,
+                        transactions: f.transactions?.map((t: any) => ({
+                            security_title: t.securityTitle,
+                            transaction_date: t.transactionDate instanceof Date ? t.transactionDate.toISOString() : t.transactionDate,
+                            coding: {
+                                form_type: t.coding.formType,
+                                code: t.coding.code,
+                                equity_swap_involved: t.coding.equitySwapInvolved,
+                            },
+                            amounts: {
+                                shares: t.amounts.shares,
+                                shares_footnote_id: t.amounts.sharesFootnoteId,
+                                price_per_share: t.amounts.pricePerShare,
+                                acquired_disposed_code: t.amounts.acquiredDisposedCode,
+                            },
+                            post_transaction_amounts: t.postTransactionAmounts ? {
+                                shares_owned_following_transaction: t.postTransactionAmounts.sharesOwnedFollowingTransaction,
+                                shares_owned_following_transaction_footnote_id: t.postTransactionAmounts.sharesOwnedFollowingTransactionFootnoteId,
+                            } : undefined,
+                            ownership_nature: t.ownershipNature,
+                        })),
+                        reporting_owner: f.reportingOwner ? {
+                            name: f.reportingOwner.name,
+                            cik: f.reportingOwner.cik,
+                            relationship: {
+                                is_officer: f.reportingOwner.relationship.isOfficer,
+                                is_director: f.reportingOwner.relationship.isDirector,
+                                is_ten_percent_owner: f.reportingOwner.relationship.isTenPercentOwner,
+                                is_other: f.reportingOwner.relationship.isOther,
+                            }
+                        } : undefined,
+                        issuer: f.issuer ? {
+                            name: f.issuer.name,
+                            cik: f.issuer.cik,
+                            trading_symbol: f.issuer.tradingSymbol,
+                        } : undefined,
+                    })) || [],
+                    total_filings: data.secData.insiderFilings?.totalFilings ?? 0,
+                },
+                current_holdings: data.secData.currentHoldings?.map((h: any) => ({
+                    name: h.name,
+                    ticker: h.ticker,
+                    shares_owned: h.sharesOwned,
+                    share_price: h.sharePrice,
+                    total_value: h.totalValue,
+                })) || [],
+            };
+        }
+
+        const summary = data.summary ? {
+            net_worth: data.summary.netWorth,
+            giving_score: data.summary.givingScore,
+            giving_capacity: data.summary.givingCapacity,
+        } : undefined;
+
+        const political_contributions = data.politicalContributions?.map((c: any) => ({
+            candidate_id: c.candidateId,
+            committee: {
+                id: c.committee.id,
+                name: c.committee.name,
+                type: c.committee.type,
+                state: c.committee.state,
+                city: c.committee.city,
+                zip: c.committee.zip,
+                created_at: c.committee.createdAt,
+                cycle: c.committee.cycle,
+                party: c.committee.party,
+            },
+            candidate_name: c.candidateName,
+            candidate_last_name: c.candidateLastName,
+            candidate_middle_name: c.candidateMiddleName,
+            contribution_receipt_amount: c.contributionReceiptAmount,
+            contributor_first_name: c.contributorFirstName,
+            contributor_last_name: c.contributorLastName,
+            contributor_address: {
+                address_one: c.contributorAddress.addressOne,
+                address_two: c.contributorAddress.addressTwo,
+                city: c.contributorAddress.city,
+                state: c.contributorAddress.state,
+                zip: c.contributorAddress.zip,
+            },
+            contributor_employer: c.contributorEmployer,
+            contributor_occupation: c.contributorOccupation,
+            contribution_receipt_date: c.contributionReceiptDate instanceof Date ? c.contributionReceiptDate.toISOString() : c.contributionReceiptDate,
+        })) || [];
+
+
+        const result =  {
+            user_id:  userId,
+            date_created: data.dateCreated,
+            address: data.address,
+            prospect_name: prospectName,
+            prospect_employer: employer,
+            property_data,
+            sec_data,
+            political_contributions,
+            summary,
+        };
+
+        return result;
+    }
 }

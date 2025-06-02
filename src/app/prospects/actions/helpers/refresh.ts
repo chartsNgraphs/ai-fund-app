@@ -65,10 +65,10 @@ export async function refreshProspectProfile(id: string, automated: boolean, pro
         const updatedProfile = await prospectProfileRepository.create({
             id: uuidv4(),
             prospectId: id,
-            data: filteredProfile,
+            data: ProfileAdapter.toProfileData(filteredProfile).data,
             netWorth: summary?.netWorth,
             givingScore: summary?.givingScore,
-            givingCapacity: summary?.givingCapacity,
+            givingCapacity: summary?.givingCapacity
         });
 
         return {

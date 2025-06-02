@@ -5,7 +5,7 @@ import { Pencil, Mail } from "lucide-react";
 import { Phone } from "lucide-react";
 import { Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import EditButton from "./components/edit-button";
+import EditButton from "../../../components/prospect/edit-button";
 
 export default async function ProspectOverview(prospect: Prospect) {
     

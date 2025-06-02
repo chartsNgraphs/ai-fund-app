@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { v4 } from "uuid";
 import { Prospect } from "@/model/prospects/prospect";
 import prisma from "@/prisma/client";
+import { adaptModelToPrisma, adaptPrismaToModel } from "./adapters/profile-adapter";
 
 export interface QueryResult {
     count: number;
@@ -30,9 +31,6 @@ export default class ProspectRepository {
         page: number = 1,
         pageSize: number = 25,
     ): Promise<QueryResult> {
-
-        console.log("ProspectRepository.getAll", userId, query, page, pageSize);
-
         let results = await this.prisma.prospect.findMany(
             {
                 where: {
@@ -44,7 +42,18 @@ export default class ProspectRepository {
                 include: {
                     addresses: true,
                     socials: true,
-                    profiles: true, // Include profiles in the query
+                    profiles: {
+                        include: {
+                            properties: true, // Include properties in the query
+                            politicalContributions: true, // Include political contributions in the query
+                            securityHoldings: true, // Include security holdings in the query
+                            insiderFilings: {
+                                include: {
+                                    transactions: true, // Include transactions in the insider filings
+                                }
+                            }
+                        }
+                    }, // Include profiles in the query
                     events: true, // Include events in the query
                     additionalPersons: true, // Include additional individuals in the query
                 }
@@ -78,10 +87,7 @@ export default class ProspectRepository {
                 ...social,
                 type: social.type || "linkedin", // Ensure type is always a string
             })),
-            profiles: result.profiles.map(profile => ({
-                ...profile,
-                data: (profile.data as unknown as string), // Parse the data field
-            })),
+            profiles: result.profiles.map(profile => adaptPrismaToModel(profile)),
             events: result.events.map(event => ({
                 ...event,
                 eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
@@ -96,7 +102,6 @@ export default class ProspectRepository {
         })),
             count: count,
         };
-
     }
 
     /**
@@ -110,7 +115,18 @@ export default class ProspectRepository {
             include: {
                 addresses: true,
                 socials: true,
-                profiles: true,
+                profiles: {
+                    include: {
+                        properties: true, // Include properties in the query
+                        politicalContributions: true, // Include political contributions in the query
+                        securityHoldings: true, // Include security holdings in the query
+                        insiderFilings: {
+                            include: {
+                                transactions: true, // Include transactions in the insider filings
+                            }
+                        }, // Include insider filings in the query
+                    }
+                },
                 events: true,
                 additionalPersons: true,
             },
@@ -128,10 +144,7 @@ export default class ProspectRepository {
                     ...social,
                     type: social.type || "linkedin", // Provide a default value for type
                 })),
-                profiles: result.profiles.map(profile => ({
-                    ...profile,
-                    data: (profile.data as unknown as string), // Parse the data field
-                })),
+                profiles: result.profiles.map(profile => adaptPrismaToModel(profile)),
                 events: result.events.map(event => ({
                     ...event,
                     eventDate: new Date(event.eventDate), // Ensure eventDate is a Date object
@@ -172,9 +185,19 @@ export default class ProspectRepository {
                         })),
                     },
                     profiles: {
-                        create: prospect.profiles?.map(profile => ({
-                            data: profile.data, // Ensure data is a string
-                        })),
+                        create: prospect.profiles?.map(profile => {
+                            const profileData = adaptModelToPrisma(profile) as unknown as any;;
+                            return {
+                                data: JSON.stringify(profileData.data), // Ensure data is a string
+                                netWorth: profileData.netWorth || undefined, // Ensure netWorth is a number or null
+                                givingScore: profileData.givingScore || "U", // Ensure givingScore is a string
+                                givingCapacity: profileData.givingCapacity || undefined, // Ensure givingCapacity is a number or null
+                                properties: profileData.properties || {}, // Ensure properties is an object
+                                politicalContributions: profileData.politicalContributions || [], // Ensure politicalContributions is an array
+                                securityHoldings: profileData.securityHoldings || [], // Ensure securityHoldings is an array
+                                insiderFilings: profileData.insiderFilings || [],
+                            };
+                        }),
                     },
                     additionalPersons: {
                         create: prospect.additionalPersons?.map(individual => ({
@@ -304,10 +327,7 @@ export default class ProspectRepository {
                     ...social,
                     type: social.type || "linkedin",
                 })),
-                profiles: updatedProspect.profiles.map(profile => ({
-                    ...profile,
-                    data: (profile.data as unknown as string),
-                })),
+                profiles: updatedProspect.profiles.map(profile => (adaptPrismaToModel(profile))),
                 events: updatedProspect.events.map(event => ({
                     ...event,
                     eventDate: new Date(event.eventDate),

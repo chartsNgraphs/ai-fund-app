@@ -7,29 +7,28 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { refreshProfileDataAction } from "../actions/refresh-profile-data-action";
-import PropertyDataDisplay from "./components/property-data";
+import PropertyDataDisplay from "../../../components/prospect/property-data";
 import { ProspectProfile } from "@/model/prospects/prospect-profile";
-import InsiderTradingDataDisplay from "./components/insider-trading-data";
+import InsiderTradingDataDisplay from "../../../components/prospect/insider-trading-data";
 import { ProfileAdapter } from "@/app/services/adapters/profile-adapter";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams, useRouter } from "next/navigation";
 import updateTrackingAction from "../actions/update-tracking-action";
-import Giving from "./components/giving";
-import SecurityHoldingsDisplay from "./components/security-holdings";
-import ProfileselectDialog from "./components/profile-select-dialog";
+import Giving from "../../../components/prospect/giving";
+import SecurityHoldingsDisplay from "../../../components/prospect/security-holdings";
+import ProfileselectDialog from "../../../components/prospect/profile-select-dialog";
 import sendRefreshScheduleMessage from "@/utils/automation/servicebus/send-refresh-schedule-message";
+import { ProfileSummary } from "@/model/profiles/summary";
+import { ProfileData } from "@/model/profiles/profile-data";
 
-export default function ProfileDetailView(props: { profiles: ProspectProfile[], prospectId: string, tracked: boolean }) {
+export default function ProfileDetailView(props: { profiles: ProspectProfile[], data: ProfileData[], prospectId: string, tracked: boolean }) {
 
-	const { profiles, prospectId } = props;
+	const { profiles, prospectId, data } = props;
 	const { toast } = useToast();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const track = props.tracked || false;
-
-	// sort profiles by createdAt date
-	profiles.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isRefreshDialogOpen, setIsRefreshDialogOpen] = useState(false);
@@ -37,15 +36,15 @@ export default function ProfileDetailView(props: { profiles: ProspectProfile[], 
 	const [isSelectDialogOpen, setIsSelectDialogOpen] = useState(false);
 
 	// Parse profile data
-	const parsedProfileDatas = profiles.map((profile: any) => {
-		return ProfileAdapter.toProfileData(profile.data as unknown as string).data;
-	});
+	const parsedProfileDatas = data;
 
 	// Get the index from the query parameter or default to 0 (latest profile)
 	const profileIndex = parseInt(searchParams.get("profileIndex") || "0", 10);
 	const selectedProfileIndex = isNaN(profileIndex) || profileIndex < 0 || profileIndex >= profiles.length ? 0 : profileIndex;
 
 	const currentProfileData = parsedProfileDatas[selectedProfileIndex];
+
+	console.log("Current Profile Data:", currentProfileData);
 
 	// Handle profile selection
 	const handleProfileSelect = (index: number) => {

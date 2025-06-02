@@ -3,14 +3,13 @@ import { Card } from "@/components/ui/card";
 import { SECFiling, SECData } from "@/model/profiles/sec-data";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import getSecUrl from "../../actions/get-sec-url";
+import getSecUrl from "../../app/prospects/actions/get-sec-url";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 
 
 export default function InsiderTradingDataDisplay(props: { data: SECData }) {
     const { data } = props;
-
     const emptyData = ()=> {
         return (
             <Card className="w-full h-full p-4">
@@ -22,7 +21,7 @@ export default function InsiderTradingDataDisplay(props: { data: SECData }) {
         );
     }
 
-    if (data.version !== '2' || !data.insiderFilings?.filings) {
+    if (data.version == '1' || !data.insiderFilings?.filings) {
         return emptyData();
     }
 

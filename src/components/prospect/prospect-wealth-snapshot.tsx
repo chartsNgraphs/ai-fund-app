@@ -2,10 +2,19 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Info } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChartAreaDefault } from "./charts/area-chart";
+import { ChartConfig } from "../ui/chart";
 
 export default function WealthSnapshotDisplay(props: {data: WealthSnapshot}) {
     const { data } = props;
+
+    const netWorthHistory = data.netWorthHistory || [0, 0, 0, 0, 0];
+
+    const netWorthHistoryWithLabels = netWorthHistory.map((value, index) => ({
+        month: `Month${index + 1}`,
+        netWorth: value,
+    }));
+
 
     return (
         <Card className="w-full h-full p-4">
@@ -40,6 +49,9 @@ export default function WealthSnapshotDisplay(props: {data: WealthSnapshot}) {
                     </div>
                 </div>
             </div>
+            {/* <div className="mt-4">
+                <ChartAreaDefault data={netWorthHistoryWithLabels}/>
+            </div> */}
         </Card>
     );
 }
