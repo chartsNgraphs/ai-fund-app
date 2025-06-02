@@ -68,11 +68,7 @@ export async function refreshProspectProfile(id: string, automated: boolean, pro
             data: ProfileAdapter.toProfileData(filteredProfile).data,
             netWorth: summary?.netWorth,
             givingScore: summary?.givingScore,
-            givingCapacity: summary?.givingCapacity,
-            politicalContributions: profile.politicalContributions,
-            securityHoldings: profile.securityHoldings,
-            insiderFilings: profile.insiderFilings,
-            properties: profile.properties
+            givingCapacity: summary?.givingCapacity
         });
 
         return {

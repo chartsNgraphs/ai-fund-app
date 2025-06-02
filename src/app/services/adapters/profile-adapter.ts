@@ -190,7 +190,7 @@ export class ProfileAdapter {
      * @param profile Convert back into python API data format.
      * @returns 
      */
-    static toApiData(profile: {data: ProfileData}, userId: string, prospectName: string): any {
+    static toApiData(profile: {data: ProfileData}, userId: string, prospectName: string, employer): any {
         const { data } = profile;
 
         if ((data as any).user_id ) {
@@ -309,6 +309,7 @@ export class ProfileAdapter {
             date_created: data.dateCreated,
             address: data.address,
             prospect_name: prospectName,
+            prospect_employer: employer,
             property_data,
             sec_data,
             political_contributions,
