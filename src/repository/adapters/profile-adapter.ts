@@ -109,11 +109,6 @@ export function adaptModelToPrisma(profile: ProspectProfile): PrismaProfile {
  */
 export function adaptPrismaToModel(prismaProfile: any): ProspectProfile {
     const data = typeof prismaProfile.data === "string" ? JSON.parse(prismaProfile.data) : prismaProfile.data;
-
-    console.log("Adapting Prisma profile to model format", prismaProfile);
-
-    console.log("Properties in Prisma profile:", data.properties);
-
     const propertyData = (data.propertyData as any[] | undefined)?.map(property => ({
         address: property.address,
         identifier: property.identifier,
@@ -227,8 +222,5 @@ export function adaptPrismaToModel(prismaProfile: any): ProspectProfile {
         givingCapacity: prismaProfile.givingCapacity || 0,
     };
 
-    console.log("the summary data:", data.summary);
-
-    console.log("Adapted profile:", profile);
     return profile;
 }

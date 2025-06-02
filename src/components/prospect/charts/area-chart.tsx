@@ -39,8 +39,6 @@ export function ChartAreaDefault(
 ) {
   const { chartConfig: config = chartConfig, data = chartData } = props;
 
-  console.log("ChartAreaDefault", { config, data });
-
   return (
     <div className="min-h-[300px] w-full">
       <CardHeader>

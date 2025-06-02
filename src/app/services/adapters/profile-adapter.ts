@@ -92,8 +92,6 @@ export class ProfileAdapter {
 
         let secDataComplete: SECData | undefined = undefined;
 
-        console.log('ProfileAdapter.toProfileData', secData);
-
         if (secData) {
             secDataComplete = {
                 version: '2',
@@ -196,8 +194,6 @@ export class ProfileAdapter {
         if ((data as any).user_id ) {
             return data; // Already in API format
         }
-
-        console.log('ProfileAdapter.toApiData', data);
 
         const property_data = data.propertyData?.map((p: any) => ({
             address: p.address,
@@ -315,8 +311,6 @@ export class ProfileAdapter {
             political_contributions,
             summary,
         };
-
-        console.log('ProfileAdapter.toApiData', result);
 
         return result;
     }

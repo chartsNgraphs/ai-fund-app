@@ -23,7 +23,6 @@ export default async function Prospects({ searchParams }) {
     }
 
     if (query) {
-        console.log("Adding search to history:", query);
         await addSearchToHistory(query);
     }
 

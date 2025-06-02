@@ -60,8 +60,6 @@ export default class ProspectProfileRepository {
         
         const { id, prospectId, createdAt, updatedAt, ...profileData } = profileToSave;
 
-        console.log("Creating Prospect Profile:", profileData);
-
         const result = await this.prisma.prospectProfile.create({
             data: {
                 ...profileData,
